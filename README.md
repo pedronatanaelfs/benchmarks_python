@@ -11,20 +11,31 @@ In standard multi-objective optimization, one decision maker faces several confl
 - compromise / concession among parties,
 - fair evaluation of approximation quality across DMs.
 
-This repository provides a **verified Python port** of the main synthetic suites used in that literature:
+This repository provides a **source-traced Python port** of the main synthetic suites used in that literature, with numerical and analytical validation reported **benchmark-by-benchmark**:
 
 | Family | Problems | Origin |
 |---|---|---|
 | MPMOP | MPMOP1–MPMOP17 | Liu et al. (CEC 2020) + Zhao et al. (2026) extensions |
 | MPDMP | MPDMP1–MPDMP18 | She et al. (2023) + Zhao et al. (2026) extensions |
 
+### Validation status (current)
+
+| Status | Count | Notes |
+|---|---|---|
+| **PASS** | 29 | Source-consistent + analytical tests; MPMOP1–11 also match Octave `MPMOP_Value.m` |
+| **PARTIAL** | 6 | MPMOP12–17: decision dimension `D` not fixed in ZM26 Table S-VI (`n_var=10` is an assumed default) |
+| **NEEDS_MANUAL_VERIFICATION** | 0 | — |
+| **FAIL** | 0 | — |
+
+See `validation/validation_report.md` and `validation/audit_final.md`.
+
 ## What it does
 
 - Implements all **35** benchmarks with vectorized NumPy evaluation
 - Exposes a uniform API (`get_problem`, `evaluate`, `evaluate_dm`, Pareto set / reference points when known)
-- Preserves **which objectives belong to which DM** (essential for fairness research)
+- Preserves **which objectives belong to which DM** (essential for fairness research) via `CommonPSStatus` and DM objective slices
 - Provides a **pymoo adapter** that concatenates objectives for standard MOEAs (NSGA-II/III, etc.), while keeping the multi-DM view on the base problem
-- Ships unit tests, analytical checks, source mapping, and validation artifacts under `docs/` and `validation/`
+- Ships unit tests, analytical checks, optional Octave equivalence, source mapping, and validation artifacts under `docs/` and `validation/`
 
 Example workflow:
 
@@ -165,17 +176,23 @@ pytest -q
 Artifacts:
 
 - `validation/validation_report.md`
+- `validation/audit_before.md` / `validation/audit_final.md`
+- `validation/equivalence/` (MPMOP1–11 vs Octave)
+- `validation/audits/` (per-benchmark KEEP/FIX decisions)
 - `validation/reference_values/`
-- `validation/environment.txt`
+- `validation/test_summary.txt`
 
-GNU Octave is **not** required for normal use. Optional MATLAB/Octave
-equivalence notes live under `validation/matlab_octave/`.
+GNU Octave is **optional** for normal use. When installed, MPMOP1–11 can be
+cross-checked against author `MPMOP_Value.m` via
+`validation/matlab_octave/run_mpmop_equivalence.py`.
+MPDMP PlatEMO classdefs are `OCTAVE_INCOMPATIBLE` (no `nsidedpoly` / PROBLEM base).
 
 ## Citation
 
-If you use this package, please cite the original benchmark papers listed above
-and this repository. A formal citation file (`CITATION.cff`) can be added when
-the public release is finalized.
+If you use this package, please cite the **original benchmark papers** listed
+above (Liu/She/Zhao et al.) and this Python port repository.
+
+Machine-readable citation metadata: [`CITATION.cff`](CITATION.cff).
 
 ## License
 

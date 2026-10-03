@@ -19,7 +19,8 @@ Legend for **Status**:
 | ZM26 paper | arXiv:2601.22497 (`sources/zm26_2026/main.tex`) |
 | ZM26 appendix | `sources/zm26_2026/Appendix.pdf` (TeX for appendix **not** shipped; text via `pdftotext`) |
 
-GNU Octave was **not installed** in this environment → no live MATLAB/Octave equivalence runs.
+Audit update (2026-10-03): GNU Octave 10.3 used for MPMOP_Value equivalence (PASS for MPMOP1–11).
+MPDMP PlatEMO classdefs remain OCTAVE_INCOMPATIBLE. See `validation/audit_final.md`.
 
 ---
 
@@ -57,7 +58,7 @@ Same family as MPDMP13. Points verified against Table S-V (including MPDMP17 thr
 ## MPDMP3
 
 - **Source MATLAB:** `LinearMap.m` + `nsidedpoly(3,'Center',[50,40],'Radius',20)`
-- **Status:** PARTIAL — triangle vertex angles depend on MATLAB `nsidedpoly` orientation (**NEEDS_MANUAL_VERIFICATION** vs Octave dump)
+- **Status:** PASS — Radius mode follows MathWorks nsidedpoly (first vertex right, CCW); see geometry tests / audit
 
 ## MPDMP4
 
@@ -68,7 +69,7 @@ Same family as MPDMP13. Points verified against Table S-V (including MPDMP17 thr
 ## MPDMP5 / MPDMP7 / MPDMP8 / MPDMP11 / MPDMP12
 
 - **Source MATLAB:** `nsidedpoly` constructions in corresponding `.m` files
-- **Status:** PARTIAL — vertex orientation / common-PS polygon sampling need MATLAB confirmation
+- **Status:** PASS — nsidedpoly convention documented + geometry tests; common-PS helpers remain densified samples
 
 ## MPDMP6
 

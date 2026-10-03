@@ -1,29 +1,70 @@
 cff-version: 1.2.0
 title: "fairmoo_benchmarks"
-message: "If you use this software, please cite the original benchmark papers and this repository."
+message: >
+  If you use this software, please cite (1) the original MPMOP/MPDMP benchmark
+  papers and (2) this Python port repository. Do not attribute authorship of the
+  original benchmarks to the port maintainers.
 type: software
 authors:
-  - name: "fairmoo_benchmarks contributors"
+  - family-names: "Ferreira da Silva"
+    given-names: "Pedro Natanael"
+    alias: "pedronatanaelfs"
+repository-code: "https://github.com/pedronatanaelfs/benchmarks_python"
+url: "https://github.com/pedronatanaelfs/benchmarks_python"
 version: "0.1.0"
 license: MIT
 abstract: >
-  Python/NumPy/pymoo implementations of multi-party multi-objective
-  optimization benchmarks MPMOP1–MPMOP17 and MPDMP1–MPDMP18, with
-  explicit decision-maker objective ownership and source traceability.
+  Source-traced Python/NumPy/pymoo implementations of multi-party multi-objective
+  optimization benchmarks MPMOP1–MPMOP17 and MPDMP1–MPDMP18, with explicit
+  decision-maker objective ownership and benchmark-by-benchmark validation status.
 keywords:
   - multi-objective optimization
   - multi-party optimization
   - evolutionary computation
   - benchmarks
   - pymoo
-preferred-citation:
-  type: article
-  title: "Please cite the original MPMOP/MPDMP papers listed in README.md"
-  authors:
-    - family-names: Liu
-      given-names: Wenjian
-    - family-names: She
-      given-names: Zeneng
-    - family-names: Zhao
-      given-names: Zifan
-  notes: "See README.md and docs/source_mapping.md for full bibliographic details."
+references:
+  - type: conference-paper
+    title: "Evolutionary Approach to Multiparty Multiobjective Optimization Problems with Common Pareto Optimal Solutions"
+    authors:
+      - family-names: Liu
+        given-names: Wenjian
+      - family-names: Luo
+        given-names: Wenjian
+      - family-names: Lin
+        given-names: Xin
+      - family-names: Li
+        given-names: Miqing
+      - family-names: Yang
+        given-names: Shengxiang
+    year: 2020
+    conference:
+      name: "IEEE Congress on Evolutionary Computation (CEC)"
+  - type: article
+    title: "Multiparty distance minimization: Problems and an evolutionary approach"
+    authors:
+      - family-names: She
+        given-names: Zeneng
+      - family-names: Luo
+        given-names: Wenjian
+      - family-names: Lin
+        given-names: Xin
+      - family-names: Chang
+        given-names: Yatong
+      - family-names: Shi
+        given-names: Yuhui
+    year: 2023
+    journal: "Swarm and Evolutionary Computation"
+  - type: article
+    title: "Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization"
+    authors:
+      - family-names: Zhao
+        given-names: Zifan
+      - family-names: Xu
+        given-names: Peilan
+      - family-names: Luo
+        given-names: Wenjian
+    year: 2026
+    identifiers:
+      - type: url
+        value: "https://arxiv.org/abs/2601.22497"
