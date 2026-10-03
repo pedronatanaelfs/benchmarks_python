@@ -12,3 +12,7 @@ sources/**/.git/
 .conda/
 *.conda
 envs/
+# Octave temp artifacts
+validation/matlab_octave/_tmp_*
+validation/matlab_octave/_pytest_*
+validation/test_summary_pytest.txt
