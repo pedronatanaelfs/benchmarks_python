@@ -7,6 +7,8 @@ from typing import Any, Mapping, Optional, Sequence, Union
 
 import numpy as np
 
+from fairmoo_benchmarks.status import CommonPSStatus
+
 ArrayLike = Union[np.ndarray, Sequence[float]]
 
 
@@ -29,7 +31,7 @@ class MultiPartyProblem(ABC):
         family: str,
         source: str,
         year: Optional[int] = None,
-        common_ps_exists: str = "Unknown",
+        common_ps_exists: CommonPSStatus | str | bool | None = CommonPSStatus.UNKNOWN,
         known_ps: bool = False,
         known_pf: bool = False,
         dm_names: Optional[Sequence[str]] = None,
@@ -54,8 +56,7 @@ class MultiPartyProblem(ABC):
         if len(self.dm_names) != self.n_dm:
             raise ValueError("dm_names length must equal n_dm")
 
-        if common_ps_exists not in {"True", "False", "Unknown"}:
-            raise ValueError("common_ps_exists must be 'True', 'False', or 'Unknown'")
+        self._common_ps_status = CommonPSStatus.parse(common_ps_exists)
 
         self.metadata: dict[str, Any] = {
             "family": family,
@@ -63,13 +64,20 @@ class MultiPartyProblem(ABC):
             "year": year,
             "n_dm": self.n_dm,
             "n_obj_per_dm": list(self.n_obj_per_dm),
-            "common_ps_exists": common_ps_exists,
+            "common_ps_exists": self._common_ps_status.value,
+            "common_ps_status": self._common_ps_status,
             "known_ps": bool(known_ps),
             "known_pf": bool(known_pf),
             "notes": notes,
         }
         if metadata:
             self.metadata.update(dict(metadata))
+            # Keep status object authoritative if metadata overwrote the string.
+            if "common_ps_status" in self.metadata and isinstance(
+                self.metadata["common_ps_status"], CommonPSStatus
+            ):
+                self._common_ps_status = self.metadata["common_ps_status"]
+                self.metadata["common_ps_exists"] = self._common_ps_status.value
 
         self._dm_slices: dict[int, slice] = {}
         start = 0
@@ -82,8 +90,13 @@ class MultiPartyProblem(ABC):
         return dict(self._dm_slices)
 
     @property
-    def common_ps_exists(self) -> str:
-        return str(self.metadata["common_ps_exists"])
+    def common_ps_status(self) -> CommonPSStatus:
+        return self._common_ps_status
+
+    @property
+    def common_ps_exists(self) -> CommonPSStatus:
+        """Alias for :attr:`common_ps_status` (type-safe enum, not a bool/str)."""
+        return self._common_ps_status
 
     @staticmethod
     def _as_2d(X: ArrayLike) -> tuple[np.ndarray, bool]:
@@ -133,13 +146,17 @@ class MultiPartyProblem(ABC):
     def get_pareto_set(
         self, dm: Optional[int] = None, n_points: int = 1000
     ) -> Optional[np.ndarray]:
-        """Return approximate Pareto set samples, or ``None`` if unknown."""
+        """Return Pareto set samples when known, else ``None``.
+
+        Returned samples may be analytic or densified along a known manifold.
+        They are not claimed to be a complete PF discretization unless documented.
+        """
         return None
 
     def get_pareto_front(
         self, dm: Optional[int] = None, n_points: int = 1000
     ) -> Optional[np.ndarray]:
-        """Return approximate Pareto front samples, or ``None`` if unknown."""
+        """Return Pareto front samples when known, else ``None``."""
         return None
 
     def get_reference_points(self, dm: Optional[int] = None) -> Optional[np.ndarray]:
@@ -149,13 +166,14 @@ class MultiPartyProblem(ABC):
     def get_common_pareto_set(self, n_points: int = 1000) -> Optional[np.ndarray]:
         """Return common PS samples when known.
 
-        If the paper states that the intersection is empty, returns an empty
-        array of shape ``(0, n_var)``.
+        - ``CommonPSStatus.EMPTY`` → empty array shape ``(0, n_var)``
+        - ``CommonPSStatus.UNKNOWN`` → ``None``
+        - ``CommonPSStatus.EXISTS`` → samples from :meth:`get_pareto_set` with ``dm=None``
         """
-        status = self.common_ps_exists
-        if status == "False":
+        status = self.common_ps_status
+        if status is CommonPSStatus.EMPTY:
             return np.zeros((0, self.n_var), dtype=float)
-        if status == "Unknown":
+        if status is CommonPSStatus.UNKNOWN:
             return None
         return self.get_pareto_set(dm=None, n_points=n_points)
 
@@ -173,6 +191,9 @@ class MultiPartyProblem(ABC):
             "year": self.metadata.get("year"),
             "pareto_set_known": bool(self.metadata.get("known_ps")),
             "pareto_front_known": bool(self.metadata.get("known_pf")),
-            "common_ps_exists": self.common_ps_exists,
+            "common_ps_status": self.common_ps_status.value,
+            "common_ps_exists": self.common_ps_status.value,  # backward-compatible key
             "notes": self.metadata.get("notes", ""),
+            "dimension_source": self.metadata.get("dimension_source"),
+            "dimension_status": self.metadata.get("dimension_status"),
         }

@@ -7,6 +7,7 @@ from typing import Optional, Sequence
 import numpy as np
 
 from fairmoo_benchmarks.base import MultiPartyProblem
+from fairmoo_benchmarks.status import CommonPSStatus
 
 LIU2020_SOURCE = (
     "Liu, Luo, Lin, Li, Yang (2020). Evolutionary Approach to Multiparty "
@@ -110,11 +111,22 @@ class LiuMPMOP(MultiPartyProblem):
             family="MPMOP",
             source=LIU2020_SOURCE,
             year=2020,
-            common_ps_exists="True",
+            common_ps_exists=CommonPSStatus.EXISTS,
             known_ps=True,
             known_pf=True,
-            notes=f"value_id={value_id}, times={list(times)}. Common PS via true_PS.m.",
-            metadata={"value_id": value_id, "times": list(times)},
+            notes=(
+                f"value_id={value_id}, times={list(times)}. "
+                "Objective formulas from MPMOP_Value.m. "
+                "Default n_var=10 from OptMPNDS classdefs; "
+                "ZM26 experiments on MPMOP1–11 used D=2 (table caption)."
+            ),
+            metadata={
+                "value_id": value_id,
+                "times": list(times),
+                "dimension_source": "OptMPNDS MATLAB default Global.D=10; ZM26 tab:MPMOP_results uses D=2",
+                "dimension_default": 10,
+                "dimension_status": "SOURCE_DEFAULT_OPTMPNDS",
+            },
         )
         self.value_id = value_id
         self.times = [float(t) for t in times]

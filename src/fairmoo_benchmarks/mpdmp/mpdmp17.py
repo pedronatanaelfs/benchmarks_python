@@ -9,6 +9,7 @@ Common PS: empty (False).
 from __future__ import annotations
 
 from fairmoo_benchmarks.mpdmp.distance_base import DistanceBasedMultiPartyProblem, ZM26_SOURCE
+from fairmoo_benchmarks.status import CommonPSStatus
 
 
 class MPDMP17(DistanceBasedMultiPartyProblem):
@@ -25,7 +26,7 @@ class MPDMP17(DistanceBasedMultiPartyProblem):
             family="MPDMP",
             source=ZM26_SOURCE,
             year=2026,
-            common_ps_exists="False",
+            common_ps_exists=CommonPSStatus.EMPTY,
             known_ps=True,
             known_pf=True,
             notes="No common PS (party-wise PS mutually disjoint). x in [0,100]^2.",

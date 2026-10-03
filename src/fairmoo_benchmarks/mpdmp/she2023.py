@@ -7,6 +7,7 @@ from typing import Optional, Sequence
 import numpy as np
 
 from fairmoo_benchmarks.mpdmp.distance_base import DistanceBasedMultiPartyProblem, SHE2023_SOURCE
+from fairmoo_benchmarks.status import CommonPSStatus
 from fairmoo_benchmarks.utils import matlab_nsidedpoly_vertices, linspace_segment
 
 
@@ -54,7 +55,7 @@ class _InterleavedDistanceProblem(DistanceBasedMultiPartyProblem):
             family="MPDMP",
             source=SHE2023_SOURCE,
             year=2023,
-            common_ps_exists="True" if common_ps is not None else "Unknown",
+            common_ps_exists=CommonPSStatus.EXISTS if common_ps is not None else CommonPSStatus.UNKNOWN,
             known_ps=known_ps,
             known_pf=known_ps,
             notes=notes,
@@ -141,7 +142,7 @@ def _she_problem(
         family="MPDMP",
         source=SHE2023_SOURCE,
         year=2023,
-        common_ps_exists="True" if common_ps is not None else "Unknown",
+        common_ps_exists=CommonPSStatus.EXISTS if common_ps is not None else CommonPSStatus.UNKNOWN,
         known_ps=True,
         known_pf=True,
         notes=notes,
@@ -191,7 +192,7 @@ class MPDMP3(DistanceBasedMultiPartyProblem):
             family="MPDMP",
             source=SHE2023_SOURCE,
             year=2023,
-            common_ps_exists="True",
+            common_ps_exists=CommonPSStatus.EXISTS,
             known_ps=True,
             known_pf=True,
             notes="LinearMap.m + nsidedpoly(3, Center=[50,40], Radius=20). DM={1:2,3:5}.",
@@ -241,7 +242,7 @@ class MPDMP4(DistanceBasedMultiPartyProblem):
             family="MPDMP",
             source=SHE2023_SOURCE,
             year=2023,
-            common_ps_exists="True",
+            common_ps_exists=CommonPSStatus.EXISTS,
             known_ps=True,
             known_pf=True,
             notes="Explicit polyshape vertices in MPDMP4.m. Common PS=(50,40).",
@@ -270,7 +271,7 @@ class MPDMP5(DistanceBasedMultiPartyProblem):
             family="MPDMP",
             source=SHE2023_SOURCE,
             year=2023,
-            common_ps_exists="True",
+            common_ps_exists=CommonPSStatus.EXISTS,
             known_ps=True,
             known_pf=True,
             notes="nsidedpoly triangles Center=[39,40]/[60,20], Radius=40. Vertices order: MATLAB nsidedpoly.",
@@ -290,7 +291,7 @@ class MPDMP6(DistanceBasedMultiPartyProblem):
             family="MPDMP",
             source=SHE2023_SOURCE,
             year=2023,
-            common_ps_exists="True",
+            common_ps_exists=CommonPSStatus.EXISTS,
             known_ps=True,
             known_pf=True,
             notes="Two squares with common edge; MATLAB PS x=50, y in [40,60].",
@@ -319,7 +320,7 @@ class MPDMP7(DistanceBasedMultiPartyProblem):
             family="MPDMP",
             source=SHE2023_SOURCE,
             year=2023,
-            common_ps_exists="True",
+            common_ps_exists=CommonPSStatus.EXISTS,
             known_ps=True,
             known_pf=True,
             notes="Overlapped squares nsidedpoly SideLength=40.",
@@ -339,7 +340,7 @@ class MPDMP8(DistanceBasedMultiPartyProblem):
             family="MPDMP",
             source=SHE2023_SOURCE,
             year=2023,
-            common_ps_exists="True",
+            common_ps_exists=CommonPSStatus.EXISTS,
             known_ps=True,
             known_pf=True,
             notes="Overlapped pentagons Radius=20.",
@@ -396,7 +397,7 @@ class MPDMP11(DistanceBasedMultiPartyProblem):
             family="MPDMP",
             source=SHE2023_SOURCE,
             year=2023,
-            common_ps_exists="True",
+            common_ps_exists=CommonPSStatus.EXISTS,
             known_ps=True,
             known_pf=True,
             notes=(
@@ -435,7 +436,7 @@ class MPDMP12(DistanceBasedMultiPartyProblem):
             family="MPDMP",
             source=SHE2023_SOURCE,
             year=2023,
-            common_ps_exists="True",
+            common_ps_exists=CommonPSStatus.EXISTS,
             known_ps=True,
             known_pf=True,
             notes=(

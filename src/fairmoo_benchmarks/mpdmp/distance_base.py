@@ -7,6 +7,7 @@ from typing import Mapping, Optional, Sequence, Union
 import numpy as np
 
 from fairmoo_benchmarks.base import MultiPartyProblem
+from fairmoo_benchmarks.status import CommonPSStatus
 from fairmoo_benchmarks.utils import (
     euclidean_distances_to_points,
     linspace_segment,
@@ -34,7 +35,7 @@ class DistanceBasedMultiPartyProblem(MultiPartyProblem):
         family: str = "MPDMP",
         source: str = "",
         year: Optional[int] = None,
-        common_ps_exists: str = "Unknown",
+        common_ps_exists: CommonPSStatus | str | bool | None = CommonPSStatus.UNKNOWN,
         known_ps: bool = True,
         known_pf: bool = True,
         notes: str = "",
@@ -104,7 +105,7 @@ class DistanceBasedMultiPartyProblem(MultiPartyProblem):
         subclass override or when ``common_ps_exists == 'False'`` (empty).
         """
         if dm is None:
-            if self.common_ps_exists == "False":
+            if self.common_ps_status is CommonPSStatus.EMPTY:
                 return np.zeros((0, self.n_var), dtype=float)
             return None
 
@@ -156,7 +157,7 @@ def make_zm26_mpdmp(
         family="MPDMP",
         source=ZM26_SOURCE,
         year=2026,
-        common_ps_exists="False",
+        common_ps_exists=CommonPSStatus.EMPTY,
         known_ps=True,
         known_pf=True,
         notes="No common PS (party-wise PS mutually disjoint). x in [0,100]^2.",

@@ -28,7 +28,8 @@ def test_mpdmp13_definition() -> None:
     assert p.n_var == 2
     assert np.allclose(p.xl, [0, 0])
     assert np.allclose(p.xu, [100, 100])
-    assert p.common_ps_exists == "False"
+    from fairmoo_benchmarks.status import CommonPSStatus
+    assert p.common_ps_status is CommonPSStatus.EMPTY
     refs0 = p.get_reference_points(0)
     refs1 = p.get_reference_points(1)
     assert np.allclose(refs0, [[30, 40], [70, 40]])
