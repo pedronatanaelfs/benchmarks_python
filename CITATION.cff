@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: "fairmoo_benchmarks"
+message: "If you use this software, please cite the original benchmark papers and this repository."
+type: software
+authors:
+  - name: "fairmoo_benchmarks contributors"
+version: "0.1.0"
+license: MIT
+abstract: >
+  Python/NumPy/pymoo implementations of multi-party multi-objective
+  optimization benchmarks MPMOP1–MPMOP17 and MPDMP1–MPDMP18, with
+  explicit decision-maker objective ownership and source traceability.
+keywords:
+  - multi-objective optimization
+  - multi-party optimization
+  - evolutionary computation
+  - benchmarks
+  - pymoo
+preferred-citation:
+  type: article
+  title: "Please cite the original MPMOP/MPDMP papers listed in README.md"
+  authors:
+    - family-names: Liu
+      given-names: Wenjian
+    - family-names: She
+      given-names: Zeneng
+    - family-names: Zhao
+      given-names: Zifan
+  notes: "See README.md and docs/source_mapping.md for full bibliographic details."

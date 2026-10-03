@@ -1,0 +1,747 @@
+            Supplementary document of Fairness-Aware
+              Performance Evaluation for Multi-Party
+                   Multi-Objective Optimization
+                        Zifan Zhao, Peilan Xu, Member, IEEE, Wenjian Luo, Senior Member, IEEE
+
+   This appendix contains the details of benchmark and sup-                                                                    S-III. C OMPUTATIONAL C OST A NALYSIS
+plementary experiments that omitted in the main paper.                               To quantify the computational overhead of the ΨNP , we
+         S-I. PARAMETER S ETTING IN E XPERIMENTS                                  conducted a synthetic timing study by varying the number
+                                                                                  of DMs, M , and the number of objectives per DM, K. For
+A. Parameter setting of constant C                                                each (M, K) configuration, a solution set containing N = 200
+   To determine a proper value of the constant C, a preliminary                   points was generated in a two-dimensional decision space.
+exploration is conducted using NSGA-II. Specifically, NSGA-                       For each DM, 100 reference Pareto-front points were sam-
+II is independently executed R = 10 times, and the maximum                        pled for the party-wise performance evaluation. The objective
+observed loss of each DM is recorded as                                           functions were constructed as linear functions of the decision
+                                                                                  variables, thereby providing controlled instances with fixed
+                 L
+                 b m = max               max        Lm (x),
+                          r=1,...,R x∈P (r)                                       solution-set and reference-set sizes. ΨNP was independently
+                                          NSGA-II
+                                                                                  evaluated 30 times for each configuration. Only the indicator-
+           (r)
+where PNSGA-II denotes the final population obtained in the                       evaluation time was recorded; data generation, plotting, and
+r-th run. The constant C is then set as                                           file operations were excluded.
+                       C=        max      L
+                                          b m + δ,
+                                                                                                                                                                          22
+                              m=1,...,M
+
+where δ > 0 is a small safety margin.                                                                                      6
+                                                                                                                                                                          20
+  This choice ensures that C upper-bounds all empirical loss
+                                                                                       Objectives per decision maker (K)
+
+
+
+
+values encountered in the space. NSGA-II is adopted in this                                                                                                               18
+                                                                                                                           5
+preliminary step due to its robustness in approximating diverse
+
+
+
+
+                                                                                                                                                                               Mean CPU time (ms)
+Pareto-optimal solutions, making it suitable for estimating an                                                                                                            16
+
+empirical upper bound of loss values.                                                                                      4
+                                                                                                                                                                          14
+    S-II. PARAMETER SETTING OF PENALTY FACTOR λm
+                                                                                                                                                                          12
+  For each DM m, we project the Pareto points of the other                                                                 3
+DMs onto the objective subspace of DM m, denoted by P−m .                                                                                                                 10
+For any v ∈ P−m , we define the λm as
+                                                                                                                           2                                              8
+                     δm = max IGD(p, P Fm ),
+                             p∈P−m
+                                                                                                                                  2        3       4        5         6
+                                                                                                                                      Number of decision makers (M)
+                               δm − IGD(v, P Fm )
+                 λm = max                         .                               Fig. 1: CPU time of ΨNP under different numbers of DMs
+                         v∈P−m     γm (v) − γ̂
+                                                                                  and objectives per DM. Each marker represents a synthetic
+   This work is partly supported by the National Natural Science Foundation of
+China (Grant No. 62602284, U23B2058, 62576121), Shenzhen Fundamental              MPMOP instance with M DMs and K objectives per DM.
+Research Program (Grant No. JCYJ20220818102414030), Shenzhen Science              A solution set with N = 200 solutions is evaluated in each
+and Technology Program (Grant No. ZDSYS20210623091809029). (Corre-                case. Marker color denotes the mean CPU time over 30
+sponding author: Peilan Xu.)
+   Zifan Zhao is with Waterford Institute, Nanjing University of Information      independent evaluations, whereas marker size is proportional
+Science and Technology, Nanjing 210044, China.                                    to the corresponding variance.
+   Peilan Xu is with School of Artificial Intelligence, Nanjing University of
+Information Science and Technology, Nanjing 210044, China.
+   Wenjian Luo is with Guangdong Provincial Key Laboratory of Novel                  Fig. 1 presents the resulting CPU-time measurements. The
+Security Intelligence Technologies, Institute of Cyberspace Security, School of   mean evaluation time generally increases with M , since ΨNP
+Computer Science and Technology, Harbin Institute of Technology, Shenzhen         requires party-wise loss evaluation and Nash-product aggrega-
+518055, China.
+   Email:     202383920026@nuist.edu.cn,         xpl@nuist.edu.cn,     luowen-    tion across all DMs. Nevertheless, the timing variance remains
+jian@hit.edu.cn.                                                                  small over the tested configurations, as indicated by the marker
+sizes. These results suggest that the proposed indicator incurs    TABLE S-I: Consistency between the best-performing algo-
+stable and manageable computational cost for the multi-party       rithms selected by meanIGD and ΨNP .
+multi-objective problem scales considered in this study.                 Problem type   Instances   Agreement   Disagreement   Tie
+   Let M denote the number of DMs, N = |P | denote the
+number of solutions in the evaluated set, Km denote the num-             MPMOP             11          5             5         1
+                                          ∗                              MPDMP             12          1            11         0
+ber of objectives of DM m, and Rm = |Pm     | denote the number
+of reference Pareto-optimal solutions used for DM m. For each            Overall           23          6            16         1
+solution x ∈ P , computing the concession rate γm (x) requires
+evaluating the distance Dm (x) with respect to reference so-
+                ∗                                                  PFs, whereas ΨNP favors OptMPNDS because it better avoids
+lutions y ∈ Pm    . Since each Dm (x) involves Km objective
+components and the minimum is taken over Rm reference              unbalanced concessions and non-acceptable solutions.
+solutions, the cost of computing γm (x) is O(Rm Km ). The             In contrast, among MPMOP4–6 and MPMOP9–11, where
+subsequent computation of ϕm (x) = max{0, γm (x) − γ̂m } is        the party-wise PFs substantially overlap or the conflict be-
+O(1) once γm (x) is available.                                     tween DMs is weaker, the two indicators agree on four of
+   Therefore, computing the non-consensus penalty                  six instances and are tied on one instance. This indicates
+                                 X                                 that mean-based aggregation becomes less problematic when
+                     Lpen
+                       m (P ) =      ϕm (x)                        simultaneous improvement for different DMs is feasible. For
+                                 x∈P
+                                                                   the MPDMP benchmarks, meanIGD selects OptAll on 11 of
+for DM m requires O(N Rm Km ) time. Across all DMs, the            12 instances, whereas ΨNP generally favors the multiparty
+concession-penalty computation requires                            optimizers. This systematic discrepancy arises because OptAll
+                         XM
+                                     !                             is optimized in the concatenated objective space and therefore
+                   O N        Rm Km .                              naturally performs well on the geometric mean-based metric,
+                           m=1                                     while ΨNP additionally accounts for party-wise balance and
+After the DM-specific losses and penalties are obtained, the       mutual acceptability.
+Nash-product aggregation requires only O(M ) time. Conse-             To clarify under what conditions meanIGD may conceal
+quently, the total computational complexity of the proposed        uneven compromises among DMs, this subsection examines
+evaluation framework is                                            the search behaviors of representative MPMOP optimizers.
+                            M
+                                           !                       Asymmetric sacrifices are jointly determined by the geometry
+                          X
+              O TL + N         Rm K m + M ,                        of the party-wise Pareto sets and the selection mechanisms
+                           m=1                                     used during optimization. We therefore categorize existing
+where TL denotes the cost of computing the underlying DM-          MPMOP algorithms according to their principal search strate-
+specific performance losses Lm (P ), such as IGD or HV.            gies, including aggregate-objective optimization, multiparty
+When the concession rates are precomputed or reused across         non-dominated sorting, party-by-party decomposition, and
+repeated evaluations under different concession thresholds, the    archive- or clone-based search. For each category, we discuss
+additional penalty and Nash-product aggregation cost reduces       the circumstances under which its search process may lead
+to O(M N + M ).                                                    to unfair outcomes, and we use two representative cases to
+                                                                   illustrate the analysis.
+   S-IV. S EARCH -I NDUCED A SYMMETRIC S ACRIFICES IN                 For aggregate-objective methods such as OptAll, all party-
+                            MPMOP S                                wise objectives are treated as a single objective vector. Con-
+   To quantify how frequently mean-based evaluation yields         sequently, solutions favoring different DMs can remain non-
+conclusions different from those of the proposed fairness-         dominated in the concatenated objective space, even when
+aware criterion, we compare the best-performing algorithm          a solution is substantially inferior from the perspective of
+selected by meanIGD and ΨNP on each benchmark instance.            one DM. This behavior is particularly likely when the party-
+A result is classified as an agreement when the two indicators     wise Pareto sets have limited overlap or are disjoint, since
+select the same algorithm, as a disagreement when they select      improving the approximation quality for one DM may require
+different algorithms, and as a tie when at least one indicator     moving the population away from the preferred region of
+yields identical best mean values.                                 another DM. Thus, a low meanIGD may be obtained by
+   Table S-I summarizes the ranking-consistency statistics.        combining a small loss for one DM with a much larger loss
+Across the 23 benchmark instances for which both meanIGD           for another.
+and ΨNP are reported, one tie is observed. Among the                  Multiparty non-dominated sorting methods, including
+remaining 22 non-tie comparisons, the two indicators select        OptMPNDS [1], OptMPNDS2 [2], and OptMPNDS3 [3],
+different best-performing algorithms in 16 cases. In particular,   reduce this risk by explicitly considering the Pareto status
+all five MPMOP instances with well-separated individual PFs        of every DM. However, these methods mainly exploit ordinal
+(MPMOP1–3 and MPMOP7–8) exhibit ranking disagreement.              rank information. Hence, solutions with substantially different
+On these problems, OptAll achieves lower meanIGD by im-            sacrifice magnitudes may remain indistinguishable when their
+proving the average approximation quality across party-wise        party-wise rank vectors are mutually non-dominated. For ex-
+ample, two solutions with rank vectors (1, 2) and (6, 1) can                                                                   TABLE S-II: Party-wise IGD values of the representative final
+receive comparable multiparty priority, although one solution                                                                  populations on Case A (MPDMP7) and Case B (MPMOP13).
+is much farther from the Pareto set of one DM. Therefore,                                                                      IGD1 and IGD2 denote the inverted generational distance
+multiparty sorting improves party-wise Pareto consistency but                                                                  with respect to the reference Pareto front of DM1 and DM2,
+does not guarantee balanced approximation losses.                                                                              respectively. Mean IGD is the arithmetic average of the two
+   For party-by-party or decomposition-based search as                                                                         party-wise IGD values.
+MOEA/D-MP [4], asymmetric sacrifices may arise when the                                                                                          Case A (MPDMP7)                 Case B (MPMOP13)
+DMs have unequal approximation difficulty. When one DM                                                                          Algorithm      IGD1    IGD2   Mean             IGD1    IGD2   Mean
+has a smooth and easily accessible Pareto structure, whereas                                                                    OptAll          5.747      5.437     5.592     0.0197   0.0071   0.0134
+another has a disconnected, non-convex, or multimodal Pareto                                                                    OptMPNDS2      15.852     15.849    15.851     0.0540   0.0545   0.0542
+structure, the population may converge more rapidly toward                                                                      MOEA/D-MP      15.961     15.558    15.760     0.0381   0.0351   0.0366
+                                                                                                                                MPNNIA         16.062     15.623    15.842     0.0396   0.0363   0.0380
+the former. Although the objectives of all DMs are considered
+sequentially, later updates may not fully compensate for the
+slower progress on the more difficult party.
+   Archive- or clone-based methods like MPNNIA [5] may fur-                                                                    concatenation, many lie outside the common PS and are
+ther amplify an initial party-wise imbalance through unequal                                                                   inferior from the viewpoint of at least one DM.
+survival or reproduction opportunities. In particular, if solu-                                                                   Case B has no common PS and exhibits both geometric
+tions preferred by one DM consistently receive better ranks,                                                                   dissimilarity and unequal approximation difficulty. The linear
+lower local density, or more cloning resources, that region can                                                                PS of DM2 is relatively easy to approach, whereas the
+progressively dominate the population. Such mechanisms may                                                                     multimodal PS of DM1 contains separated preferred regions
+preserve diversity within the favored region while reducing the                                                                and is more difficult to approximate. Consequently, a solution
+search effort devoted to the other DM.                                                                                         set may achieve a favorable average approximation level while
+                                                                                                                               still leaving DM1 farther from its PS. OptAll produces a broad
+                     Case A (MPDMP7)                                                          Case B (MPMOP13)
+                                                                      1                                                        distribution including solutions close to both DMs’ PS, while
+                                                                               No common PS
+     70                                                            0.8                                                         the multiparty methods focus more strongly on the DM2’s PS.
+     60
+                                                                   0.6
+                                                                                                                               These observations show that multiparty mechanisms do not
+                                                                   0.4
+                                                                                                                               ensure equal sacrifice magnitudes when the party-wise PSs are
+     50                                                            0.2
+                                                                                                                               separated and their approximation difficulties differ.
+                                                                      0
+x2
+
+
+
+
+                                                              x2
+
+
+
+
+     40                                                            -0.2
+                                                                                                                                  Overall, mean-based evaluation is most vulnerable to mask-
+                                                                   -0.4                                                        ing unequal compromises when the party-wise PSs have
+     30
+                                                                   -0.6                                                        limited overlap or no intersection and when the approximation
+     20                                                            -0.8                                                        difficulty differs substantially across DMs. In these settings,
+          10   20   30       40        50   60    70    80
+                                                                      -1
+                                                                           0        0.2         0.4        0.6       0.8   1   the mean loss can remain small even when the loss is concen-
+                                  x1                                                                  x1
+                                                                                                                               trated on one DM. The proposed ΨNP complements meanIGD
+                    DM1 PS         DM2 PS        Common PS   OptAll            OptMPNDS2        MOEADMP          MPNNIA
+                                                                                                                               by explicitly accounting for both party-wise losses and mutual
+Fig. 2: Behavioral comparison of representative MPMOP                                                                          acceptability, thereby distinguishing balanced compromises
+optimizers under two distinct party-wise geometries. (a) Case                                                                  from solutions that achieve a favorable average performance
+A (MPDMP7): the two DMs have geometrically similar Pareto                                                                      at the expense of a particular DM.
+sets with a nonempty overlap region, yielding a common PS
+where both parties can be simultaneously satisfied. (b) Case
+                                                                                                                                S-V. VALIDITY OF NASH -P RODUCT E VALUATION OVER
+B (MPMOP13): the two DMs have geometrically dissimilar
+                                                                                                                                           N ON - CONVEX U TILITY S ETS
+Pareto sets with no common PS; in particular, the multimodal
+Pareto structure of DM1 is more difficult to approximate than                                                                     Classical Nash bargaining usually assumes convexity of the
+the linear Pareto set of DM2.                                                                                                  feasible utility set when the Nash product is maximized to
+                                                                                                                               obtain a bargaining solution with existence and uniqueness
+   Fig. 2 illustrates the above mechanisms under two rep-                                                                      guarantees. In the proposed framework, however, the Nash
+resentative party-wise geometries, and Table S-II gives the                                                                    product is used only to evaluate obtained solution sets rather
+specific IGD score on both DMs. In Case A, the two PSs                                                                         than to select a unique bargaining outcome. Therefore, the
+are geometrically similar and have a nonempty overlap region.                                                                  attainable utility set is not required to be convex.
+The multiparty methods, including OptMPNDS2, MOEA/D-
+MP, and MPNNIA, place most of their final solutions within                                                                     Lemma 1. Let U ⊆ R++M be an arbitrary attainable utility
+or close to the common PS. Therefore, both DMs can be                                                                          set, possibly non-convex. For any u = (u1 , . . . , uM ) ∈ U , the
+improved simultaneously and substantial asymmetric sacrifices                                                                  Nash-product indicator
+are unlikely. In contrast, OptAll retains a broader solution                                                                                                         M
+distribution over the two individual PS regions. Although                                                                                                            Y
+                                                                                                                                                        ΨNP (u) =         um                      (1)
+these solutions may remain non-dominated after objective                                                                                                            m=1
+is well defined. Moreover, if u, v ∈ U satisfy um ≥ vm for all                                                                                                                                                         MPDMP11. The convergence behaviors become more dis-
+m and uj > vj for at least one j, then                                                                                                                                                                                 tinguishable on MPDMP18. Although OptMPNDS initially
+                                                                                                                                                                                                                       attains a competitive value, its curve decreases during the
+                                                                          ΨNP (u) > ΨNP (v).                                                                                                                  (2)      subsequent search stage, indicating that the population quality
+Proof. Since U ⊆ R++M , all utilities are positive; hence,                                                                                                                                                             is not fully preserved. In contrast, OptMPNDS2 and OptMP-
+ΨNP (u) is well defined for every attainable utility vector.                                                                                                                                                           NDS3 maintain relatively stable late-stage trajectories, while
+Further, the product of positive numbers is strictly increasing                                                                                                                                                        OptMPNDS3 reaches the highest final value. These results
+in each component. Thus, any componentwise utility improve-                                                                                                                                                            indicate that the compared algorithms differ not only in
+ment strictly increases ΨNP . These arguments are pointwise                                                                                                                                                            their final performance but also in their ability to maintain
+and do not depend on the convexity of U.                                                                                                                                                                               population quality during evolution.
+
+Remark 1. If ΨNP were maximized over a non-convex utility                                                                                                                                                                         S-VII. L IMITATIONS AND S ENSITIVITY A NALYSES
+set, multiple maximizers could exist. This issue is irrelevant                                                                                                                                                            To isolate indicator behaviour from optimizer-dependent ef-
+here because ΨNP is used as an evaluation indicator for                                                                                                                                                                fects, we conduct a metric-level case study on MPDMP13 with
+comparing obtained solution sets, rather than as a rule for                                                                                                                                                            two DMs. The decision space is Ω = [0, 100]2 , where the two
+selecting a unique bargaining solution.                                                                                                                                                                                DMs minimize distances to line segments located at y = 40
+                                                                                                                                                                                                                       and y = 60, respectively. No optimizer is executed. Instead,
+       S-VI. C ONVERGENCE B EHAVIOR ON R EPRESENTATIVE
+                                                                                                                                                                                                                       two fixed candidate sets, Pbias and Pfair , each containing
+                         MPDMP S
+                                                                                                                                                                                                                       100 decision vectors, are evaluated under identical settings.
+                                                                                                                                                                                                                       Pbias is constructed to favor DM1: 85 solutions are sampled
+                                                 0 3 ' 0 3                                                                                                  0 3 ' 0 3  
+                                                                                                                                                                                                                   from DM1’s Pareto set, and the remaining 15 solutions are
+                                                                                                                          
+               
+                                                                                                                                                                                                                       generated near this set with a vertical perturbation bounded
+                                                                                                                          
+                                                                                                                                                                                                                       by 3. In contrast, Pfair contains 100 solutions sampled from
+log( NP)
+
+
+
+
+                                                                                                           log( NP)
+
+
+
+
+                                                                                                                      
+                                                                                                                                                                                                                       line y = 50.
+                                                                                                                      
+                                                                                                                                                                                                                            a) Sensitivity to objective dimensionality: Fig. 4 reports
+                                                                                                                          
+                                                                                                                                                                                                                   the results obtained by increasing the number of objectives per
+                                                                                                                                                                                                        
+                       ) X Q F W L R Q  ( Y D O X D W L R Q V  ×103   O R J  V F D O H                                       ) X Q F W L R Q  ( Y D O X D W L R Q V  ×103   O R J  V F D O H 
+                                                                                                                                                                                                                       DM from 2 to 20. Higher-dimensional objective vectors are
+                                                0 3 ' 0 3                                                                                                  0 3 ' 0 3                                               constructed through deterministic positive affine replications
+                                                                                                                                                                                                               of the original objectives. This construction is intended as
+               
+                                                                                                                          
+                                                                                                                                                                                                                       a controlled stress test of indicator behaviour rather than as
+log( NP)
+
+
+
+
+                                                                                                           log( NP)
+
+
+
+
+                                                                                                                                                                                                                   a replacement for a dedicated high-dimensional benchmark
+                                                                                                                          
+                                                                                                                                                                                                                   suite.
+                                                                                                                      
+                                                                                                                                                                                                                                  56                                                                    28
+                                                                                                                                                                                                                             10                                                                    10
+                                                                                                                                                                                                                                Pbias                                                                 Pbias
+                                                                                                                                                                                                                                  50                                                                    25
+                       ) X Q F W L R Q  ( Y D O X D W L R Q V  ×103   O R J  V F D O H                                       ) X Q F W L R Q  ( Y D O X D W L R Q V  ×103   O R J  V F D O H                   10             Pfair                                                  10             Pfair
+
+                                                         2 S W $ O O                 2 S W 0 3 1 ' 6           2 S W 0 3 1 ' 6              2 S W 0 3 1 ' 6                                                                10
+                                                                                                                                                                                                                                  44
+                                                                                                                                                                                                                                                                                                   10
+                                                                                                                                                                                                                                                                                                        22
+
+                                                                                                                                                                                                                                  38                                                                    19
+                                                                                                                                                                                                                             10                                                                    10
+Fig. 3: Convergence curves of the compared algorithms on rep-
+                                                                                                                                                                                                                                                                                          meanHV
+
+
+
+
+                                                                                                                                                                                                                                  32                                                                    16
+                                                                                                                                                                                                                             10                                                                    10
+                                                                                                                                                                                                                       ψNP
+
+
+
+
+resentative MPDMPs. The horizontal axis denotes the number                                                                                                                                                                   10
+                                                                                                                                                                                                                                  26
+                                                                                                                                                                                                                                                                                                   10
+                                                                                                                                                                                                                                                                                                        13
+
+                                                                                                                                                                                                                                  20
+of function evaluations on a logarithmic scale.                                                                                                                                                                              10                                                                    10
+                                                                                                                                                                                                                                                                                                        10
+
+                                                                                                                                                                                                                                  14                                                                    7
+                                                                                                                                                                                                                             10                                                                    10
+                                                                                                                                                                                                                                  8                                                                     4
+                                                                                                                                                                                                                             10                                                                    10
+   To examine the search dynamics of the compared al-
+                                                                                                                                                                                                                                       2   4        6   8   10   12   14   16   18   20                      2   4        6   8   10   12   14   16   18   20
+gorithms, Fig. 3 presents the convergence curves on four                                                                                                                                                                               (a) Number of objectives per DM (Km)                                  (b) Number of objectives per DM (Km)
+representative MPDMP instances. MPDMP1 and MPDMP11
+are selected from the original benchmark suite, whereas                                                                                                                                                                Fig. 4: Sensitivity of ΨNP and meanHV to the number of
+MPDMP13 and MPDMP18 are selected from the extended no-                                                                                                                                                                 objectives per DM. Pbias predominantly favors DM1, whereas
+common-PS suite. The logarithmic form is adopted to avoid                                                                                                                                                              Pfair provides balanced coverage of the two party-wise Pareto
+numerical scaling issues and to facilitate visual comparison.                                                                                                                                                          sets.
+All algorithms show rapid improvement during the early stage,
+indicating that the search processes quickly move away from                                                                                                                                                               As shown in Fig. 4(a), ΨNP consistently assigns a higher
+the initial random populations toward higher-quality regions.                                                                                                                                                          score to Pfair than to Pbias across all tested dimensions. This
+On MPDMP1, MPDMP11, and MPDMP13, the curves grad-                                                                                                                                                                      result reflects the ability of the product aggregation to penalize
+ually stabilize after the initial increase, suggesting that the                                                                                                                                                        the imbalance induced by the DM1-favoring set. In contrast,
+algorithms reach relatively steady search states. The multiparty                                                                                                                                                       the meanHV values of the two sets are nearly indistinguishable
+methods generally achieve higher final plateaus than Op-                                                                                                                                                               in Fig. 4(b), indicating that averaging party-wise HV values
+tAll, while the differences among OptMPNDS, OptMPNDS2,                                                                                                                                                                 may conceal the unequal coverage of the two DMs. The
+and OptMPNDS3 are comparatively small on MPDMP1 and                                                                                                                                                                    absolute values of both indicators increase rapidly as Km
+grows. This behaviour reflects the known numerical scaling                                                                           TABLE S-III: Comparison of representative aggregation rules
+difficulty of raw HV values in higher-dimensional spaces.                                                                            with the proposed axioms.
+Therefore, although the product-based aggregation remains                                                                                         Aggregation rule          A1   A2   A3   A4
+discriminative in this controlled example, implementations
+                                                                                                                                                  Arithmetic mean           ✓    ✓    ×    ×
+should be used cautiously when the number of objectives is                                                                                        Minimum utility           ×    ✓    ×    ×
+large.                                                                                                                                            Jain’s index / 1 − Gini   ×    ✓    ✓    ×
+      b) Sensitivity to reference-point selection: To investigate                                                                                 Nash product              ✓    ✓    ✓    ×
+reference-point sensitivity, we fix Km = 8 and vary the                                                                                           ΨNP                       ✓    ✓    ✓    ✓
+expansion factor as
+                                      δ ∈ {0.05, 0.10, 0.20, 0.50, 1.00}.                                                      (3)   Monotonicity because improving a non-worst-off DM may
+For DM m, the reference point is defined as                                                                                          leave the aggregate unchanged. Jain’s index and 1−Gini favor
+                                                                                                                                     balanced utility distributions, but they are not strictly Pareto-
+                                          nadir      nadir    ideal
+                                                                    
+                                rm (δ) = zm     + δ zm     − zm       ,                                                        (4)   monotone: for example, moving from (1, 1) to (2, 1) improves
+       ideal
+where zm          nadir
+             and zm     are estimated from the union of PF                                                                           one DM without harming the other, while both fairness values
+samples, Pbias , and Pfair .                                                                                                         decrease. The Nash product satisfies Axioms 1–3 for positive
+                                                                                                                                     utilities, but it does not itself penalize violations of the jointly
+           29
+                                                                                                                                     acceptable region. The concession-based penalty in ΨNP is
+      10               Pbias                                                              Pbias
+                       Pfair
+                                                                        10
+                                                                             14
+                                                                                          Pfair                                      therefore required to enforce Axiom 4.
+           27
+      10
+
+                                                                        10
+                                                                             13                                                            S-IX. MPMOP12-17 B ENCHMARK P ROBLEMS
+                                                               meanHV
+
+
+
+
+           25
+      10
+                                                                                                                                        This section presents detailed descriptions of the
+ΨNP
+
+
+
+
+                                                                             12
+                                                                        10
+      10
+           23
+                                                                                                                                     MPMOP12–MPMOP17 benchmark problems, which are
+           21                                                           10
+                                                                             11                                                      specifically constructed to ensure that the PSs of different
+      10
+                                                                                                                                     DMs are mutually disjoint, i.e., no solution is Pareto-optimal
+                0.05           0.10     0.20   0.50     1.00                      0.05            0.10   0.20    0.50         1.00
+                                                                                                                                     for all DMs simultaneously. This characteristic distinguishes
+                   Reference-point expansion factor δ                                    Reference-point expansion factor δ          MPMOP12–MPMOP17 from MPMOP1–11, in which
+                                                                                                                                     common Pareto-optimal solutions across DMs may exist.
+Fig. 5: Sensitivity of HV-based indicators to the reference-
+                                                                                                                                     The detailed configurations of these benchmark problems are
+point expansion factor δ for the controlled MPDMP13 case
+                                                                                                                                     summarized in Table S-VI.
+with Km = 8.
+                                                                                                                                        To evaluate algorithmic behavior under varying levels of
+                                                                                                                                     compromise among DMs, multiple experimental scenarios are
+   Fig. 5 shows that both meanHV and ΨNP increase substan-
+                                                                                                                                     further defined using different concession-rate thresholds. The
+tially as δ becomes larger. Hence, their absolute values are
+                                                                                                                                     same set of concession-rate thresholds is applied consistently
+sensitive to the location of the reference point. Nevertheless,
+                                                                                                                                     to both categories of benchmark problems, enabling a unified
+ΨNP consistently ranks Pfair above Pbias under all tested
+                                                                                                                                     and fair comparison across problem types. The considered
+values of δ, whereas the separation under meanHV remains
+                                                                                                                                     threshold settings are reported in Table S-IV.
+comparatively small. This ranking stability should not be
+interpreted as reference-point invariance. Rather, it indicates                                                                             S-X. MPDMP13-18 B ENCHMARK P ROBLEMS
+that the ΨNP retains its preference for balanced party-wise
+                                                                                                                                        The MPDMP13–MPDMP18 benchmark suite extends the
+coverage under the tested reference-point range. In practical
+                                                                                                                                     MPDMP framework by considering more complex geomet-
+applications, all compared solution sets should be evaluated
+                                                                                                                                     ric configurations with multiple decision makers (DMs) and
+using the same reference-point construction, and the reference
+                                                                                                                                     heterogeneous numbers of objectives. These problems are
+point should be selected based on a justified estimate of the
+                                                                                                                                     constructed using different Pareto set (PS) geometries, includ-
+attainable objective range.
+                                                                                                                                     ing parallel line segments, triangles, squares, and pentagons,
+                S-VIII. C OMPARISON W ITH R EPRESENTATIVE                                                                            which induce diverse trade-off structures among DMs. As a
+                           AGGREGATION RULES                                                                                         result, the suite provides controlled yet nontrivial test scenarios
+   Table S-III compares several representative aggregation                                                                           for evaluating algorithm performance in multi-DM optimiza-
+rules with the four axioms. The purpose is not to claim that                                                                         tion settings.
+the Nash product is uniquely characterized by these axioms,                                                                             For all problems, the decision vector is defined on a two-
+but to show that commonly used alternatives do not satisfy all                                                                       dimensional continuous space,x ∈ [0, 100]2 . For each DM
+of them simultaneously.                                                                                                              m ∈ {1, . . . , M }, let
+   The arithmetic mean is Pareto-monotone and symmetric,                                                                                            Fm (x) = fm,1 (x), . . . , fm,Km (x)
+                                                                                                                                                                                         
+but it assigns identical scores to balanced and unbalanced
+utility vectors with the same total utility and therefore violates                                                                   denote its objective vector. Each objective function is defined
+Axiom 3. The minimum-utility rule violates strict Pareto                                                                             as the Euclidean distance from the decision vector x to
+a reference point associated with the underlying geometric
+structure.
+             q
+fm,i (x) =         (x1 − pm,i,1 )2 + (x2 − pm,i,2 )2 ,
+                                                 i = 1, . . . , Km ,
+                                                               (5)
+   where pm,i = [pm,i,1 , pm,i,2 ]T denotes the i-th reference
+point defining the geometric structure for DM m, and Km is
+the number of objectives associated with DM m. The reference
+points for all benchmark problems are summarized in Table S-
+V.
+  TABLE S-IV: Concession Rate Threshold Configurations
+                                                                                             TABLE S-V: Reference points for MPDMP13–MPDMP18
+                                              2 DMs                        3 DMs
+ Case        Description                                                                       Problem   DM   Objective number       PS         pi,1   pi,2
+                                             γ1        γ2         γ1            γ2     γ3                                                        30     40
+                                                                                                         1           2           Line segment
+                                                                                                                                                 70     40
+                                                                                               MPDMP13
+                                                                                                                                                 30     60
+   1         No concession                   0.0       0.0        0.0           0.0    0.0               2           2           Line segment
+                                                                                                                                                 70     60
+   2         Partial concession              0.3       0.0        0.3           0.0    0.0                                                       30     35
+   3         Equal partial                   0.3       0.3        0.3           0.3    0.3               1           3             Triangle      50     35
+                                                                                                                                                 40     50
+   4         Asymmetric                      0.3       0.7        0.3           0.1    0.6     MPDMP14
+                                                                                                                                                 50     50
+   5         Equal moderate                  0.5       0.5        0.5           0.5    0.5               2           3             Triangle      70     50
+   6         Equal high                      0.7       0.7        0.7           0.7    0.7                                                       60     65
+                                                                                                                                                 30     35
+                                                                                                                                                 45     35
+                                                                                                         1           4             Square
+                                                                                                                                                 45     50
+                                                                                                                                                 30     50
+                                                                                               MPDMP15
+
+
+
+
+                                                                  －
+                                                                                                                                                 55     50
+              ＭＰＤＭＰ１３                   ＭＰＤＭＰ１４                       ＭＰＤＭＰ１５                                                                    70     50
+       ８０                         ８０                         ８０                                          2           4             Square
+                                                                                                                                                 70     65
+       ７０                         ７０                         ７０
+                                                                                                                                                 55     65
+       ６０                         ６０                         ６０                                                                                  30     40
+       ５０                         ５０                         ５０                                                                                  40     30
+       ４０                         ４０                         ４０                                          1           5            Pentagon       50     35
+       ３０                         ３０                         ３０                                                                                  50     45
+       ２０                         ２０                  ２０                                                                                         35     50
+        ２０    ４０        ６０   ８０    ２０   ４０    ６０   ８０ ２０              ４０ Ｘ？ ６０        ８０       MPDMP16
+                   Ｘ１                      Ｘ１                                                                                                    50     55
+                                  一ＤＭ１ ＰＳ—ＤＭ２ ＰＳ—ＤＭ３ ＰＳ                                                                                          65     50
+              ＭＰＤＭＰ１６                   ＭＰＤＭＰ１７                       ＭＰＤＭＰ１８                            2           5            Pentagon       70     60
+       ８０                         ８０                         ８０
+                                                                                                                                                 60     70
+       ７０                         ７０                         ７０                                                                                  50     65
+       ６０                         ６０                         ６０                                                                                  25     60
+                                                                                                         1           2           Line segment
+    ５０                            ５０                         ５０                                                                                  40     70
+       ４０                         ４０                         ４０                                                                                  60     70
+                                                                                               MPDMP17   2           2           Line segment
+       ３０                         ３０                         ３０                                                                                  75     60
+       ２０                         ２０                         ２０
+                                                                                                                                                 40     30
+                                                                                                         3           2           Line segment
+        ２０    ４０        ６０   ８０ ２０      ４０        ６０    ８０ ２０         ４０        ６０    ８０                                                         60     30
+                   Ｘ１                        Ｘ１                            Ｘ１                                                                    25     45
+                                                                                                         1           3             Triangle      35     35
+                                                                                                                                                 35     55
+Fig. 6: MPDMPs with no common Pareto optimal solutions.                                                                                          45     25
+                                                                                               MPDMP18   2           3             Triangle      55     25
+                                                                                                                                                 50     40
+                                                                                                                                                 65     45
+                                                                                                         3           3             Triangle      75     35
+                                                                                                                                                 75     55
+                  TABLE S-VI: Mathematical Definitions of Benchmark Problems MPMOP12–MPMOP17
+
+ Problem    DM Objective Functions                                                   Variable         Pareto Set (PS)
+                                                                                     Bounds
+                      F1 = (f11 (x), f12 (x)),
+                                  D
+                                  X                                                    x1 ∈ [1, 2],
+            DM1    g1 (x) = 1 +     (xi − 0.5)2 ,                                                     {x | x1 ∈ [1, 2], xi =
+                                  i=2                                                xi≥2 ∈ [0, 1]    0.5 (i ≥ 2)}
+                                    2                       x1
+                  f11 (x) = g1 (x) ·   , f12 (x) = g1 (x) ·
+                                   x1                       2
+MPMOP12
+                      F2 = (f21 (x), f22 (x)),
+                                  D                                2
+                                  X                     1                              x1 ∈ [3, 4],
+            DM2    g2 (x) = 1 +      xi −                                ,                            {x | x1 ∈ [3, 4], xi =
+                                                1 + e−5(x1 −3.5)
+                                  i=2                                                xi≥2 ∈ [0, 1]          1
+                                                                                                                     (i ≥ 2)}
+                                                                                                      1+e−5(x1 −3.5)
+                                        3                           x1
+                  f21 (x) = g2 (x) ·       ,   f22 (x) = g2 (x) ·
+                                        x1                          3
+                      F1 = (f11 (x), f12 (x)),
+                                   D                 2
+                                  X        sin(4πx1 )
+                   g1 (x) = 1 +       xi −               + 100 max(0, x1 − 0.5)2 ,
+            DM1                   i=2
+                                               2                                     xi ∈ [0, 1]      {x | x1 ∈ [0, 0.5), xi =
+                                                                                                      sin(4πx1 )
+                                                      
+                                                                                                          2
+                                                                                                                 (i ≥ 2)}
+                  f11 (x) = g1 (x) x1 + 0.1 sin(3πx1 ) ,
+                                                                4.25
+                  f12 (x) = g1 (x) 1 − x1 + 0.1 sin(3πx1 )
+                      F2 = (f21 (x), f22 (x)),
+
+MPMOP13                           D
+                                  X
+                   g2 (x) = 1 +         x2i + 100 max(0, 0.5 − x1 )2 ,
+            DM2                   i=2                                                xi ∈ [0, 1]      {x | x1 ∈ [0.5, 1], xi =
+                                                                                                     0 (i ≥ 2)}
+                  f21 (x) = g2 (x) x1 + 0.1 sin(3πx1 ) ,
+                                                                4.25
+                  f22 (x) = g2 (x) 1 − x1 + 0.1 sin(3πx1 )
+                      F1 = (f11 (x), f12 (x), f13 (x)),
+                                   D                              2
+                                  X        sin(2π(x1 + x2 ) + π/4)
+                   g1 (x) = 1 +       xi −                            ,
+                                  i=3
+                                                     2
+
+        DM1 f11 (x) = g1 (x) sin2 π x1 ,
+                                        
+                                                                                     xi ∈ [0, 1]      {x         |       x1       ∈
+                                     2                                                                [0, 0.5], x2 ∈ [0, 1], xi =
+                                                                                                      sin(2π(x1 +x2 )+π/4)
+                                 2 π
+                                              π                                                                        (i ≥ 3)}
+            f12 (x) = g1 (x) sin       x2 cos2       x1 ,                                                       2
+                                     2             2
+                                  π            π 
+MPMOP14     f13 (x) = g1 (x) cos2      x2 cos2       x1
+                                     2             2
+                 F2 = (f21 (x), f22 (x), f23 (x)),
+                                   D 
+                                  X                          π 2
+                   g2 (x) = 1 +       xi − sin 2π(x1 + x2 ) +       ,
+                                  i=3
+                                                              2
+
+            DM2 f21 (x) = g2 (x) sin2 π x1 ,
+                                           
+                                                                                     xi ∈ [0, 1]      {x        |      x1         ∈
+                                        2                                                             (0.5, 1], x2 ∈ [0, 1],  xi =
+                                     2 π
+                                                π                                                 sin 2π(x1 + x2 ) + π2 (i ≥
+                f22 (x) = g2 (x) sin      x2 cos2    x1 ,                                             3)}
+                                        2          2
+                                      π         π 
+                f23 (x) = g2 (x) cos2     x2 cos2    x1
+                                        2          2
+                                                                                                        Continued on next page...
+          TABLE S-VI: Mathematical Definitions of Benchmark Problems MPMOP12–MPMOP17 (Continued)
+
+ Prob.    DM Objective Functions                                                           Variable         Pareto Set (PS)
+                                                                                           Bounds
+
+                    F1 = (f11 (x), f12 (x)),
+                                D
+                                X                                                            x1 ∈ [1, 2],
+          DM1    g1 (x) = 1 +     (xi − 0.5)2 ,                                                             {x | x1 ∈ [1, 2], xi =
+                                i=2                                                        xi≥2 ∈ [0, 1]    0.5 (i ≥ 2)}
+                                2                     x1
+                f11 (x) = g1 (x)   , f12 (x) = g1 (x)
+                                x1                    2
+                    F2 = (f21 (x), f22 (x)),
+MPMOP15                         D                                2
+                                X                   1                                        x1 ∈ [2, 3],
+          DM2    g2 (x) = 1 +      xi −                                ,                                    {x | x1 ∈ [2, 3], xi =
+                                             1 + e−5(x1 −2.5)
+                                i=2                                                        xi≥2 ∈ [0, 1]          1
+                                                                                                                           (i ≥ 2)}
+                                                                                                            1+e−5(x1 −2.5)
+                                3                     x1
+                f21 (x) = g2 (x)   , f22 (x) = g2 (x)
+                                x1                    3
+                    F3 = (f31 (x), f32 (x)),
+                                D
+                                X                                                            x1 ∈ [3, 4],
+          DM3    g3 (x) = 1 +     (xi − 0.5)2 ,                                                             {x | x1 ∈ [3, 4], xi =
+                                i=2                                                        xi≥2 ∈ [0, 1]    0.5 (i ≥ 2)}
+                                   4                         x1
+                f31 (x) = g3 (x)      ,   f32 (x) = g3 (x)
+                                   x1                        4
+                    F1 = (f11 (x), f12 (x)),
+                                 D                 2
+                                X        sin(4πx1 )
+                 g1 (x) = 1 +       xi −               + 100 max(0, x1 − 1/3)2 ,
+          DM1                   i=2
+                                             2                                             xi ∈ [0, 1]      {x | x1 ∈ [0, 1/3), xi =
+                                                                                                            sin(4πx1 )
+                                                    
+                                                                                                                2
+                                                                                                                       (i ≥ 2)}
+                f11 (x) = g1 (x) x1 + 0.1 sin(3πx1 ) ,
+                                                              2.5
+                f12 (x) = g1 (x) 1 − x1 + 0.1 sin(3πx1 )
+                    F2 = (f21 (x), f22 (x)),
+                                D
+                                X
+                                      x2i + 100 max(0, 1/3 − x1 )2 + max(0, x1 − 2/3)2 ,
+                                                                                      
+                 g2 (x) = 1 +
+          DM2                   i=2                                                        xi ∈ [0, 1]      {x | x1 ∈ [1/3, 2/3), xi =
+                                                                                                           0 (i ≥ 2)}
+MPMOP16         f21 (x) = g2 (x) x1 + 0.1 sin(3πx1 ) ,
+                                                              3.0
+                f22 (x) = g2 (x) 1 − x1 + 0.1 sin(3πx1 )
+                    F3 = (f31 (x), f32 (x)),
+                                 D                 2
+                                X        sin(4πx1 )
+                 g3 (x) = 1 +       xi +               + 100 max(0, 2/3 − x1 )2 ,
+          DM3                   i=2
+                                             2                                             xi ∈ [0, 1]      {x | x1 ∈ [2/3, 1], xi =
+                                                                                                           − sin(4πx
+                                                                                                                  2
+                                                                                                                     1)
+                                                                                                                        (i ≥ 2)}
+                f31 (x) = g3 (x) x1 + 0.1 sin(3πx1 ) ,
+                                                              3.5
+                f32 (x) = g3 (x) 1 − x1 + 0.1 sin(3πx1 )
+
+                                                                                                              Continued on next page...
+          TABLE S-VI: Mathematical Definitions of Benchmark Problems MPMOP12–MPMOP17 (Continued)
+
+ Prob.    DM Objective Functions                                       Variable      Pareto Set (PS)
+                                                                       Bounds
+
+                    F1 = (f11 (x), f12 (x), f13 (x)),
+                                D
+                                X
+                 g1 (x) = 1 +     (xi − 0.5x1 )2 ,
+                                i=3
+
+                           π  π                        π
+          DM1       y1 =     + x1 ,           y2 =       x2 ,          xi ∈ [0, 1]   {x | x1 < 0.33, x2 ∈
+                           6  3                        2                             [0, 1], xi = 0.5x1 (i ≥ 3)}
+                f11 (x) = g1 (x) sin(y1 ),
+
+                f12 (x) = g1 (x) sin(y2 ) cos(y1 ),
+
+                f13 (x) = g1 (x) cos(y2 ) cos(y1 )
+MPMOP17
+                    F2 = (f21 (x), f22 (x), f23 (x)),
+                                D
+                                X
+                 g2 (x) = 1 +         x2i ,
+                                i=3
+
+                           π                  π
+          DM2       y1 =     x1 ,     y2 =      x2 ,                   xi ∈ [0, 1]   {x | 0.33 ≤ x1 <
+                           2                  2                                      0.66, x2 ∈ [0, 1], xi =
+                f21 (x) = g2 (x) sin(y1 ),                                           0 (i ≥ 3)}
+
+                f22 (x) = g2 (x) sin(y2 ) cos(y1 ),
+
+                f23 (x) = g2 (x) cos(y2 ) cos(y1 )
+                    F3 = (f31 (x), f32 (x), f33 (x)),
+                                D
+                                X
+                 g3 (x) = 1 +     (xi − 0.5x1 )2 ,
+                                i=3
+
+                           π  π                        π
+          DM3       y1 =     + x1 ,           y2 =       x2 ,          xi ∈ [0, 1]   {x | x1 ≥ 0.66, x2 ∈
+                           6  3                        2                             [0, 1], xi = 0.5x1 (i ≥ 3)}
+                f31 (x) = g3 (x) sin(y1 ),
+
+                f32 (x) = g3 (x) sin(y2 ) cos(y1 ),
+
+                f33 (x) = g3 (x) cos(y2 ) cos(y1 )
+                             R EFERENCES
+[1] W. Liu, W. Luo, X. Lin, M. Li, and S. Yang, “Evolutionary approach
+    to multiparty multiobjective optimization problems with common pareto
+    optimal solutions,” in 2020 IEEE Congress on Evolutionary Computation
+    (CEC). IEEE, 2020, pp. 1–9.
+[2] Z. She, W. Luo, Y. Chang, X. Lin, and Y. Tan, “A new evolutionary
+    approach to multiparty multiobjective optimization,” in International
+    Conference on Swarm Intelligence. Springer, 2021, pp. 58–69.
+[3] Z. She, W. Luo, X. Lin, Y. Chang, and Y. Shi, “Multiparty distance
+    minimization: Problems and an evolutionary approach,” Swarm and
+    Evolutionary Computation, vol. 83, p. 101415, 2023.
+[4] Y. Chang, W. Luo, X. Lin, Z. She, and Y. Shi, “Multiparty multiobjec-
+    tive optimization by moea/d,” in 2022 IEEE Congress on Evolutionary
+    Computation (CEC). IEEE, 2022, pp. 01–08.
+[5] K. Chen, W. Luo, Q. Zhou, P. Xu, Y. Shi et al., “A novel immune
+    algorithm for multiparty multiobjective optimization,” IEEE Transactions
+    on Emerging Topics in Computational Intelligence, 2025.
+

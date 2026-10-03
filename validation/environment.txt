@@ -1,0 +1,9 @@
+Python 3.12.3
+Platform Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+numpy 2.5.3
+scipy 1.18.1
+pandas 3.0.6
+matplotlib 3.11.2
+pymoo 0.6.2
+pytest 9.1.1
+GNU Octave: NOT INSTALLED

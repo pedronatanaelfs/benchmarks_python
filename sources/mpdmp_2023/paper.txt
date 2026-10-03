@@ -1,0 +1,969 @@
+                                                Evolutionary Multiparty Distance Minimization
+                                              Zeneng Shea , Wenjian Luoa , Xin Linb , Yatong Changa , Yuhui Shic
+                                             Email: 20s151103@stu.hit.edu.cn, luowenjian@hit.edu.cn, iskcal@mail.ustc.edu.cn,
+                                                            20s151150@stu.hit.edu.cn, shiyh@sustech.edu.cn
+arXiv:2207.13390v1 [cs.NE] 27 Jul 2022
+
+
+
+
+                                         a
+                                            School of Computer Science and Technology, Harbin Institute of Technology, Shenzhen
+                                                                       518055, Guangdong, China
+                                         b
+                                           School of Computer Science and Technology of the University of Science and Technology
+                                                                  of China, Hefei 230027, Anhui, China
+                                             c
+                                               Guangdong Provincial Key Laboratory of Brain-inspired Intelligent Computation,
+                                           Department of Computer Science and Engineering, Southern University of Science and
+                                                                   Technology, Shenzhen 518055, China
+
+
+
+
+                                         Abstract
+                                         In the field of evolutionary multiobjective optimization, the decision maker
+                                         (DM) concerns conflicting objectives. In the real-world applications, there
+                                         usually exist more than one DM and each DM concerns parts of these ob-
+                                         jectives. Multiparty multiobjective optimization problems (MPMOPs) are
+                                         proposed to depict the MOP with multiple decision makers involved, where
+                                         each party concerns about certain some objectives of all. However, in the evo-
+                                         lutionary computation field, there is not much attention paid on MPMOPs.
+                                         This paper constructs a series of MPMOPs based on distance minimization
+                                         problems (DMPs), whose Pareto optimal solutions can be vividly visualized.
+                                         To address MPMOPs, the new proposed algorithm OptMPNDS3 uses the
+                                         multiparty initializing method to initialize the population and takes JADE2
+                                         operator to generate the offsprings. OptMPNDS3 is compared with OptAll,
+                                         OptMPNDS and OptMPNDS2 on the problem suite. The result shows that
+                                         OptMPNDS3 is strongly comparable to other algorithms.
+                                         Keywords: Multiobjective optimization, multiparty multiobjective
+                                         optimization, distance minimization problem, evolutionary algorithm
+
+
+                                         1. Introduction
+                                            In real world, decision-making problems tend to have multiple conflicting
+                                         objectives, where decision makers (DMs) often require the best solutions.
+
+                                         Preprint submitted to Information Science                                 July 28, 2022
+Such decision-making problems with two or three objectives are called mul-
+tiobjective optmization problems (MOPs) [5, 10, 27] and those with more
+than three objectives are named as many-objective optimization problems
+(MaOPs) [15, 30, 18]. MOPs are import problems and play significant roles
+in engineering application including industrial design [23, 19], scheduling
+[22, 4], project portfolio optimization [12, 26] and vehicle routing [34, 2].
+The MOP attracts interest of many researchers from various domains in-
+cluding mathematicians, computer scientists, engineers and economists for
+its applications in different fields [3].
+    Since the objectives of MOPs are conflicting, optimizing one objective
+may lead to deterioration of others in MOPs. Under the situation, Pareto op-
+timal solutions, which no solution is better than in all objectives, are answers
+to the problems. Given no further information, Pareto optimal solutions are
+offered to the decision maker to choose. To obtain Pareto optimal solutions,
+evolutionary methods are widely used for they can generate a host of solu-
+tions in one run without further information. A great many of MOEAs hava
+been proposed such as: NSGA-II [8], NSGA-III [7], PEAS-II [6], SPEA2 [41],
+MOEA/D [37], Two Arch2 [31], and HypE [1].
+    However, there is usually more than one decision maker involved in the
+real world applications. These decision maker usually does not care about
+all objectives in MOPs but a part. Multiparty multiobjective optimization
+problems (MPMOPs) are a special class of MOPs, where involves multiple
+parties and each party stands for a DM. In MPMOPs, there is more than one
+party and at least one party has more than one objective. Using MOEAs to
+handle with MPMOPs will obtain a series of solutions which are not Pareto
+optimal in the view of all parties. For example, the article [13] introduces a
+real-world distance minimization problem (DMP), which is easily visualized
+for its 2-dimensional decision space. The problem is to find an optimal po-
+sition which is closest to a set of predefined target points in an actual map.
+Four objectives to be minimized in the problem as follows.
+
+   • f1 (x): Distance to the nearest elementary school,
+
+   • f2 (x): Distance to the nearest junior-high school,
+
+   • f3 (x): Distance to the nearest convenience store,
+
+   • f4 (x): Distance to the nearest railway station.
+
+
+                                       2
+Suppose it is a living position problem about how to locate the best position
+for a family to purchase or rent their house, treating the house-buying prob-
+lem as an MOP is not appropriate. In fact, it is not necessary that everyone
+in a family should focus on all the objectives. The positions of elementary
+and junior-high schools (f1 (x) and f2 (x)) generally are only focused by the
+student in the family. The parent maybe cares more about the positions of
+the convenience store and the railway station (f3 (x) and f4 (x)). There are
+two decision makers, which focus on different objectives, in the living posi-
+tion problem. Given two solutions x and y, x and y are not dominated by
+each other in the view of the student, i.e., f1 (x) ≤ f1 (y), f2(x) ≥ f2 (y); x
+dominates y in the view of the parent, i.e.,f3 (x) < f3 (y), f4 (x) ≤ f4 (y). As a
+result, x and y do not dominate each other by comparing the all objectives.
+In fact, x is obviously better than y for they are equal good for the student
+and x is better for the parent.
+     There is only a little work focusing on the MPMOPs. In [20], Liu et
+al. proposed a multiparty algorithm called OptMPNDS based on NSGA-II
+[8] to address the MPMOPs with common Pareto optimal solutions, which
+are Pareto optimal for all parties simultaneously. In 2021, She et al. [25]
+proposed a modified algorithm based on OptMPNDS, namely OptMPNDS2,
+which defines a new dominance relationship under the multiple parties. How-
+ever, as an emerging topic in the computational intelligence field, there are
+still many aspects to be further studied. Yet, the study about the MPMOP
+mainly concentrates on the design of algorithms and there is no work about
+the real-world applications of the MPMOPs. Consequently, this paper stud-
+ies the MPMOP from the viewpoint of applications, which applies distance
+minimization problems (DMPs). The DMP is a visual multiobjective opti-
+mization problem. So the adaptation of DMPs helps to learn the behaviors
+of the multiparty multiobjective optimization algorithm. The primary con-
+tributions of this paper are as follows:
+   • We constructed a multiparty multiobjective optimization problem suite
+     which is based on distance minimization problems. It is the first work
+     about the applications of MPMOPs. This application can visualize the
+     behaviors of algorithms in decision space.
+   • A multiparty multiobjective algorithm, namely OptMPNDS3, is pro-
+     posed. The algorithm uses the Pareto optimal solutions of every DM as
+     initial population and JADE2 operator to generate offspring. OptMP-
+     NDS, OptMPNDS2 and OptMPNDS3 are compared together on the
+
+                                        3
+      problem suite. Experimental results show that OptMPNDS3 has a
+      comparative performance on the problem suite.
+
+    The rest of his paper is organized as follows. First, in Section 2, we
+introduce the related concepts of the multiobjective optimization problem,
+the multiparty multiobjective optimization problem, and the distance mini-
+mization problem. We construct new multiparty multiobjective optimization
+test problems based on several distance minimization problems in Section 3.
+Next, we propose an evolutionary algorithm for the problem suite in Section
+4. Then, Section 5 gives the experimental results of four algorithms on the
+test problems. Finally, we make a brief conclusion in Section 6.
+
+2. Related Work
+2.1. Multiobjective Optimization Problems
+    Multiobjective optimization problems (MOPs) are a type of optimization
+problems which have two or three conflicting objectives. And many-objective
+optimization problems (MaOPs) have more than three conflicting objectives.
+These conflicting objectives cannot be optimal simultaneously. An MOP or
+MaOP is defined as a minimization problem without loss of generality [11]:
+
+                Minimize  F (x) = (f1 (x), f2 (x), . . . , fm (x)),
+                          
+                          hi (x) = 0, i = 1, . . . , np
+                          
+                                                                               (1)
+                Subject to gj (x) ≤ 0, j = 1, . . . , nq ,
+                          
+                            x ∈ [xmin , xmax ]
+                          
+
+where x represents a vector of decision variables, of which lower and upper
+bounds are xmin and xmax , respectively. hi (x) = 0 denotes the i-th equality
+constraint of np ; gj (x) ≤ 0 denotes the j-th inequality constraint of nq . fn (x)
+stands for objectives of the n-th objectives, and the number of objectives is
+m.
+    Since the objectives of an MOP are conflicting with each other, the op-
+timizer of an MOP obtains the Pareto optimal solutions according to the
+Pareto dominance. Pareto dominance is a binary relation about decision
+vectors [39]. Given two decision vectors x and y, x dominates y, denoted
+as x ≺ y, if and only if f (x) ≤ f (y) for all objectives and fn (x) < fn (y)
+for at least one objective fn [21]. Based on the dominance relation, a
+
+
+                                        4
+Pareto optimal solution x, namely a non-dominated solution, is not dom-
+inated by any solutions in the whole decision space Ω, i.e., ∄x′ ∈ Ω, x′ ≺ x.
+The Pareto optimal set (PS) is a set consisting of Pareto optimal solu-
+tions, which is formally defined as PS = {x ∈ Ω|∄x′ ∈ Ω, x′ ≺ x}. The
+Pareto optimal front (PF) is a set of objectives of PS, formally defined as
+{f = (f1 (x), f2 (x), · · · , fm (x))|x ∈ P S}.
+
+2.2. Multiparty Multiobjective Optimization Problems
+    A multiparty multiobjective optimization problem (MPMOP) is a special
+kind of MOPs, which involves multiple parties. Each party stands for a
+decision maker and focuses on a part of objectives. In an MPMOP, the
+objective function of Formula (1) becomes the following form:
+
+                     F (x) = (f1 (x), f2 (x), . . . , fM (x)),
+                                                                          (2)
+                     fi (x) = (fi1 , fi2 , . . . , fiim )
+
+where M stands for the number of parties; im represents the quantity of
+objectives of i-th party.
+    Using the normal multiobjective optimization evolutionary algorithms
+will obtain a host of solutions which are not optimal for multiple parties.
+If only two solutions are not Pareto dominated each other in one party, they
+are not Pareto dominated each other in all objectives. Only when a solu-
+tion is better than another in one party and equal good or better in the rest
+parties, it is said that the solution is better.
+    Thus, Liu et al. [20] proposed an algorithm based on NSGA-II, called
+OptMPNDS, to address the MPMOPs with common Pareto solutions, which
+are optimal in each MOP of each party. To demonstrate the strength of
+OptMPNDS, the authors also showed the baseline algorithm, namely OptAll,
+which uses NSGA-II to optimize MPMOPs but the dominated solutions for
+multiparty are eliminated from the population in the final generation. Then,
+She et al. [25] proposed a modified algorithm based on OptMPNDS, namely
+OptMPNDS2, which could obtain better performance on some questions of
+the benchmark. Both two algorithms redefine the dominance relation of
+solutions according to the Pareto levels of all parties, which are obtained
+from the non-dominated sorting in NSGA-II. The main difference among
+the three algorithms including NSGA-II is the sorting of individuals. As
+for OptMPNDS, first, it applies the non-dominated sorting to each party
+to obtain multiple levels for each individual. Then, the common solutions,
+
+                                        5
+whose levels of all parties are the same, are assigned with the same level as
+the number; the rest solutions are assigned with the max level of all parties as
+the number. All the solutions are sorted into different ranks according to the
+numbers in ascending order. When the numbers of the former and the latter
+are the same, the former are prior and placed in front of the latter. Final, in
+each rank, crowding distance is used to sort individuals with the same rank.
+While, after obtaining the multiple levels of all parties, OptMPNDS2 takes
+all the levels of each individual as its “objectives” to perform non-dominated
+sorting again.
+
+2.3. Distance Minimization Problems
+    To evaluate solutions obtained by MOEAs, many indicators are proposed
+such as Generational Distance (GD) [29], Inverted Generational Distance
+(IGD) [38] and Hypervolume (HV) [42]. However, DMs usually do not un-
+derstand the indicators for lack of professional knowledge. And some MOEAs
+get into trouble when facing the many-objective optimization problems. Con-
+sequently, the distance minimization problem (DMP) is proposed to study
+the behaviors of MOEAs recently since its 2-dimensional or 3-dimensional
+decision space is easily visualized.
+    The DMP is to find an optimal position which is closest to a set of pre-
+defined target points in 2-dimensional or 3-dimensional space. The DMP is
+a classic MOP because minimizing the distances to multiple target points
+simultaneously is required in order to solve the problem. Koppen et al. [17]
+constructed the problem that, given a set of points, the objective function
+is the Euclidean distances of a point to the predefined points. They proved
+that the Pareto optimal set of the problem equals the convex closure of the
+set of points. Rudolph et al. [24] introduced a variant of the DMPs, where
+the equivalent Pareto subsets are distributed in multiple disconnected re-
+gions instead of single polygon. Ishibuchi et al. [14] defined the general form
+of the variant that each objective is not the distance to one point, but to
+the nearest point of a set points. And they used the DMPs to test MOEAs
+and generate a real-world many-objective test problem from a real map [13].
+Later, they further generated the DMPs from 2-dimensional decision space
+to n-dimensional decision space and tested performances of algorithms by
+the DMPs with 10, 100 and 1000 dimensions [16]. Zille et al. [40] modified
+the DMP by using the Manhattan distance as the objective function to sub-
+stitute the Euclidean distance and found it more difficult to address. And
+they generated the dynamic DMPs by reshaping the decision space, changing
+
+                                       6
+the distance measure, and so on. Xu et al. [33] proposed a fast procedure
+to construct the Pareto optimal set of DMPs under the Manhattan distance
+measure and proved the optimality of the theoretical construction process.
+
+2.4. JADE2
+    Differential evolution (DE) is an evolutionary algorithm which uses the
+difference of population individuals to direct the evolution. The procedure
+of DE is initializing population and then repeating mutation, crossover and
+selection operators until the terminated condition is satisfied.
+    JADE2 [35] is a self-adaptive DE algorithm [28, 43] used to solve mul-
+tiobjective optimization problems based on JADE [36], which controls the
+parameters CR and F automatically. It generates the two parameters for
+every individual xi , which are chosen from two random distributions respec-
+tively.
+                            CRi = randni (µCR , 0.1)
+                                                                         (3)
+                             Fi = randci (µF , 0.1)
+where randni (µCR , 0.1) is the number randomly selected from normal dis-
+tribution with mean µCR and variance 0.1; randci (µF , 0.1) is the number
+randomly selected from Cauchy distribution with local parameter µF and
+scale parameter 0.1. If the obtained value for CRi is out of [0, 1], CRi is
+truncated to 0 or 1. If the obtained value for Fi is greater than 1, Fi is trun-
+cated to 1; If Fi is less than 0, a value is selected again from the distribution.
+    µCR and µF are updated as follows for each generation, which are initial-
+ized to 0.5.
+                      µCR = (1 − c) · µCR + c · meanA (SCR )
+                                                                               (4)
+                       µF = (1 − c) · µF + c · meanL (SF )
+where c is a learning rate which is set to 0.1. SCR and SF are two collections
+storied the successful CR and F of previous generations, which are chosen
+from the corresponding individual when the trial vector generated is better
+than it corresponding parent. meanA (.) is arithmetic mean and meanL (.) is
+calculated as follows:
+                                                     2
+                                          P
+                                             F ∈S F
+                           meanL (SF ) = P F                               (5)
+                                              F ∈SF F
+
+   Besides, JADE2 uses ‘DE/current-to-pbest/1’ as the mutation operator
+and an external archive to maintain the diversity. The operator ‘DE/current-
+to-pbest/1’ chooses pbest xP best randomly from top p percent individuals
+
+                                        7
+instead of the best individual.
+                     ui (t) = xi (t) + F ∗ (xP best (t) − xi (t))
+                                                                                (6)
+                                     + F ∗ (xi1 (t) − xi2 (t))
+
+where xi2 is randomly chosen from the population; xi1 is randomly chosen
+from the union of the population and the archive to help algorithm to ex-
+plore the bigger region to maintain diversity. The external archive is used
+to store individuals which are not selected. After updating all individuals in
+a generation, if the archive exceeds the predefined size, some individuals are
+randomly eliminated until satisfying the size limit.
+    To address MOPs, the selection of JADE2 includes two stages.
+
+(1) When finishing generating trial vectors, the trial vector is compared with
+    its parent by dominance relation. The non-dominated solution is picked
+    to next stage; the dominated solution is added to the archive.
+
+(2) The left solutions of the first stage participate the non-dominance sorting
+    which NSGA-II uses. And the better ones survive; The worse ones are
+    added to the archive.
+
+3. The Multiparty DMPs
+    In [14], Ishibuchi at el. demonstrates the use of 2-dimensional distance
+minimization problems (DMPs). It aims to obtain a point in a 2-dimensional
+region whose distances to sets of given points should be minimized simulta-
+neously. The general form of the DMP, namely an unconstrained MOP, is as
+follows:
+                 Minimize f (x) = (f1 (x), f2 (x), . . . , fm (x)),      (7)
+where x represents the 2-dimensional decision vector. fn denotes the n-th
+objective of m, which is calculated by the Euclidean distance to a set of k
+points (pn1 , pn2, . . . , pnk ). Specifically, the distance to the nearest point of
+the set is practically used as fn (x):
+
+          fn (x) = min{dis(x, pn1 ), dis(x, pn2 ), · · · , dis(x, pnk )},       (8)
+
+where dis(x, p) means the distance between points x and p.
+   To construct a DMP with m objectives, m sets of points are required, and
+a set has k points. Moreover, problems are not identical because of using
+
+                                          8
+different k. Based on Formulas (7) and (8), Ishibuchi et al. uses the DMP to
+examine evolutionary algorithms including NSGA-II in the occasion k = 1
+and 2. For k = 1, the Formula (8) becomes the form as follows.
+
+                                 fn (x) = dis(x, pn1 )                           (9)
+
+    The multiparty distance minimization problem (MPDMP) can be con-
+structed by adding a party to each target point. The multiparty multiobjec-
+tive optimization problems with two parties, each of which has two objectives,
+based on the DMPs are defined as follows:
+               Minimize F = (F1 , F2 )
+                                                                                (10)
+               F1 = (f1 , f2 , . . . , fi ), F2 = (fi+1 , fi+2 , . . . , fj )
+
+where F1 represents the objective function of the party who cares about from
+f1 to fi , F2 represents the objective function of another party who cares about
+the rest objectives i.e., from fi+1 to fj . fn (x), which is the same as Formula
+(9) (an objective of a DMP), represents the distance to the predefined target
+point.
+    The test problem suite in this paper is constructed according to the
+Formula (10). There are totally 8 problems in the test suite, which are
+described as follows. They are constructed from two overlapped geometric
+shapes, which belong to two parties respectively. These problems constructed
+through the above method have common Pareto solutions. The vertexes of
+each geometric shape are the target points of one party and the Euclidean
+distances to the vertexes are objectives of the party. The first two problems
+are generated from four target points, where two points are for each party. In
+view of each party, the DM faces an MOP with two objectives which are the
+distances to above two points. As Figures 1 and 2 shown, for each party, the
+line connected two target points is the region of his or her Pareto solutions.
+And the Pareto solution for all parties is the intersection of each MOP of
+each party. Consequently, the PS of MPDMP1, as the same as MPDMP2,
+is the tagged intersection point of two lines. The target points of MPDMP3
+are the vertexes of a line and a triangle, where each shape for one party. As
+it proved in [17], the convex closure of target points is the Pareto solutions
+in a DMP. The line is the PS of one party and the triangle is the PS for
+another party. Consequently, the PS of MPDMP3 is the intersection region
+of the line and triangle.
+
+
+                                             9
+                    Table 1: The shapes of PS for all problems
+
+  Problem         PS of Party 1         PS of Party 2            PS
+  MPDMP1          one line              one line                 one point
+  MPDMP2          one line              one line                 one point
+  MPDMP3          one line              one triangle             one line
+  MPDMP4          one triangle          one triangle             one point
+  MPDMP5          one triangle          one triangle             one triangle
+  MPDMP6          one rectangle         one rectangle            one line
+  MPDMP7          one rectangle         one rectangle            one rectangle
+  MPDMP8          one pentagon          one pentagon             one pentagon
+
+    MPDMP4 and MPDMP5 are constructed from two overlapped regular
+triangles, of which the difference is the region of the PS. The PS of MPDMP4
+is one point and one triangle for MPDMP5.
+    Similarly, MPDMP6 and MPDMP7, where PSs are a line and a rectangle,
+respectively, are constructed from two overlapped rectangles. MPDMP8 is
+constructed from two overlapped regular pentagons, of which the PS region
+is a pentagon.
+
+4. Proposed algorithms
+4.1. Framework
+     When it comes to designing an evolutionary algorithm to address MOPs,
+it is of the utmost importance to balance convergence improvement and di-
+versity maintenance. That the non-dominated sorting with all objectives
+together will obtain a lot of dominated solutions for MPMOPs suggests that
+the selection pressure is so weak, and the diversity of solutions is maintained
+strongly. While, the multiparty sorting in OptMPNDS2 that we proposed
+in [25] generates a relatively strong selection pressure to eliminate the dom-
+inated solutions, which results in convergence improving of solutions.
+     The new algorithm, named OptMPNDS3, employs two strategies includ-
+ing initializing and JADE2 operators. Algorithm 1 shows the main pseu-
+docodes of the framework and its main procedures are as follows.
+
+(1) The population P0 is initialized with population size N.
+
+                                       10
+         80                                   PS
+
+
+
+
+         60
+    x2
+
+
+
+
+         40
+
+
+
+
+         20
+
+
+
+                   20   40         60        80
+                              x1
+
+Figure 1: MPDMP1, each line represents the PS of one party
+
+
+
+
+         80
+                                              PS
+
+
+
+
+         60
+    x2
+
+
+
+
+         40
+
+
+
+
+         20
+              20        40              60
+                              x1
+
+Figure 2: MPDMP2, each line represents the PS of one party
+
+
+
+                             11
+Figure 3: MPDMP3, the line represents the PS of one party and the triangle for another
+
+
+
+
+           Figure 4: MPDMP4, each triangle represents the PS of one party
+
+
+
+                                         12
+Figure 5: MPDMP5, each triangle represents the PS of one party
+
+
+
+
+Figure 6: MPDMP6, each rectangle represents the PS of one party
+
+
+
+                              13
+Figure 7: MPDMP7, each rectangle represents the PS of one party
+
+
+
+
+Figure 8: MPDMP8, each pentagon represents the PS of one party
+
+
+
+                              14
+Algorithm 1 OptMPNDS3
+Require: N (the population size),
+    F = (F1 (x), F2 (x), . . . , FM (x)) (the objective function)
+Ensure: MP S (the multiparty Pareto optimal solutions)
+ 1: P0 = Initialization(N, F )
+ 2: t = 0, Qt = ∅, A = ∅
+ 3: P0 = MPNDS2(P0 , F )
+ 4: Sort P0 by crowding entropy for each rank
+ 5: while F E is not reached do
+ 6:   Offsprings Qt are generated from Pt combined with A using parameters
+      µCR and µF
+ 7:   The non-dominate solutions in Qt and Pt are storied in Rt , others are
+      put into A
+ 8:   B = MPNDS2(Rt , F )
+ 9:   Sort B by crowding entropy for each rank
+10:   i = 1, Pt+1 = ∅
+11:   while |Pt+1 ∪ Bi | ≤ N do
+12:      Pt+1 = Pt+1 ∪ Bi
+13:      i=i+1
+14:   end while
+15:   while |Pt+1 | < N do
+16:      Remove the least crowded solution from Bi into Pt+1
+17:      Update the crowding entropy of Bi
+18:   end while
+19:   Update the A with individuals not selected
+20:   Put CR and F which generate solutions in Pt+1 into SCR and SF
+21:   Update the parameters µCR and µF with SCR and SF
+22:   t=t+1
+23: end while
+24: Set MP S as solutions which is Pareto optimal in all parties in Pt
+
+
+
+
+                                    15
+Algorithm 2 Initialization
+Require: N (the population size),
+    F = (F1 (x), F2 (x), . . . , FM (x)) (the objective function)
+Ensure: S (the Pareto optimal solutions of each party)
+ 1: S = ∅
+ 2: for i ∈ {1, · · · , M} do
+                                                N
+ 3:   Initialize population P0 with size ⌊ M       ⌋
+ 4:   t = 0, Qt = ∅
+ 5:   while F EI is not reached do
+ 6:      Rt = Pt ∪ Qt
+ 7:      A = NonDominatedSorting(Rt , Fi )
+ 8:      Sort A by crowding distance for each rank
+ 9:      i = 1, Pt+1 = ∅
+10:      while |Pt+1 ∪ Ai | ≤ N do
+11:        Pt+1 = Pt+1 ∪ Ai
+12:        i=i+1
+13:      end while
+                                    N
+14:      Pt+1 = Pt+1 ∪ Ai (1 : ⌊ M    ⌋ − |Pt+1 |)
+15:      Create the offspring Qt+1 of Pt+1
+16:      t=t+1
+17:   end while
+18:   Put Pt into S
+19: end for
+
+
+
+
+(2) The trial vectors are generated according to Formula (6) and then the
+    crossover is performed. The non-dominated solutions from the popula-
+    tion Pt and its trial vectors are gathered into Rt ; The remaining dom-
+    inated solutions are storied into archive A. These steps are almost the
+    same as JADE2.
+
+(3) Function MPNDS2(.) is applied to sort these individuals into different
+    ranks B. Then, individuals in the same rank are sorted according to the
+    crowding distance.
+
+(4) The individuals in sorted collection B are picked as the next generation
+    Pt one by one. And the solutions excluded by non-dominated sorting are
+
+                                        16
+Algorithm 3 MPNDS2 [25]
+Require: Rt , F = (F1 (x), F2 (x), . . . , FM (x))
+Ensure: F
+ 1: L = ∅ ;
+ 2: for i ∈ {1, · · · , M} do
+ 3:   L(:, i) = NonDominatedSorting(Rt , Fi ) ;
+ 4: end for
+ 5: F = NonDominatedSorting(Rt , L)
+
+
+
+
+    put into A.
+
+(5) Update the archive A and the parameter µCR and µF .
+
+(6) Back to (2) perform the evolution of next generation and the loop from
+    steps 5 to 23 is repeated until F E (the maximum fitness evaluations) is
+    reached.
+
+(7) Return the final solutions MP S.
+
+    A modified JADE2 operator is used to generate the offsprings. First,
+when the archive meets the size limitation, the newcomer takes the place
+of the closest one in archive. The measure of closeness uses Euclidean
+distance in the decision space. Second, crowding distance is substituted
+by crowding entropy [32]. Crowding entropy considers not only the av-
+erage distance of two points on either side, but also the distribution be-
+tween the two points. The source code of this framework is available at
+https://github.com/MiLabHITSZ/2022SheOptMPNDS3.
+
+4.2. Initialization
+    In the framework, the initializing strategy of OptMPNDS3 is imple-
+mented by the function Initialization(.). And the pseudocodes of function
+Initialization(.) are shown in Algorithm 2. The core idea of the initializing
+is that the solution to the MPMOP has to be Pareto front to all parties if
+the question has common solutions. So, the algorithm firstly finds out the
+Pareto front of each party respectively as the start of the evolution.
+
+
+                                       17
+    Specific, the procedure of function Initialization(.) is depicted as follows.
+First, S is initialized to ∅. Then, in the loop from step 2 to 19, the Pareto
+solution of multiple parties are obtained from a party to another. Algorithm
+2 treats the MPMOP as multiple MOPs in view of multiple parties. For each
+party, the procedure to obtain the Pareto solution is identical to NSGA-II
+and the maximum fitness evaluations of initialization in each party is set the
+same as F EI. Finally, the Pareto solutions of all parties, of which quantity
+is no more than N, are gathered into S.
+
+4.3. Multiparty Sorting
+    As in [25], we first sort the solutions according to non-dominated sorting
+to obtain the Pareto levels for every party. And then, the Pareto levels of
+all parties of one individual are used as its “objective” to participate the fol-
+lowing sorting to accomplish the evaluation. The procedure is implemented
+in function MPNDS2(.), which is depicted in Algorithm 3. Although MP-
+NDS2(.) is adapted to the framework, its effect is almost the same with [25]
+as Algorithm 3 shown.
+
+5. Experiments
+5.1. Settings
+    The test problems are from MPDMP1 from MPDMP8 and the distance
+function dis(.) of problems uses Euclidean measures.
+    All these algorithms are run 30 times independently on the problems to
+compare the average results. For each run, the population size is set to 200;
+F E (the maximum fitness evaluations) is set to 80000. In OptMPNDS3,
+F EI, which contains in F E, is set as 10000. For OptAll, OptMPNDS and
+OptMPNDS2, The simulated binary crossover (SBX) [9] is used, of which
+crossover probability is set as 1.0 and the distribution index is set as 15;
+The polynomial mutation is used, of which the mutation probability is set
+as 0.5 and the distribution index is set as 20. For OptMPNDS3, the JADE2
+operator is used, where p is set to 0.05 and c is set to 0.05.
+
+5.2. Performance Metric
+    The slightly modified Inverted Generational Distance (IGD), which de-
+fines the distance from a point to the PF, is used. The specific formulas are
+
+
+
+                                       18
+as follows [20].
+                           M q
+                           X
+             d(v, S) = min    (vi1 − si1 )2 + · · · + (viji − siji )2
+                        s∈S
+                              i=1
+                               P                                             (11)
+                                    v∈P ∗d(v, P )
+             IGD(P ∗, P ) =
+                                       |P ∗|
+where d(v, S) represents the distance from an individual v to the PF S. s
+represents the individual in P F ; vij , as well as sij , means the j-th objective
+of the i-th party. P ∗ represents the true P F and P represents the P F that
+algorithms obtained. The smaller the value is, the better performance the
+algorithm has.
+
+5.3. Compared Algorithms
+    Algorithm OptAll in [20] simply puts objectives of all party together and
+treats the MPMOP as an MOP. OptMPNDS and OptMPNDS2 both define
+the multiparty sorting relationship based on NSGA-II to address the MP-
+MOP. OptMPNDS takes the max level among the levels obtained by using
+non-dominated sorting of all parties as the rank of the solution. Especially,
+priority is given to the solution with the same level of all parties in OptMP-
+NDS. OptMPNDS2 directly uses the levels obtained in all parties as the
+objectives to sort again. The last procedure of all algorithms is to eliminate
+the solutions which are not in the first rank after non-dominated sorting
+in all parties, since all the test problems have the common Pareto optimal
+solutions.
+
+5.4. Results
+    The IGD values of all these algorithms on problems from MPDMP1 to
+MPDMP8 are shown in Table 2. Each row stands for the mean and standard
+deviation values of certain one algorithm. And the best results are labeled
+in the bold font in each column. Since the DMP is easily used to visually
+examine the behaviors of multiobjective evolutionary algorithms, this section
+does not only consider the IGD values, but also analyzes the test algorithms
+above in the decision space.
+    As Table 2 shown, the best IGD values of MPDMP1 and MPDMP2 are
+obtained by the algorithm OptMPNDS3. These two problems, of which PSs
+both are a point respectively, show the convergence ability of the OptMP-
+NDS3. OptMPNDS outperforms other algorithms in MPDMP3, of which
+
+                                            19
+                    Table 2: The mean and standard IGD values of 30 runs
+
+ problem   OptAll                   OptMPNDS                 OptMPNDS2                OptMPNDS3
+ MPDMP1    4.0422e+00(2.4607e+00)   5.4518e-02(2.9469e-02)   4.7641e-02(2.7699e-02)   4.4678e-02(2.8456e-02)
+ MPDMP2    3.9441e+00(2.0614e+00)   6.4854e-02(3.4374e-02)   6.1729e-02(3.2529e-02)   5.7665e-02(3.5736e-02)
+ MPDMP3    2.7295e+00(6.6283e-01)   2.1066e-01(4.7955e-02)   2.1530e-01(4.1893e-02)   1.1286e-01(3.5309e-02)
+ MPDMP4    1.7758e-02(1.3846e-02)   9.5788e-04(2.1092e-03)   1.0511e-03(1.6580e-03)   1.3263e-02(6.0290e-03)
+ MPDMP5    6.9001e+00(6.0692e-01)   2.9676e+00(9.1629e-02)   2.9440e+00(1.2337e-01)   2.6629e+00(9.8791e-02)
+ MPDMP6    3.2338e+00(7.9582e-01)   1.3157e-01(8.9143e-03)   1.2986e-01(9.1713e-03)   8.3832e-02(1.3690e-03)
+ MPDMP7    8.9266e+00(1.2515e+00)   2.4542e+00(1.3254e-01)   2.4549e+00(1.3088e-01)   2.2578e+00(1.0964e-01)
+ MPDMP8    6.2347e+00(8.0153e-01)   2.4560e+00(6.5224e-02)   2.4574e+00(8.6273e-02)   2.2545e+00(5.5708e-02)
+
+
+
+PS is a line, and solutions OptMPNDS3 obtained rank align in the PS line.
+The performance of OptMPNDS3, especially compared with OptMPNDS, is
+not so good in the MPMOP4. In MPMOP5, OptMPNDS3 performs better
+and finds the optimal region, of which shape is a triangle. In MPDMP6,
+MPMOP7 and MPMOP8, where the quantity of objectives of one party are
+more than three, the solutions OptMPNDS3 obtained almost in the common
+PS.
+    The performance of OptMPNDS3 is noticeably different with other al-
+gorithms in MPDMP4 and MPDMP6. The optimal solutions in the final
+population of one run for the two algorithms on MPDMP4 and MPDMP6
+are displayed in the decision space as Figure 9 shown. The red filled circles
+represent the solutions obtained by OptMPNDS and the blue circles represent
+the solutions obtained by OptMPNDS3. Solutions of OptMPNDS3 almost
+tightly gather around one point which is the true PS of MPDMP4; However,
+solutions of OptMPNDS are distributed dispersedly in a larger region. To
+our surprise, one of solutions which OptMPNDS obtained almost hits on
+the optimal point. As Figure 10 shown, OptMPNDS, which is similar to
+OptMPNDS3, finds solutions around one line that is the true PS, but some-
+times its solutions can reach other region way far from the PS; The behavior
+of OptMPNDS3 matches our expectation for it shows a perfect balance of
+convergence and diversity, whose solutions are ranked on the line of true PS
+almost with the same interval. It is believed that the solution of OptMP-
+NDS3 distributes more balance. In conclusion, OptMPNDS3 performs better
+other algorithms in almost all the problems.
+
+6. Conclusion
+   In this paper, it is the first time that a piece of work shows the applications
+of MPMOPs. The multiparty test problems based on distance minimization
+
+                                                   20
+Figure 9: Solutions obtained by one run of OptMPNDS and OptMPNDS3 on MPDMP4
+
+
+
+
+Figure 10: Solutions obtained by one run of OptMPNDS and OptMPNDS3 on MPDMP6
+
+
+
+                                    21
+problems can clearly show the behaviors of the test algorithms in the decision
+space. Then, we modify the evolutionary algorithms including using initializ-
+ing method and self-adaptive DE operators to address these problems. And
+the proposed algorithm OptMPNDS3 has a comparable performance against
+the other algorithms. For the visual of the problem suite, behaviors of algo-
+rithms are analyzed to illustrate how algorithms work and why OptMPNDS3
+has a comparable performance.
+    In the future, we will construct multiparty optimization problems without
+the common Pareto solution and find out a proper performance metric to
+fairly measure the solutions algorithms obtained for MPMOPs without the
+common solution. We will also apply more evolutionary methods to study
+MPMOPs and propose more effective evolutionary algorithms to address
+MPMOPs.
+
+Acknowledgment
+   This study is supported by the National Natural Science Foundation of
+China (Grant No. 61573327), and the Guangdong Provincial Key Laboratory
+(Grant No. 2020B121201001).
+
+References
+ [1] Bader, J., Zitzler, E., 2011. HypE: An algorithm for fast hypervolume-
+     based many-objective optimization. Evolutionary computation 19, 45–
+     76.
+
+ [2] Braekers, K., Ramaekers, K., Van Nieuwenhuyse, I., 2016. The vehicle
+     routing problem: State of the art classification and review. Computers
+     & Industrial Engineering 99, 300–313.
+
+ [3] Chand, S., Wagner, M., 2015. Evolutionary many-objective optimiza-
+     tion: A quick-start guide. Surveys in Operations Research and Manage-
+     ment Science 20, 35–42.
+
+ [4] Chiang, A.J., Jeang, A., Chiang, P.C., Chiang, P.S., Chung, C.P., 2019.
+     Multi-objective optimization for simultaneous operating room and nurs-
+     ing unit scheduling. International Journal of Engineering Business Man-
+     agement 11, 1847979019891022.
+
+
+                                     22
+ [5] Coello, C.C., 2006. Evolutionary multi-objective optimization: a his-
+     torical view of the field. IEEE Computational Intelligence Magazine 1,
+     28–36.
+ [6] Corne, D.W., Jerram, N.R., Knowles, J.D., Oates, M.J., 2001. PESA-II:
+     Region-based selection in evolutionary multiobjective optimization, in:
+     Proceedings of the 3rd annual conference on genetic and evolutionary
+     computation, pp. 283–290.
+ [7] Deb, K., Jain, H., 2013. An evolutionary many-objective optimization
+     algorithm using reference-point-based nondominated sorting approach,
+     part I: solving problems with box constraints. IEEE Transactions on
+     Evolutionary Computation 18, 577–601.
+ [8] Deb, K., Pratap, A., Agarwal, S., Meyarivan, T., 2002. A fast and
+     elitist genetic algorithm: NSGA-II. IEEE Transactions on Evolutionary
+     Computation 6, 182–197.
+ [9] Deb, K., Sindhya, K., Okabe, T., 2007. Self-adaptive simulated bi-
+     nary crossover for real-parameter optimization, in: Proceedings of the
+     9th Annual Conference on Genetic and Evolutionary Computation, pp.
+     1187–1194.
+[10] Fonseca, C.M., Fleming, P.J., 1995. An overview of evolutionary al-
+     gorithms in multiobjective optimization. Evolutionary Computation 3,
+     1–16.
+[11] Geng, H., Zhang, M., Huang, L., Wang, X., 2006. Infeasible elitists and
+     stochastic ranking selection in constrained evolutionary multi-objective
+     optimization, in: Proceedings of Asia-Pacific Conference on Simulated
+     Evolution and Learning, Springer. pp. 336–344.
+[12] Goli, A., Zare, H.K., Tavakkoli-Moghaddam, R., Sadeghieh, A., 2019.
+     Hybrid artificial intelligence and robust optimization for a multi-
+     objective product portfolio problem case study: The dairy products
+     industry. Computers & industrial engineering 137, 106090.
+[13] Ishibuchi, H., Akedo, N., Nojima, Y., 2011. A many-objective test prob-
+     lem for visually examining diversity maintenance behavior in a decision
+     space. Proceedings of Genetic and Evolutionary Computation Confer-
+     ence, GECCO’11 , 649–656.
+
+                                     23
+[14] Ishibuchi, H., Hitotsuyanagi, Y., Tsukamoto, N., Nojima, Y., 2010.
+     Many-objective test problems to visually examine the behavior of multi-
+     objective evolution in a decision space, in: Proceedings of International
+     Conference on Parallel Problem Solving from Nature, Springer. pp. 91–
+     100.
+
+[15] Ishibuchi, H., Tsukamoto, N., Nojima, Y., 2008. Evolutionary many-
+     objective optimization: A short review, in: Proceedings of 2008 IEEE
+     Congress on Evolutionary Computation (CEC), IEEE. pp. 2419–2426.
+
+[16] Ishibuchi, H., Yamane, M., Akedo, N., Nojima, Y., 2013. Many-
+     objective and many-variable test problems for visual examination of
+     multiobjective search, in: Proceedings of 2013 IEEE Congress on Evo-
+     lutionary Computation, IEEE. pp. 1491–1498.
+
+[17] Köppen, M., Yoshida, K., 2007. Substitute distance assignments in nsga-
+     ii for handling many-objective optimization problems, in: Proceedings of
+     International Conference on Evolutionary Multi-Criterion Optimization,
+     Springer. pp. 727–741.
+
+[18] Li, B., Li, J., Tang, K., Yao, X., 2015. Many-objective evolutionary
+     algorithms: A survey. ACM Computing Surveys 48, 1–35.
+
+[19] Lin, Y.H., Lin, M.D., Tsai, K.T., Deng, M.J., Ishii, H., 2021. Multi-
+     objective optimization design of green building envelopes and air con-
+     ditioning systems for energy conservation and CO2 emission reduction.
+     Sustainable Cities and Society 64, 102555.
+
+[20] Liu, W., Luo, W., Lin, X., Li, M., Yang, S., 2020. Evolutionary ap-
+     proach to multiparty multiobjective optimization problems with com-
+     mon pareto optimal solutions, in: Proceedings of 2020 IEEE Congress
+     on Evolutionary Computation (CEC), IEEE. pp. 1–9.
+
+[21] Miettinen, K., 2012. Nonlinear multiobjective optimization. volume 12.
+     Springer Science & Business Media.
+
+[22] Ming, B., Liu, P., Chang, J., Wang, Y., Huang, Q., 2017. Deriving oper-
+     ating rules of pumped water storage using multiobjective optimization:
+     Case study of the han to wei interbasin water transfer project, china.
+     Journal of Water Resources Planning and Management 143, 05017012.
+
+
+                                     24
+[23] Rosso, F., Ciancio, V., Dell’Olmo, J., Salata, F., 2020. Multi-objective
+     optimization of building retrofit in the mediterranean climate by means
+     of genetic algorithm application. Energy and Buildings 216, 109945.
+
+[24] Rudolph, G., Naujoks, B., Preuss, M., 2007. Capabilities of EMOA
+     to detect and preserve equivalent pareto subsets, in: Proceedings of
+     International Conference on Evolutionary Multi-Criterion Optimization,
+     Springer. pp. 36–50.
+
+[25] She, Z., Luo, W., Chang, Y., Lin, X., Tan, Y., 2021. A new evolutionary
+     approach to multiparty multiobjective optimization, in: Proceedings of
+     International Conference on Swarm Intelligence, Springer. pp. 58–69.
+
+[26] Silva, Y.L.T., Herthel, A.B., Subramanian, A., 2019. A multi-objective
+     evolutionary algorithm for a class of mean-variance portfolio selection
+     problems. Expert Systems with Applications 133, 225–241.
+
+[27] Tamaki, H., Kita, H., Kobayashi, S., 1996. Multi-objective optimization
+     by genetic algorithms: A review, in: Proceedings of IEEE International
+     Conference on Evolutionary Computation, IEEE. pp. 517–522.
+
+[28] Tanabe, R., Fukunaga, A., 2013. Success-history based parameter adap-
+     tation for differential evolution, in: Proceedings of 2013 IEEE congress
+     on evolutionary computation, IEEE. pp. 71–78.
+
+[29] Van Veldhuizen, D.A., Lamont, G.B., 2000. On measuring multiobjec-
+     tive evolutionary algorithm performance, in: Proceedings of the 2000
+     Congress on Evolutionary Computation, IEEE. pp. 204–211.
+
+[30] Von Lücken, C., Barán, B., Brizuela, C., 2014. A survey on multi-
+     objective evolutionary algorithms for many-objective problems. Com-
+     putational Optimization and Applications 58, 707–756.
+
+[31] Wang, H., Jiao, L., Yao, X., 2014. Two Arch2: An improved two-
+     archive algorithm for many-objective optimization. IEEE Transactions
+     on Evolutionary Computation 19, 524–541.
+
+[32] Wang, Y.N., Wu, L.H., Yuan, X.F., 2010. Multi-objective self-adaptive
+     differential evolution with elitist archive and crowding entropy-based
+     diversity measure. Soft Computing 14, 193–209.
+
+
+                                     25
+[33] Xu, J., Deb, K., Gaur, A., 2015. Identifying the pareto-optimal solu-
+     tions for multi-point distance minimization problem in manhattan space.
+     Comput. Optim. Innov.(COIN) Lab., East Lansing, MI, USA, COIN
+     Tech. Rep 2015018.
+
+[34] Zhang, H., Zhang, Q., Ma, L., Zhang, Z., Liu, Y., 2019. A hybrid
+     ant colony optimization algorithm for a multi-objective vehicle routing
+     problem with flexible time windows. Information Sciences 490, 166–190.
+
+[35] Zhang, J., Sanderson, A.C., 2008. Self-adaptive multi-objective differ-
+     ential evolution with direction information provided by archived inferior
+     solutions, in: Proceedings of 2008 IEEE Congress on Evolutionary Com-
+     putation, CEC 2008, pp. 2801–2810. doi:10.1109/CEC.2008.4631174.
+
+[36] Zhang, J., Sanderson, A.C., 2009. JADE: Adaptive differential evolu-
+     tion with optional external archive. IEEE Transactions on Evolutionary
+     Computation 13, 945–958. doi:10.1109/TEVC.2009.2014613.
+
+[37] Zhang, Q., Li, H., 2007. MOEA/D: A multiobjective evolutionary al-
+     gorithm based on decomposition. IEEE Transactions on Evolutionary
+     Computation 11, 712–731.
+
+[38] Zhang, Q., Zhou, A., Zhao, S., Suganthan, P.N., Liu, W., Tiwari, S.,
+     et al., 2008. Multiobjective optimization test instances for the cec 2009
+     special session and competition. University of Essex, Colchester, UK and
+     Nanyang technological University, Singapore, special session on perfor-
+     mance assessment of multi-objective optimization algorithms, technical
+     report 264, 1–30.
+
+[39] Zhou, A., Qu, B.Y., Li, H., Zhao, S.Z., Suganthan, P.N., Zhang, Q.,
+     2011. Multiobjective evolutionary algorithms: A survey of the state of
+     the art. Swarm and Evolutionary Computation 1, 32–49.
+
+[40] Zille, H., Mostaghim, S., 2015. Properties of scalable Distance Mini-
+     mization Problems using the Manhattan metric, in: Proceedings of 2015
+     IEEE Congress on Evolutionary Computation, IEEE. pp. 2875–2882.
+
+[41] Zitzler, E., Laumanns, M., Thiele, L., 2001. SPEA2: Improving the
+     strength pareto evolutionary algorithm. TIK-report 103.
+
+
+
+                                     26
+[42] Zitzler, E., Thiele, L., 1999. Multiobjective evolutionary algorithms: a
+     comparative case study and the strength pareto approach. IEEE Trans-
+     actions on Evolutionary Computation 3, 257–271.
+
+[43] Zuo, M., Dai, G., Peng, L., 2021. A new mutation operator for
+     differential evolution algorithm. Soft Computing 25, 13595–13615.
+     doi:10.1007/s00500-021-06077-6.
+
+
+
+
+                                     27
+

@@ -1,0 +1,36 @@
+name,family,n_var,n_dm,n_obj_total,n_obj_dm1,n_obj_dm2,n_obj_dm3,bounds_summary,ps_known,pf_known,common_ps_exists,source,validation_status
+MPDMP1,MPDMP,2,2,4,2,2,,xl=0; xu=100,True,True,True,"She, Luo, Lin, Chang, Shi (2023). Multiparty distance minimization: Problems and an evolutionary approach. Swarm and Evo",PASS
+MPDMP2,MPDMP,2,2,4,2,2,,xl=0; xu=100,True,True,True,"She, Luo, Lin, Chang, Shi (2023). Multiparty distance minimization: Problems and an evolutionary approach. Swarm and Evo",PASS
+MPDMP3,MPDMP,2,2,5,2,3,,xl=0; xu=100,True,True,True,"She, Luo, Lin, Chang, Shi (2023). Multiparty distance minimization: Problems and an evolutionary approach. Swarm and Evo",PARTIAL
+MPDMP4,MPDMP,2,2,6,3,3,,xl=0; xu=100,True,True,True,"She, Luo, Lin, Chang, Shi (2023). Multiparty distance minimization: Problems and an evolutionary approach. Swarm and Evo",PASS
+MPDMP5,MPDMP,2,2,6,3,3,,xl=0; xu=100,True,True,True,"She, Luo, Lin, Chang, Shi (2023). Multiparty distance minimization: Problems and an evolutionary approach. Swarm and Evo",PARTIAL
+MPDMP6,MPDMP,2,2,8,4,4,,xl=0; xu=100,True,True,True,"She, Luo, Lin, Chang, Shi (2023). Multiparty distance minimization: Problems and an evolutionary approach. Swarm and Evo",PASS
+MPDMP7,MPDMP,2,2,8,4,4,,xl=0; xu=100,True,True,True,"She, Luo, Lin, Chang, Shi (2023). Multiparty distance minimization: Problems and an evolutionary approach. Swarm and Evo",PARTIAL
+MPDMP8,MPDMP,2,2,10,5,5,,xl=0; xu=100,True,True,True,"She, Luo, Lin, Chang, Shi (2023). Multiparty distance minimization: Problems and an evolutionary approach. Swarm and Evo",PARTIAL
+MPDMP9,MPDMP,2,3,6,2,2,2,xl=0; xu=100,True,True,True,"She, Luo, Lin, Chang, Shi (2023). Multiparty distance minimization: Problems and an evolutionary approach. Swarm and Evo",PASS
+MPDMP10,MPDMP,2,3,8,2,2,4,xl=0; xu=100,True,True,True,"She, Luo, Lin, Chang, Shi (2023). Multiparty distance minimization: Problems and an evolutionary approach. Swarm and Evo",PASS
+MPDMP11,MPDMP,2,3,9,3,3,3,xl=0; xu=100,True,True,True,"She, Luo, Lin, Chang, Shi (2023). Multiparty distance minimization: Problems and an evolutionary approach. Swarm and Evo",PARTIAL
+MPDMP12,MPDMP,2,3,12,4,4,4,xl=0; xu=100,True,True,True,"She, Luo, Lin, Chang, Shi (2023). Multiparty distance minimization: Problems and an evolutionary approach. Swarm and Evo",PARTIAL
+MPDMP13,MPDMP,2,2,4,2,2,,xl=0; xu=100,True,True,False,"Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization. arXiv:2601.224",PASS
+MPDMP14,MPDMP,2,2,6,3,3,,xl=0; xu=100,True,True,False,"Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization. arXiv:2601.224",PASS
+MPDMP15,MPDMP,2,2,8,4,4,,xl=0; xu=100,True,True,False,"Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization. arXiv:2601.224",PASS
+MPDMP16,MPDMP,2,2,10,5,5,,xl=0; xu=100,True,True,False,"Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization. arXiv:2601.224",PASS
+MPDMP17,MPDMP,2,3,6,2,2,2,xl=0; xu=100,True,True,False,"Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization. arXiv:2601.224",PASS
+MPDMP18,MPDMP,2,3,9,3,3,3,xl=0; xu=100,True,True,False,"Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization. arXiv:2601.224",PASS
+MPMOP1,MPMOP,10,2,4,2,2,,"xl=[1.,0.,0.,0.,0.,0.,0.,0.,0.,0.]; xu=[4.,1.,1.,1.,1.,1.,1.,1.,1.,1.]",True,True,True,"Liu, Luo, Lin, Li, Yang (2020). Evolutionary Approach to Multiparty Multiobjective Optimization Problems with Common Par",PASS
+MPMOP2,MPMOP,10,2,4,2,2,,"xl=[ 0.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.]; xu=1",True,True,True,"Liu, Luo, Lin, Li, Yang (2020). Evolutionary Approach to Multiparty Multiobjective Optimization Problems with Common Par",PASS
+MPMOP3,MPMOP,10,2,4,2,2,,"xl=[ 0.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.]; xu=1",True,True,True,"Liu, Luo, Lin, Li, Yang (2020). Evolutionary Approach to Multiparty Multiobjective Optimization Problems with Common Par",PASS
+MPMOP4,MPMOP,10,2,6,3,3,,"xl=[ 0., 0.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.]; xu=1",True,True,True,"Liu, Luo, Lin, Li, Yang (2020). Evolutionary Approach to Multiparty Multiobjective Optimization Problems with Common Par",PASS
+MPMOP5,MPMOP,10,2,6,3,3,,xl=0; xu=1,True,True,True,"Liu, Luo, Lin, Li, Yang (2020). Evolutionary Approach to Multiparty Multiobjective Optimization Problems with Common Par",PASS
+MPMOP6,MPMOP,10,2,6,3,3,,"xl=[ 0., 0.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.]; xu=1",True,True,True,"Liu, Luo, Lin, Li, Yang (2020). Evolutionary Approach to Multiparty Multiobjective Optimization Problems with Common Par",PASS
+MPMOP7,MPMOP,10,3,6,2,2,2,"xl=[1.,0.,0.,0.,0.,0.,0.,0.,0.,0.]; xu=[4.,1.,1.,1.,1.,1.,1.,1.,1.,1.]",True,True,True,"Liu, Luo, Lin, Li, Yang (2020). Evolutionary Approach to Multiparty Multiobjective Optimization Problems with Common Par",PASS
+MPMOP8,MPMOP,10,3,6,2,2,2,"xl=[ 0.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.]; xu=1",True,True,True,"Liu, Luo, Lin, Li, Yang (2020). Evolutionary Approach to Multiparty Multiobjective Optimization Problems with Common Par",PASS
+MPMOP9,MPMOP,10,3,9,3,3,3,"xl=[ 0., 0.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.]; xu=1",True,True,True,"Liu, Luo, Lin, Li, Yang (2020). Evolutionary Approach to Multiparty Multiobjective Optimization Problems with Common Par",PASS
+MPMOP10,MPMOP,10,3,9,3,3,3,xl=0; xu=1,True,True,True,"Liu, Luo, Lin, Li, Yang (2020). Evolutionary Approach to Multiparty Multiobjective Optimization Problems with Common Par",PASS
+MPMOP11,MPMOP,10,3,9,3,3,3,"xl=[ 0., 0.,-1.,-1.,-1.,-1.,-1.,-1.,-1.,-1.]; xu=1",True,True,True,"Liu, Luo, Lin, Li, Yang (2020). Evolutionary Approach to Multiparty Multiobjective Optimization Problems with Common Par",PASS
+MPMOP12,MPMOP,10,2,4,2,2,,"xl=[1.,0.,0.,0.,0.,0.,0.,0.,0.,0.]; xu=[4.,1.,1.,1.,1.,1.,1.,1.,1.,1.]",True,False,False,"Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization. arXiv:2601.224",PARTIAL
+MPMOP13,MPMOP,10,2,4,2,2,,xl=0; xu=1,True,False,False,"Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization. arXiv:2601.224",PARTIAL
+MPMOP14,MPMOP,10,2,6,3,3,,xl=0; xu=1,True,False,False,"Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization. arXiv:2601.224",PARTIAL
+MPMOP15,MPMOP,10,3,6,2,2,2,"xl=[1.,0.,0.,0.,0.,0.,0.,0.,0.,0.]; xu=[4.,1.,1.,1.,1.,1.,1.,1.,1.,1.]",True,False,False,"Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization. arXiv:2601.224",PARTIAL
+MPMOP16,MPMOP,10,3,6,2,2,2,xl=0; xu=1,True,False,False,"Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization. arXiv:2601.224",PARTIAL
+MPMOP17,MPMOP,10,3,9,3,3,3,xl=0; xu=1,True,False,False,"Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization. arXiv:2601.224",PARTIAL
