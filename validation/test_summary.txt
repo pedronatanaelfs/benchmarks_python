@@ -5,9 +5,9 @@ scipy 1.18.1
 pymoo 0.6.2
 pytest 9.1.1
 Octave 10.3.0 (conda-forge)
-Tests: 146 passed, 1 skipped, 0 failed
+Tests: 227 passed, 1 skipped, 0 failed
 ---
-...............................................s........................ [ 48%]
-........................................................................ [ 97%]
-...                                                                      [100%]
-146 passed, 1 skipped in 2.09s
+Includes 35 parameterized licensed-MATLAB objective regression cases.
+Objective comparison: 35 PASS, 0 FAIL (rtol=1e-9, atol=1e-10).
+Includes 33 parameterized licensed-MATLAB PS/PF regression cases.
+PS/PF comparison: 33 PASS, 0 FAIL; MPMOP4/9 safely excluded.

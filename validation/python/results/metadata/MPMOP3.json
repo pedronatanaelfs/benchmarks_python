@@ -1,0 +1,55 @@
+{
+  "name": "MPMOP3",
+  "family": "MPMOP",
+  "n_var": 10,
+  "n_dm": 2,
+  "n_obj_per_dm": [
+    2,
+    2
+  ],
+  "n_obj_total": 4,
+  "xl": [
+    0.0,
+    -1.0,
+    -1.0,
+    -1.0,
+    -1.0,
+    -1.0,
+    -1.0,
+    -1.0,
+    -1.0,
+    -1.0
+  ],
+  "xu": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "source": "Liu, Luo, Lin, Li, Yang (2020). Evolutionary Approach to Multiparty Multiobjective Optimization Problems with Common Pareto Optimal Solutions. IEEE CEC 2020. Official code: https://github.com/lwjie595/OptMPNDS (Problems/MPMOP/MPMOP_Value.m).",
+  "year": 2020,
+  "pareto_set_known": true,
+  "pareto_front_known": true,
+  "common_ps_status": "exists",
+  "common_ps_exists": "exists",
+  "notes": "value_id=MPMOP3, times=[0.0, 1.5707963267948966]. Objective formulas from MPMOP_Value.m. Default n_var=10 from OptMPNDS classdefs; ZM26 experiments on MPMOP1\u201311 used D=2 (table caption).",
+  "dimension_source": "OptMPNDS MATLAB default Global.D=10; ZM26 tab:MPMOP_results uses D=2",
+  "dimension_status": "SOURCE_DEFAULT_OPTMPNDS",
+  "encoding": "real",
+  "dm_objective_indices_1based": [
+    [
+      1,
+      2
+    ],
+    [
+      3,
+      4
+    ]
+  ]
+}

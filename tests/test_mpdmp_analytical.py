@@ -57,3 +57,35 @@ def test_mpdmp17_three_dms() -> None:
     assert p.n_dm == 3
     assert p.n_obj_per_dm == [2, 2, 2]
     assert np.allclose(p.get_reference_points(2), [[40, 30], [60, 30]])
+
+
+@pytest.mark.parametrize(
+    "name,expected_rows",
+    [
+        ("MPDMP13", 100),
+        ("MPDMP14", 100),
+        ("MPDMP15", 100),
+        ("MPDMP16", 100),
+        ("MPDMP17", 300),
+        ("MPDMP18", 300),
+    ],
+)
+def test_conflict_pf_matches_matlab_sampling_shape(
+    name: str, expected_rows: int
+) -> None:
+    p = get_problem(name)
+    pf = p.get_pareto_front()
+    assert pf is not None
+    assert pf.shape == (expected_rows, p.n_obj)
+    assert np.all(np.isfinite(pf))
+
+
+def test_matlab_concession_cases() -> None:
+    two_dm = get_problem("MPDMP13")
+    assert np.allclose(two_dm.get_concession(0), [0.0, 0.0])
+    assert np.allclose(two_dm.get_concession(0.4), [0.3, 0.7])
+    assert np.allclose(two_dm.get_concession(7), [1.0, 1.0])
+
+    three_dm = get_problem("MPDMP17")
+    assert np.allclose(three_dm.get_concession(0.4), [0.3, 0.1, 0.6])
+    assert np.allclose(three_dm.get_concession(0.7), [1.0, 1.0, 1.0])

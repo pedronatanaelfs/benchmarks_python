@@ -24,13 +24,12 @@ def test_mpmop12_g_on_ps() -> None:
     ps0 = p.get_pareto_set(dm=0, n_points=50)
     assert ps0 is not None
     # On DM1 PS, g1 should be 1
-    g1 = 1.0 + np.sum((ps0[:, 1:] - 0.5) ** 2, axis=1)
+    g1 = 1.0 + np.sum((ps0[:, 1:] - 1.0) ** 2, axis=1)
     assert np.allclose(g1, 1.0, atol=1e-12)
 
     ps1 = p.get_pareto_set(dm=1, n_points=50)
     assert ps1 is not None
-    tmp = 1.0 / (1.0 + np.exp(-5.0 * (ps1[:, 0] - 3.5)))
-    g2 = 1.0 + np.sum((ps1[:, 1:] - tmp[:, None]) ** 2, axis=1)
+    g2 = 1.0 + np.sum(ps1[:, 1:] ** 2, axis=1)
     assert np.allclose(g2, 1.0, atol=1e-12)
 
     assert p.get_common_pareto_set().shape[0] == 0
@@ -41,8 +40,7 @@ def test_mpmop15_g_on_ps() -> None:
     assert p.n_dm == 3
     ps1 = p.get_pareto_set(dm=1, n_points=40)
     assert ps1 is not None
-    tmp = 1.0 / (1.0 + np.exp(-5.0 * (ps1[:, 0] - 2.5)))
-    g2 = 1.0 + np.sum((ps1[:, 1:] - tmp[:, None]) ** 2, axis=1)
+    g2 = 1.0 + np.sum((ps1[:, 1:] - 0.5) ** 2, axis=1)
     assert np.allclose(g2, 1.0, atol=1e-12)
 
 

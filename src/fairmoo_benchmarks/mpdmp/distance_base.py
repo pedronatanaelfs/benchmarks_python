@@ -96,6 +96,53 @@ class DistanceBasedMultiPartyProblem(MultiPartyProblem):
             return np.vstack([self.reference_points[i] for i in range(self.n_dm)])
         return self.reference_points[int(dm)].copy()
 
+    def get_concession(self, rate: float = 0.0) -> np.ndarray:
+        """Reproduce MATLAB ``MPDMP.GetConcession``.
+
+        MPDMP1–12 always return zero concession. MPDMP13–18 select one of
+        seven author-defined cases from ``rate``.
+        """
+        number = int(self.name.replace("MPDMP", ""))
+        if number <= 12:
+            return np.zeros(self.n_dm, dtype=float)
+
+        try:
+            value = float(rate)
+        except (TypeError, ValueError):
+            value = 0.0
+        if not np.isfinite(value):
+            value = 0.0
+        scaled = value * 10.0 if 0.0 < value < 1.0 else value
+        # MATLAB round is half-away-from-zero; case ids are then clamped.
+        case_id = int(np.floor(scaled + 0.5)) if scaled >= 0 else int(np.ceil(scaled - 0.5))
+        case_id = max(1, min(7, case_id))
+
+        if self.n_dm == 2:
+            cases = np.array(
+                [
+                    [0.0, 0.0],
+                    [0.3, 0.0],
+                    [0.3, 0.3],
+                    [0.3, 0.7],
+                    [0.5, 0.5],
+                    [0.7, 0.7],
+                    [1.0, 1.0],
+                ]
+            )
+        else:
+            cases = np.array(
+                [
+                    [0.0, 0.0, 0.0],
+                    [0.3, 0.0, 0.0],
+                    [0.3, 0.3, 0.3],
+                    [0.3, 0.1, 0.6],
+                    [0.5, 0.5, 0.5],
+                    [0.7, 0.7, 0.7],
+                    [1.0, 1.0, 1.0],
+                ]
+            )
+        return cases[case_id - 1].copy()
+
     def get_pareto_set(
         self, dm: Optional[int] = None, n_points: int = 1000
     ) -> Optional[np.ndarray]:
@@ -163,3 +210,20 @@ def make_zm26_mpdmp(
         notes="No common PS (party-wise PS mutually disjoint). x in [0,100]^2.",
         ps_geometry=ps_geometry,
     )
+
+
+def matlab_centroid_path_front(
+    problem: DistanceBasedMultiPartyProblem,
+    pairs: Sequence[tuple[int, int]],
+    points_per_path: int = 100,
+) -> np.ndarray:
+    """Reproduce the conflict-map PF samplers used by MATLAB MPDMP14–18."""
+    centers = [
+        np.mean(problem.reference_points[dm], axis=0)
+        for dm in range(problem.n_dm)
+    ]
+    paths = [
+        linspace_segment(centers[start], centers[end], points_per_path)
+        for start, end in pairs
+    ]
+    return problem.evaluate(np.vstack(paths))

@@ -1,0 +1,1 @@
+{"problem":"MPDMP3","D":2,"M":5,"encoding":"real","lower":[0,0],"upper":[100,100],"DM":2,"dm_objective_indices_1based":[[1,2],[3,4,5]],"matlab_class":"MPDMP3","reference_repository":"2026ZhaoNash-main"}

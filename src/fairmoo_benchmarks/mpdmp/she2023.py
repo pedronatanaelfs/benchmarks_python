@@ -8,7 +8,11 @@ import numpy as np
 
 from fairmoo_benchmarks.mpdmp.distance_base import DistanceBasedMultiPartyProblem, SHE2023_SOURCE
 from fairmoo_benchmarks.status import CommonPSStatus
-from fairmoo_benchmarks.utils import matlab_nsidedpoly_vertices, linspace_segment
+from fairmoo_benchmarks.utils import (
+    linspace_segment,
+    matlab_grid_polygon_intersection,
+    matlab_nsidedpoly_vertices,
+)
 
 
 def _reorder_objectives(
@@ -116,8 +120,6 @@ class _InterleavedDistanceProblem(DistanceBasedMultiPartyProblem):
         ps = np.asarray(self._common_ps, dtype=float)
         if ps.ndim == 1:
             ps = ps.reshape(1, -1)
-        if ps.shape[0] == 1 and n_points > 1:
-            return np.repeat(ps, n_points, axis=0)
         return ps
 
     def get_pareto_set(self, dm: Optional[int] = None, n_points: int = 1000) -> Optional[np.ndarray]:
@@ -203,7 +205,7 @@ class MPDMP3(DistanceBasedMultiPartyProblem):
         if dm is not None:
             return super().get_pareto_set(dm=dm, n_points=n_points)
         # Common PS: segment of the line inside the triangle
-        line = linspace_segment([30, 50], [70, 50], max(n_points * 5, 5000))
+        line = linspace_segment([30, 50], [70, 50], 10000)
         tri = self.reference_points[1]
         # Point-in-triangle via barycentric
         def in_tri(P):
@@ -221,10 +223,7 @@ class MPDMP3(DistanceBasedMultiPartyProblem):
 
         mask = np.array([in_tri(p) for p in line])
         ps = line[mask]
-        if ps.shape[0] == 0:
-            return ps
-        idx = np.linspace(0, ps.shape[0] - 1, n_points).astype(int)
-        return ps[idx]
+        return ps
 
     def get_common_pareto_set(self, n_points: int = 1000) -> Optional[np.ndarray]:
         return self.get_pareto_set(dm=None, n_points=n_points)
@@ -232,8 +231,9 @@ class MPDMP3(DistanceBasedMultiPartyProblem):
 
 class MPDMP4(DistanceBasedMultiPartyProblem):
     def __init__(self) -> None:
-        p1 = np.array([[50.0, 70.0], [30.0, 40.0], [70.0, 40.0]])
-        p2 = np.array([[50.0, 40.0], [30.0, 10.0], [70.0, 10.0]])
+        # MATLAB polyshape normalizes the constructor vertices clockwise.
+        p1 = np.array([[50.0, 70.0], [70.0, 40.0], [30.0, 40.0]])
+        p2 = np.array([[50.0, 40.0], [70.0, 10.0], [30.0, 10.0]])
         super().__init__(
             name="MPDMP4",
             reference_points={0: p1, 1: p2},
@@ -251,7 +251,7 @@ class MPDMP4(DistanceBasedMultiPartyProblem):
         self._common = np.array([[50.0, 40.0]])
 
     def get_common_pareto_set(self, n_points: int = 1000) -> Optional[np.ndarray]:
-        return np.repeat(self._common, n_points, axis=0)
+        return self._common.copy()
 
     def get_pareto_set(self, dm: Optional[int] = None, n_points: int = 1000) -> Optional[np.ndarray]:
         if dm is None:
@@ -278,6 +278,18 @@ class MPDMP5(DistanceBasedMultiPartyProblem):
             ps_geometry={0: "Triangle", 1: "Triangle"},
         )
 
+    def get_common_pareto_set(self, n_points: int = 1000) -> Optional[np.ndarray]:
+        return matlab_grid_polygon_intersection(
+            [self.reference_points[0], self.reference_points[1]]
+        )
+
+    def get_pareto_set(
+        self, dm: Optional[int] = None, n_points: int = 1000
+    ) -> Optional[np.ndarray]:
+        if dm is None:
+            return self.get_common_pareto_set(n_points)
+        return super().get_pareto_set(dm=dm, n_points=n_points)
+
 
 class MPDMP6(DistanceBasedMultiPartyProblem):
     def __init__(self) -> None:
@@ -299,8 +311,8 @@ class MPDMP6(DistanceBasedMultiPartyProblem):
         )
 
     def get_common_pareto_set(self, n_points: int = 1000) -> Optional[np.ndarray]:
-        y = np.linspace(40.0, 60.0, n_points)
-        return np.column_stack([np.full(n_points, 50.0), y])
+        y = np.linspace(40.0, 60.0, 10000)
+        return np.column_stack([np.full(10000, 50.0), y])
 
     def get_pareto_set(self, dm: Optional[int] = None, n_points: int = 1000) -> Optional[np.ndarray]:
         if dm is None:
@@ -327,6 +339,18 @@ class MPDMP7(DistanceBasedMultiPartyProblem):
             ps_geometry={0: "Square", 1: "Square"},
         )
 
+    def get_common_pareto_set(self, n_points: int = 1000) -> Optional[np.ndarray]:
+        return matlab_grid_polygon_intersection(
+            [self.reference_points[0], self.reference_points[1]]
+        )
+
+    def get_pareto_set(
+        self, dm: Optional[int] = None, n_points: int = 1000
+    ) -> Optional[np.ndarray]:
+        if dm is None:
+            return self.get_common_pareto_set(n_points)
+        return super().get_pareto_set(dm=dm, n_points=n_points)
+
 
 class MPDMP8(DistanceBasedMultiPartyProblem):
     def __init__(self) -> None:
@@ -346,6 +370,18 @@ class MPDMP8(DistanceBasedMultiPartyProblem):
             notes="Overlapped pentagons Radius=20.",
             ps_geometry={0: "Pentagon", 1: "Pentagon"},
         )
+
+    def get_common_pareto_set(self, n_points: int = 1000) -> Optional[np.ndarray]:
+        return matlab_grid_polygon_intersection(
+            [self.reference_points[0], self.reference_points[1]]
+        )
+
+    def get_pareto_set(
+        self, dm: Optional[int] = None, n_points: int = 1000
+    ) -> Optional[np.ndarray]:
+        if dm is None:
+            return self.get_common_pareto_set(n_points)
+        return super().get_pareto_set(dm=dm, n_points=n_points)
 
 
 class MPDMP9(_InterleavedDistanceProblem):
@@ -411,9 +447,9 @@ class MPDMP11(DistanceBasedMultiPartyProblem):
         )
 
     def get_common_pareto_set(self, n_points: int = 1000) -> Optional[np.ndarray]:
-        from fairmoo_benchmarks.utils import sample_convex_polygon
-
-        return sample_convex_polygon(self._common_poly, n_points)
+        return matlab_grid_polygon_intersection(
+            [self.reference_points[0], self.reference_points[1], self.reference_points[2]]
+        )
 
     def get_pareto_set(self, dm: Optional[int] = None, n_points: int = 1000) -> Optional[np.ndarray]:
         if dm is None:
@@ -456,9 +492,9 @@ class MPDMP12(DistanceBasedMultiPartyProblem):
         )
 
     def get_common_pareto_set(self, n_points: int = 1000) -> Optional[np.ndarray]:
-        from fairmoo_benchmarks.utils import sample_convex_polygon
-
-        return sample_convex_polygon(self._common_rect, n_points)
+        return matlab_grid_polygon_intersection(
+            [self.reference_points[0], self.reference_points[1], self.reference_points[2]]
+        )
 
     def get_pareto_set(self, dm: Optional[int] = None, n_points: int = 1000) -> Optional[np.ndarray]:
         if dm is None:

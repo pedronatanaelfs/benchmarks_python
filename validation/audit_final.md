@@ -1,5 +1,11 @@
 # Audit Summary (Final)
 
+> **Superseded by the licensed-MATLAB equivalence audit (2026-10-19).**
+> Current authoritative status: 35/35 objective PASS; 33/33 safely executable
+> PS/PF PASS; overall 33 PASS, 2 PARTIAL (MPMOP4/9 unsafe reference meshes),
+> 0 FAIL. See `equivalence_matrix.md`, `discrepancy_report.md`, and
+> `reports/`.
+
 Branch: `audit-validation`  
 Date: 2026-10-03
 

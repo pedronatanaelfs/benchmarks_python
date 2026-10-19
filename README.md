@@ -22,12 +22,14 @@ This repository provides a **source-traced Python port** of the main synthetic s
 
 | Status | Count | Notes |
 |---|---|---|
-| **PASS** | 29 | Source-consistent + analytical tests; MPMOP1–11 also match Octave `MPMOP_Value.m` |
-| **PARTIAL** | 6 | MPMOP12–17: decision dimension `D` not fixed in ZM26 Table S-VI (`n_var=10` is an assumed default) |
+| **PASS** | 33 | Objectives and safely executable PS/PF outputs match licensed MATLAB |
+| **PARTIAL** | 2 | MPMOP4/9 objectives pass; original `true_PS.m` uses an unsafe 20000×20000 mesh |
 | **NEEDS_MANUAL_VERIFICATION** | 0 | — |
 | **FAIL** | 0 | — |
 
-See `validation/validation_report.md` and `validation/audit_final.md`.
+Objective equivalence is **PASS 35/35**. PS/PF equivalence is **PASS 33/33**
+for every safely executable MATLAB reference. See
+`validation/equivalence_matrix.md` and `validation/reports/`.
 
 ## What it does
 
@@ -47,7 +49,10 @@ F_dm1 = problem.evaluate_dm(X, 0) # only DM1's objectives
 
 ## What it does not do (yet)
 
-This release focuses on **correct benchmarks**, not on fairness metrics or solvers. It does **not** currently implement satisfaction/ROI models, concession mechanisms, Nash-product indicators, or preference elicitation. Those can be built on top of this API later.
+This release focuses on **correct benchmarks**, not on fairness metrics or
+solvers. It includes the MPDMP reference concession-case table, but does
+**not** implement satisfaction/ROI models, Nash-product indicators,
+preference elicitation, or optimization algorithms.
 
 Scientific correctness is prioritized over completeness. Ambiguous details are marked `NEEDS_MANUAL_VERIFICATION` or `PARTIAL` in the documentation — they are never invented silently.
 
@@ -161,10 +166,10 @@ Vendored under `sources/`:
 |---|---|
 | MPMOP1–11 | Liu et al., IEEE CEC 2020 + [OptMPNDS](https://github.com/lwjie595/OptMPNDS) |
 | MPDMP1–12 | She et al., 2023 + [2022SheOptMPNDS3](https://github.com/MiLabHITSZ/2022SheOptMPNDS3) |
-| MPMOP12–17, MPDMP13–18 | Zhao et al., 2026 ([arXiv:2601.22497](https://arxiv.org/abs/2601.22497)) appendix |
+| MPMOP12–17, MPDMP13–18 | Zhao et al., 2026 ([arXiv:2601.22497](https://arxiv.org/abs/2601.22497)) plus supplied executable MATLAB repository |
 
-Traceability: `docs/source_mapping.md`, `docs/benchmark_inventory.csv`,
-`docs/mathematical_validation.md`.
+Traceability: `docs/source_mapping.md`, `docs/mathematical_validation.md`,
+and the generated artifacts under `validation/`.
 
 ## Tests and validation
 
@@ -180,6 +185,10 @@ Artifacts:
 - `validation/equivalence/` (MPMOP1–11 vs Octave)
 - `validation/audits/` (per-benchmark KEEP/FIX decisions)
 - `validation/reference_values/`
+- `validation/matlab/results/` (licensed-MATLAB objective references)
+- `validation/matlab/pareto_results/` (licensed-MATLAB PS/PF references)
+- `validation/reports/numerical_comparison.csv`
+- `validation/reports/pareto_comparison.csv`
 - `validation/test_summary.txt`
 
 GNU Octave is **optional** for normal use. When installed, MPMOP1–11 can be

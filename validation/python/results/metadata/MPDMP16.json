@@ -1,0 +1,45 @@
+{
+  "name": "MPDMP16",
+  "family": "MPDMP",
+  "n_var": 2,
+  "n_dm": 2,
+  "n_obj_per_dm": [
+    5,
+    5
+  ],
+  "n_obj_total": 10,
+  "xl": [
+    0.0,
+    0.0
+  ],
+  "xu": [
+    100.0,
+    100.0
+  ],
+  "source": "Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization. arXiv:2601.22497, Appendix Table S-V / Section S-X.",
+  "year": 2026,
+  "pareto_set_known": true,
+  "pareto_front_known": true,
+  "common_ps_status": "empty",
+  "common_ps_exists": "empty",
+  "notes": "No common PS (party-wise PS mutually disjoint). x in [0,100]^2.",
+  "dimension_source": null,
+  "dimension_status": null,
+  "encoding": "real",
+  "dm_objective_indices_1based": [
+    [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    [
+      6,
+      7,
+      8,
+      9,
+      10
+    ]
+  ]
+}

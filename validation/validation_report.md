@@ -1,5 +1,10 @@
 # Validation Report
 
+> **Superseded for MATLAB equivalence.** This historical report predates the
+> deterministic licensed-MATLAB run. The authoritative final results are
+> `equivalence_matrix.md` and `reports/numerical_comparison.csv`: after
+> correction, objective-function equivalence is PASS for all 35 benchmarks.
+
 GNU Octave: **10.3.0** (conda-forge) for `MPMOP_Value.m` equivalence.
 MATLAB proprietary license not used. MPDMP PlatEMO classdefs: `OCTAVE_INCOMPATIBLE`.
 

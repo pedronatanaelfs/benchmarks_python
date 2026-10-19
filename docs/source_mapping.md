@@ -2,6 +2,12 @@
 
 Traceability from each Python benchmark to primary mathematical / code sources.
 
+> **2026-10-19 update:** the supplied executable MATLAB repositories are the
+> implementation ground truth where they differ from publication tables.
+> All 35 objectives and all 33 safely executable PS/PF references now match
+> licensed MATLAB. Historical details below describe the pre-MATLAB audit;
+> use `validation/equivalence_matrix.md` for current status.
+
 Legend for **Status**:
 - **PASS** — definition cross-checked against a primary source and analytical checks pass
 - **PARTIAL** — runs correctly but some detail (dimension D, `nsidedpoly` orientation, full common-PS sampler) still needs MATLAB/Octave or author confirmation

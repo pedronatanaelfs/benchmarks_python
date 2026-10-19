@@ -1,0 +1,39 @@
+{
+  "name": "MPDMP1",
+  "family": "MPDMP",
+  "n_var": 2,
+  "n_dm": 2,
+  "n_obj_per_dm": [
+    2,
+    2
+  ],
+  "n_obj_total": 4,
+  "xl": [
+    0.0,
+    0.0
+  ],
+  "xu": [
+    100.0,
+    100.0
+  ],
+  "source": "She, Luo, Lin, Chang, Shi (2023). Multiparty distance minimization: Problems and an evolutionary approach. Swarm and Evolutionary Computation. Official code: https://github.com/MiLabHITSZ/2022SheOptMPNDS3",
+  "year": 2023,
+  "pareto_set_known": true,
+  "pareto_front_known": true,
+  "common_ps_status": "exists",
+  "common_ps_exists": "exists",
+  "notes": "square.m: DM1=(A,C), DM2=(B,D). Common PS=(50,50).",
+  "dimension_source": null,
+  "dimension_status": null,
+  "encoding": "real",
+  "dm_objective_indices_1based": [
+    [
+      1,
+      2
+    ],
+    [
+      3,
+      4
+    ]
+  ]
+}

@@ -1,0 +1,1 @@
+{"problem":"MPDMP2","D":2,"M":4,"encoding":"real","lower":[0,0],"upper":[100,100],"DM":2,"dm_objective_indices_1based":[[1,2],[3,4]],"matlab_class":"MPDMP2","reference_repository":"2026ZhaoNash-main"}

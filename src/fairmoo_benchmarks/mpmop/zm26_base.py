@@ -1,4 +1,4 @@
-"""Shared helpers for MPMOP12–MPMOP17 (ZM26 Appendix Table S-VI)."""
+"""Shared helpers for MPMOP12–MPMOP17 from the supplied MATLAB repository."""
 
 from __future__ import annotations
 
@@ -12,17 +12,13 @@ from fairmoo_benchmarks.status import CommonPSStatus
 DEFAULT_N_VAR = 10
 
 ZM26_MPMOP_SOURCE = (
-    "Zhao, Xu, Luo (2026). Fairness-Aware Performance Evaluation for "
-    "Multi-Party Multi-Objective Optimization. arXiv:2601.22497, "
-    "Appendix Table S-VI / Section S-IX."
+    "2026ZhaoNash-main/MPMOP MATLAB classdefs and MPMOP_Value.m "
+    "(author-supplied executable reference)."
 )
 
 DIMENSION_NOTE = (
-    "Table S-VI defines objectives for general D but does not fix a numeric D. "
-    "ZM26 Table tab:MPMOP_results caption states D=2 for MPMOP1–11 experiments only "
-    "(not MPMOP12–17). MPMOP14/17 require D>=3. "
-    f"Constructor default n_var={DEFAULT_N_VAR} is an ASSUMED_DEFAULT "
-    "(Liu/OptMPNDS convention), not source-confirmed for ZM26 MPMOP12–17."
+    f"The MATLAB class constructor default is D={DEFAULT_N_VAR}; Python exposes "
+    "n_var as an override while preserving that source default."
 )
 
 
@@ -51,17 +47,17 @@ class ZM26MPMOP(MultiPartyProblem):
             year=2026,
             common_ps_exists=CommonPSStatus.EMPTY,
             known_ps=True,
-            known_pf=False,
+            known_pf=True,
             notes=(notes + " " + DIMENSION_NOTE).strip()
             if notes
             else (
                 "Party-wise PS mutually disjoint (no common PS). "
-                "PF not tabulated analytically in appendix. " + DIMENSION_NOTE
+                "MATLAB-compatible party PF sampling is implemented. " + DIMENSION_NOTE
             ),
             metadata={
-                "dimension_source": "not explicitly specified in ZM26 Table S-VI",
+                "dimension_source": "2026ZhaoNash MATLAB class constructor",
                 "dimension_default": DEFAULT_N_VAR,
-                "dimension_status": "ASSUMED_DEFAULT",
+                "dimension_status": "SOURCE_DEFAULT_MATLAB",
             },
         )
 

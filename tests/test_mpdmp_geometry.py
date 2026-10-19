@@ -9,13 +9,15 @@ from fairmoo_benchmarks import get_problem
 from fairmoo_benchmarks.utils import matlab_nsidedpoly_vertices
 
 
-def test_radius_mode_first_vertex_to_the_right() -> None:
-    # MathWorks nsidedpoly: first vertex to the right of center, then CCW.
+def test_radius_mode_matches_matlab_polyshape_vertex_order() -> None:
+    # Licensed MATLAB returns a top-oriented triangle, normalized clockwise
+    # from the lower-left vertex by polyshape.Vertices.
     V = matlab_nsidedpoly_vertices(3, [50.0, 40.0], radius=20.0)
     assert V.shape == (3, 2)
-    assert np.allclose(V[0], [70.0, 40.0], atol=1e-12)
-    # CCW: second vertex has positive y relative to center after rightmost
-    assert V[1, 1] > 40.0
+    expected = np.array(
+        [[32.67949192431123, 30.0], [50.0, 60.0], [67.32050807568876, 30.0]]
+    )
+    assert np.allclose(V, expected, atol=1e-12)
 
 
 def test_sidelength_square_axis_aligned_matches_mpdmp6_ps() -> None:

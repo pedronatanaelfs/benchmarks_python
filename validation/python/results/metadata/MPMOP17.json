@@ -1,0 +1,60 @@
+{
+  "name": "MPMOP17",
+  "family": "MPMOP",
+  "n_var": 10,
+  "n_dm": 3,
+  "n_obj_per_dm": [
+    2,
+    2,
+    2
+  ],
+  "n_obj_total": 6,
+  "xl": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "xu": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "source": "2026ZhaoNash-main/MPMOP MATLAB classdefs and MPMOP_Value.m (author-supplied executable reference).",
+  "year": 2026,
+  "pareto_set_known": true,
+  "pareto_front_known": true,
+  "common_ps_status": "empty",
+  "common_ps_exists": "empty",
+  "notes": "MATLAB party constants: c=0, 0.5, 1. The MATLAB class constructor default is D=10; Python exposes n_var as an override while preserving that source default.",
+  "dimension_source": "2026ZhaoNash MATLAB class constructor",
+  "dimension_status": "SOURCE_DEFAULT_MATLAB",
+  "encoding": "real",
+  "dm_objective_indices_1based": [
+    [
+      1,
+      2
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      5,
+      6
+    ]
+  ]
+}

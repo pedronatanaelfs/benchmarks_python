@@ -84,6 +84,27 @@ def sample_convex_polygon(vertices: np.ndarray, n_points: int, seed: int = 42) -
     return out
 
 
+def matlab_grid_polygon_intersection(
+    polygons: Sequence[np.ndarray], grid_size: int = 1000
+) -> np.ndarray:
+    """Reproduce ``polygon.PS``: a MATLAB-ordered grid inside all polygons."""
+    axis = np.linspace(0.0, 100.0, int(grid_size))
+    X, Y = np.meshgrid(axis, axis)
+    points = np.column_stack([X.ravel(order="F"), Y.ravel(order="F")])
+    inside = np.ones(points.shape[0], dtype=bool)
+
+    for vertices in polygons:
+        vertices = np.asarray(vertices, dtype=float)
+        edges = np.roll(vertices, -1, axis=0) - vertices
+        rel = points[:, None, :] - vertices[None, :, :]
+        cross = edges[None, :, 0] * rel[:, :, 1] - edges[None, :, 1] * rel[:, :, 0]
+        tolerance = 1e-10
+        inside &= np.all(cross >= -tolerance, axis=1) | np.all(
+            cross <= tolerance, axis=1
+        )
+    return points[inside]
+
+
 def matlab_nsidedpoly_vertices(
     n: int,
     center: Sequence[float],
@@ -91,26 +112,28 @@ def matlab_nsidedpoly_vertices(
     radius: float | None = None,
     side_length: float | None = None,
 ) -> np.ndarray:
-    """Approximate MATLAB ``nsidedpoly`` vertices (CCW).
+    """Return vertices in MATLAB ``nsidedpoly(...).Vertices`` order.
 
-    - ``radius`` mode: first vertex to the right of the center (angle 0), as in
-      MathWorks docs for the default construction.
-    - ``side_length`` mode with even ``n``: rotate by ``π/n`` so that a square
-      (n=4) is **axis-aligned**. This matches the hardcoded common-PS geometry
-      in ``MPDMP6.m`` (vertical shared edge at x=50, y∈[40,60]) and the paper
-      figures showing axis-aligned rectangles.
-
-    NEEDS_MANUAL_VERIFICATION: exact MATLAB ``nsidedpoly`` rotation for odd-n
-    Radius polygons should be cross-checked in MATLAB/Octave when available.
+    Orientation and ordering were recovered from licensed-MATLAB evaluations
+    of MPDMP3–8 and MPDMP10–12. Odd polygons have a top vertex; even polygons
+    use a ``π/n`` rotation. ``polyshape.Vertices`` then reports the boundary
+    clockwise, beginning at the lowest/left tied vertex.
     """
     if (radius is None) == (side_length is None):
         raise ValueError("Provide exactly one of radius or side_length")
-    used_side = side_length is not None
     if side_length is not None:
         radius = float(side_length) / (2.0 * np.sin(np.pi / n))
     assert radius is not None
     cx, cy = float(center[0]), float(center[1])
-    # Axis-align even polygons when constructed via SideLength (MPDMP6/7/10).
-    start = (np.pi / n) if (used_side and n % 2 == 0) else 0.0
+    start = np.pi / 2.0 if n % 2 else np.pi / n
     angles = start + 2.0 * np.pi * np.arange(n) / n
-    return np.column_stack([cx + radius * np.cos(angles), cy + radius * np.sin(angles)])
+    vertices = np.column_stack(
+        [cx + radius * np.cos(angles), cy + radius * np.sin(angles)]
+    )
+
+    # Floating-point trig makes theoretically tied x coordinates differ by a
+    # few ulps, so select the MATLAB start vertex using rounded coordinates.
+    rounded = np.round(vertices, decimals=12)
+    start_index = int(np.lexsort((rounded[:, 0], rounded[:, 1]))[0])
+    order = (start_index - np.arange(n)) % n
+    return vertices[order]

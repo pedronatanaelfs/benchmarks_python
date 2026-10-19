@@ -1,0 +1,1 @@
+{"problem":"MPMOP7","D":10,"M":6,"encoding":"real","lower":[1,0,0,0,0,0,0,0,0,0],"upper":[4,1,1,1,1,1,1,1,1,1],"DM":3,"dm_objective_indices_1based":[[1,2],[3,4],[5,6]],"matlab_class":"MPMOP7","reference_repository":"2026ZhaoNash-main"}

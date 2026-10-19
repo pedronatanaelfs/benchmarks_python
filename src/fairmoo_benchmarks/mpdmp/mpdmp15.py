@@ -8,7 +8,15 @@ Common PS: empty (False).
 
 from __future__ import annotations
 
-from fairmoo_benchmarks.mpdmp.distance_base import DistanceBasedMultiPartyProblem, ZM26_SOURCE
+from typing import Optional
+
+import numpy as np
+
+from fairmoo_benchmarks.mpdmp.distance_base import (
+    DistanceBasedMultiPartyProblem,
+    ZM26_SOURCE,
+    matlab_centroid_path_front,
+)
 from fairmoo_benchmarks.status import CommonPSStatus
 
 
@@ -31,6 +39,13 @@ class MPDMP15(DistanceBasedMultiPartyProblem):
             notes="No common PS (party-wise PS mutually disjoint). x in [0,100]^2.",
             ps_geometry={0: "Square", 1: "Square"},
         )
+
+    def get_pareto_front(
+        self, dm: Optional[int] = None, n_points: int = 1000
+    ) -> Optional[np.ndarray]:
+        if dm is not None:
+            return super().get_pareto_front(dm=dm, n_points=n_points)
+        return matlab_centroid_path_front(self, [(0, 1)])
 
 
 __all__ = ["MPDMP15"]

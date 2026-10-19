@@ -175,36 +175,91 @@ class LiuMPMOP(MultiPartyProblem):
         return None
 
     def _common_ps_approx(self, n_points: int) -> Optional[np.ndarray]:
-        """Approximate common PS by intersecting party manifolds when simple.
+        """Faithful, vectorized port of MATLAB ``true_PS.m`` sampling."""
 
-        For general cases, returns None and marks metadata.
-        """
-        # Try to use first DM PS and filter points where all party g≈1.
-        ps0 = self._party_ps(0, max(n_points * 20, 2000))
-        if ps0 is None:
-            return None
-        ok = np.ones(ps0.shape[0], dtype=bool)
-        for t in self.times:
-            F = mpmop_value(self.value_id, ps0, t)
-            # On PS with g=1, objectives match the g=1 formulas; check residual vs g=1 rebuild
-            # Simpler: evaluate g residual for each value_id
-            if self.value_id == "MPMOP1":
-                a = 5.0 * np.cos(0.5 * np.pi * t)
-                tmp = 1.0 / (1.0 + np.exp(a * (ps0[:, 0] - 2.5)))
-                g = 1.0 + np.sum((ps0[:, 1:] - tmp[:, None]) ** 2, axis=1)
-                ok &= g <= 1.0 + 1e-6
-            elif self.value_id == "MPMOP2":
-                G = np.sin(0.5 * np.pi * t)
-                tmp = G * np.sin(4.0 * np.pi * ps0[:, 0]) / (1.0 + abs(G))
-                g = 1.0 + np.sum((ps0[:, 1:] - tmp[:, None]) ** 2, axis=1)
-                ok &= g <= 1.0 + 1e-6
-            else:
-                return None
-        ps = ps0[ok]
-        if ps.shape[0] == 0:
-            return ps
-        idx = np.linspace(0, ps.shape[0] - 1, min(n_points, ps.shape[0])).astype(int)
-        return ps[idx]
+        def retain_last_in_clusters(indices: np.ndarray) -> np.ndarray:
+            if indices.size == 0:
+                return indices
+            discard = np.zeros(indices.size, dtype=bool)
+            discard[:-1] = np.diff(indices) < 10
+            return indices[~discard]
+
+        if self.value_id == "MPMOP1":
+            divisions = 20000 if self.name == "MPMOP1" else 40000
+            x1_grid = np.linspace(1.0, 4.0, divisions)
+            a = 5.0 * np.cos(0.5 * np.pi * np.asarray(self.times))
+            manifolds = np.vstack(
+                [1.0 / (1.0 + np.exp(ai * (x1_grid - 2.5))) for ai in a]
+            )
+            match = np.all(np.abs(manifolds[0] - manifolds[1:]) < 1e-4, axis=0)
+            indices = retain_last_in_clusters(np.flatnonzero(match))
+            x1 = x1_grid[indices]
+            a2 = a[1]
+            tail = 1.0 / (1.0 + np.exp(a2 * (x1 - 2.5)))
+            X = np.empty((x1.size, self.n_var))
+            X[:, 0] = x1
+            X[:, 1:] = tail[:, None]
+            return X
+
+        if self.value_id == "MPMOP2":
+            x1_grid = np.linspace(0.0, 1.0, 40000)
+            G = np.sin(0.5 * np.pi * np.asarray(self.times))
+            coefficients = G / (1.0 + np.abs(G))
+            manifolds = coefficients[:, None] * np.sin(4.0 * np.pi * x1_grid)
+            match = np.all(np.abs(manifolds[0] - manifolds[1:]) < 1e-4, axis=0)
+            indices = retain_last_in_clusters(np.flatnonzero(match))
+            x1 = x1_grid[indices]
+            tail = coefficients[1] * np.sin(4.0 * np.pi * x1)
+            X = np.empty((x1.size, self.n_var))
+            X[:, 0] = x1
+            X[:, 1:] = tail[:, None]
+            return X
+
+        if self.value_id == "MPMOP3":
+            x1 = np.linspace(0.0, 1.0, 10000)
+            keep = np.ones(x1.size, dtype=bool)
+            for t in self.times:
+                N = 1 + int(np.floor(10.0 * abs(np.sin(0.5 * np.pi * t))))
+                for i in range(N):
+                    keep &= ~((x1 > i / N) & (x1 < (2 * i + 1) / (2 * N)))
+            X = x1[keep, None]
+            for _ in range(1, self.n_var):
+                next_column = np.cos(4.0 * self.times[0] + X[:, 0] + X[:, -1])
+                X = np.column_stack([X, next_column])
+            return X
+
+        if self.value_id == "MPMOP5":
+            axis = np.linspace(0.0, 1.0, 1000)
+            G = np.abs(np.sin(0.5 * np.pi * np.asarray(self.times)))
+            coefficients = 0.5 * G
+            match = np.all(
+                np.abs(
+                    coefficients[0] * axis[None, :]
+                    - coefficients[1:, None] * axis[None, :]
+                )
+                < 1e-4,
+                axis=0,
+            )
+            x1 = axis[np.flatnonzero(match)[-1]]
+            X = np.zeros((axis.size, self.n_var))
+            X[:, 0] = x1
+            X[:, 1] = axis
+            X[:, 2:] = 0.5 * G[1] * x1
+            return X
+
+        if self.value_id == "MPMOP6":
+            axis = np.linspace(0.0, 1.0, 1000)
+            manifolds = np.vstack([np.sin(t * axis) for t in self.times])
+            match = np.all(np.abs(manifolds[0] - manifolds[1:]) < 1e-4, axis=0)
+            valid_x1 = axis[match]
+            X = np.zeros((valid_x1.size * axis.size, self.n_var))
+            X[:, 0] = np.repeat(valid_x1, axis.size)
+            X[:, 1] = np.tile(axis, valid_x1.size)
+            X[:, 2:] = np.sin(self.times[1] * X[:, 0:1])
+            return X
+
+        # MPMOP4/9 use an unsafe 20000x20000 mesh in the MATLAB source.
+        return None
 
     def get_pareto_front(self, dm: Optional[int] = None, n_points: int = 1000) -> Optional[np.ndarray]:
         ps = self.get_pareto_set(dm=dm, n_points=n_points)
