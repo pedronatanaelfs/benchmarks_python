@@ -1,0 +1,689 @@
+paper:
+  title: "Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Optimization"
+  arxiv: "https://arxiv.org/abs/2601.22497"
+  version: "arXiv:2601.22497 (accepted IEEE TEVC)"
+notes:
+  - "Values transcribed from the arXiv HTML of ZM26. Never fabricated."
+  - "Nash absolute magnitudes depend on unpublished C; rankings are comparable."
+  - "Table III Nash column is log Psi_NP; reproduction uses natural log."
+  - "null means the paper did not report that cell."
+TABLE_II_MPMOP:
+  MPMOP1:
+    OptMPNDS:
+      nash_score:
+        mean: 42100000.0
+        std: 5940000.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 1.44
+        std: 0.296
+        source: "ZM26 Table II"
+    OptAll:
+      nash_score:
+        mean: 779000.0
+        std: 1370000.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.952
+        std: 0.0256
+        source: "ZM26 Table II"
+  MPMOP2:
+    OptMPNDS:
+      nash_score:
+        mean: 811.0
+        std: 24.9
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.0936
+        std: 0.0172
+        source: "ZM26 Table II"
+    OptAll:
+      nash_score:
+        mean: 52.6
+        std: 21.3
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.0753
+        std: 0.00964
+        source: "ZM26 Table II"
+  MPMOP3:
+    OptMPNDS:
+      nash_score:
+        mean: 612000.0
+        std: 3260.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.108
+        std: 0.000316
+        source: "ZM26 Table II"
+    OptAll:
+      nash_score:
+        mean: 90200.0
+        std: 26500.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.115
+        std: 0.00185
+        source: "ZM26 Table II"
+  MPMOP4:
+    OptMPNDS:
+      nash_score:
+        mean: 11.8
+        std: 5.58
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.0659
+        std: 0.00277
+        source: "ZM26 Table II"
+    OptAll:
+      nash_score:
+        mean: 12.4
+        std: 8.35
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.0663
+        std: 0.00287
+        source: "ZM26 Table II"
+  MPMOP5:
+    OptMPNDS:
+      nash_score:
+        mean: 88.6
+        std: 18.5
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.105
+        std: 0.0054
+        source: "ZM26 Table II"
+    OptAll:
+      nash_score:
+        mean: 88.7
+        std: 13.8
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.106
+        std: 0.00511
+        source: "ZM26 Table II"
+  MPMOP6:
+    OptMPNDS:
+      nash_score:
+        mean: 7.1
+        std: 2.08
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.13
+        std: 0.00597
+        source: "ZM26 Table II"
+    OptAll:
+      nash_score:
+        mean: 6.32
+        std: 2.16
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.132
+        std: 0.00697
+        source: "ZM26 Table II"
+  MPMOP7:
+    OptMPNDS:
+      nash_score:
+        mean: 2870000000000.0
+        std: 225000000000.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 1.27
+        std: 0.444
+        source: "ZM26 Table II"
+    OptAll:
+      nash_score:
+        mean: 1510000000.0
+        std: 6230000000.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 1.28
+        std: 0.206
+        source: "ZM26 Table II"
+  MPMOP8:
+    OptMPNDS:
+      nash_score:
+        mean: 491000.0
+        std: 6400.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.197
+        std: 0.0274
+        source: "ZM26 Table II"
+    OptAll:
+      nash_score:
+        mean: 3680.0
+        std: 3060.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.25
+        std: 0.0368
+        source: "ZM26 Table II"
+  MPMOP9:
+    OptMPNDS:
+      nash_score:
+        mean: 42000000000000.0
+        std: 79700000000000.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.195
+        std: 0.00396
+        source: "ZM26 Table II"
+    OptAll:
+      nash_score:
+        mean: 47800000000000.0
+        std: 82100000000000.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.195
+        std: 0.00422
+        source: "ZM26 Table II"
+  MPMOP10:
+    OptMPNDS:
+      nash_score:
+        mean: 3200.0
+        std: 591.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.142
+        std: 0.00852
+        source: "ZM26 Table II"
+    OptAll:
+      nash_score:
+        mean: 3160.0
+        std: 558.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.14
+        std: 0.00833
+        source: "ZM26 Table II"
+  MPMOP11:
+    OptMPNDS:
+      nash_score:
+        mean: 810000.0
+        std: 6960.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.197
+        std: 0.00866
+        source: "ZM26 Table II"
+    OptAll:
+      nash_score:
+        mean: 109000.0
+        std: 49000.0
+        source: "ZM26 Table II"
+      meanIGD:
+        mean: 0.291
+        std: 0.0208
+        source: "ZM26 Table II"
+TABLE_III_MPDMP:
+  MPDMP1:
+    OptAll:
+      log_nash:
+        mean: 6.6979
+        std: 0.1748
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 4.04
+        std: 2.46
+        source: "ZM26 Table III"
+    OptMPNDS:
+      log_nash:
+        mean: 8.6562
+        std: 0.0028
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.0545
+        std: 0.0295
+        source: "ZM26 Table III"
+    OptMPNDS2:
+      log_nash:
+        mean: 8.6556
+        std: 0.0017
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.0476
+        std: 0.0277
+        source: "ZM26 Table III"
+    OptMPNDS3:
+      log_nash:
+        mean: 8.6565
+        std: 0.0024
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.0447
+        std: 0.0285
+        source: "ZM26 Table III"
+  MPDMP2:
+    OptAll:
+      log_nash:
+        mean: 8.3224
+        std: 0.147
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 3.94
+        std: 2.06
+        source: "ZM26 Table III"
+    OptMPNDS:
+      log_nash:
+        mean: 9.236
+        std: 0.0051
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.0649
+        std: 0.0344
+        source: "ZM26 Table III"
+    OptMPNDS2:
+      log_nash:
+        mean: 9.2362
+        std: 0.0044
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.0617
+        std: 0.0325
+        source: "ZM26 Table III"
+    OptMPNDS3:
+      log_nash:
+        mean: 9.2354
+        std: 0.0037
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.0577
+        std: 0.0357
+        source: "ZM26 Table III"
+  MPDMP3:
+    OptAll:
+      log_nash:
+        mean: 4.6996
+        std: 0.1737
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 2.73
+        std: 0.663
+        source: "ZM26 Table III"
+    OptMPNDS:
+      log_nash:
+        mean: 6.4921
+        std: 0.0082
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.211
+        std: 0.048
+        source: "ZM26 Table III"
+    OptMPNDS2:
+      log_nash:
+        mean: 6.4905
+        std: 0.0076
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.215
+        std: 0.0419
+        source: "ZM26 Table III"
+    OptMPNDS3:
+      log_nash:
+        mean: 6.4855
+        std: 0.0087
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.113
+        std: 0.0353
+        source: "ZM26 Table III"
+  MPDMP4:
+    OptAll:
+      log_nash:
+        mean: 9.3076
+        std: 0.144
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.0178
+        std: 0.0138
+        source: "ZM26 Table III"
+    OptMPNDS:
+      log_nash:
+        mean: 10.1946
+        std: 0.0028
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.000958
+        std: 0.00211
+        source: "ZM26 Table III"
+    OptMPNDS2:
+      log_nash:
+        mean: 10.1949
+        std: 0.0033
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.00105
+        std: 0.00166
+        source: "ZM26 Table III"
+    OptMPNDS3:
+      log_nash:
+        mean: 10.1826
+        std: 0.0039
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.0133
+        std: 0.00603
+        source: "ZM26 Table III"
+  MPDMP5:
+    OptAll:
+      log_nash:
+        mean: 9.5794
+        std: 0.1495
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 6.9
+        std: 0.607
+        source: "ZM26 Table III"
+    OptMPNDS:
+      log_nash:
+        mean: 10.4618
+        std: 0.0048
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 2.97
+        std: 0.0916
+        source: "ZM26 Table III"
+    OptMPNDS2:
+      log_nash:
+        mean: 10.462
+        std: 0.0041
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 2.94
+        std: 0.123
+        source: "ZM26 Table III"
+    OptMPNDS3:
+      log_nash:
+        mean: 10.4666
+        std: 0.0027
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 2.66
+        std: 0.0988
+        source: "ZM26 Table III"
+  MPDMP6:
+    OptAll:
+      log_nash:
+        mean: 8.9463
+        std: 0.1413
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 3.23
+        std: 0.796
+        source: "ZM26 Table III"
+    OptMPNDS:
+      log_nash:
+        mean: 9.9652
+        std: 0.0013
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.132
+        std: 0.00891
+        source: "ZM26 Table III"
+    OptMPNDS2:
+      log_nash:
+        mean: 9.9645
+        std: 0.0011
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.13
+        std: 0.00917
+        source: "ZM26 Table III"
+    OptMPNDS3:
+      log_nash:
+        mean: 9.963
+        std: 0.0003
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.0838
+        std: 0.0137
+        source: "ZM26 Table III"
+  MPDMP7:
+    OptAll:
+      log_nash:
+        mean: 9.5011
+        std: 0.1493
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 8.93
+        std: 1.25
+        source: "ZM26 Table III"
+    OptMPNDS:
+      log_nash:
+        mean: 10.5529
+        std: 0.0032
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 2.45
+        std: 0.133
+        source: "ZM26 Table III"
+    OptMPNDS2:
+      log_nash:
+        mean: 10.553
+        std: 0.0028
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 2.45
+        std: 0.131
+        source: "ZM26 Table III"
+    OptMPNDS3:
+      log_nash:
+        mean: 10.5549
+        std: 0.002
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 2.26
+        std: 0.11
+        source: "ZM26 Table III"
+  MPDMP8:
+    OptAll:
+      log_nash:
+        mean: 9.7392
+        std: 0.1291
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 6.23
+        std: 0.802
+        source: "ZM26 Table III"
+    OptMPNDS:
+      log_nash:
+        mean: 11.0936
+        std: 0.0043
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 2.46
+        std: 0.0652
+        source: "ZM26 Table III"
+    OptMPNDS2:
+      log_nash:
+        mean: 11.0935
+        std: 0.0046
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 2.46
+        std: 0.0863
+        source: "ZM26 Table III"
+    OptMPNDS3:
+      log_nash:
+        mean: 11.097
+        std: 0.0026
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 2.25
+        std: 0.0557
+        source: "ZM26 Table III"
+  MPDMP9:
+    OptAll:
+      log_nash:
+        mean: 14.9919
+        std: 0.115
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 6.71
+        std: 3.17
+        source: "ZM26 Table III"
+    OptMPNDS:
+      log_nash:
+        mean: 16.1469
+        std: 0.001
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.031
+        std: 0.0225
+        source: "ZM26 Table III"
+    OptMPNDS2:
+      log_nash:
+        mean: 16.1464
+        std: 0.0022
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.0215
+        std: 0.0185
+        source: "ZM26 Table III"
+    OptMPNDS3:
+      log_nash:
+        mean: 16.1363
+        std: 0.004
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.203
+        std: 0.875
+        source: "ZM26 Table III"
+  MPDMP10:
+    OptAll:
+      log_nash:
+        mean: 14.3334
+        std: 0.1151
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 6.55
+        std: 3.2
+        source: "ZM26 Table III"
+    OptMPNDS:
+      log_nash:
+        mean: 15.4952
+        std: 0.0021
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.0964
+        std: 0.0475
+        source: "ZM26 Table III"
+    OptMPNDS2:
+      log_nash:
+        mean: 15.4957
+        std: 0.0017
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.0845
+        std: 0.0478
+        source: "ZM26 Table III"
+    OptMPNDS3:
+      log_nash:
+        mean: 15.4953
+        std: 0.0017
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 0.0699
+        std: 0.0351
+        source: "ZM26 Table III"
+  MPDMP11:
+    OptAll:
+      log_nash:
+        mean: 17.1521
+        std: 0.1428
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 1.79
+        std: 1.79
+        source: "ZM26 Table III"
+    OptMPNDS:
+      log_nash:
+        mean: 18.8487
+        std: 0.0062
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 1.39
+        std: 0.0976
+        source: "ZM26 Table III"
+    OptMPNDS2:
+      log_nash:
+        mean: 18.8495
+        std: 0.0053
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 1.38
+        std: 0.0783
+        source: "ZM26 Table III"
+    OptMPNDS3:
+      log_nash:
+        mean: 18.8566
+        std: 0.0029
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 1.19
+        std: 0.0458
+        source: "ZM26 Table III"
+  MPDMP12:
+    OptAll:
+      log_nash:
+        mean: 17.2519
+        std: 0.1562
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 10.2
+        std: 1.62
+        source: "ZM26 Table III"
+    OptMPNDS:
+      log_nash:
+        mean: 18.5885
+        std: 0.0032
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 2.74
+        std: 0.149
+        source: "ZM26 Table III"
+    OptMPNDS2:
+      log_nash:
+        mean: 18.5891
+        std: 0.0032
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 2.78
+        std: 0.142
+        source: "ZM26 Table III"
+    OptMPNDS3:
+      log_nash:
+        mean: 18.5889
+        std: 0.0023
+        source: "ZM26 Table III"
+      meanIGD:
+        mean: 2.79
+        std: 0.317
+        source: "ZM26 Table III"
+paper_best_algorithm:
+  Table_II_best_nash:
+    MPMOP1: "OptMPNDS"
+    MPMOP2: "OptMPNDS"
+    MPMOP3: "OptMPNDS"
+    MPMOP4: "OptAll"
+    MPMOP5: "OptAll"
+    MPMOP6: "OptMPNDS"
+    MPMOP7: "OptMPNDS"
+    MPMOP8: "OptMPNDS"
+    MPMOP9: "OptAll"
+    MPMOP10: "OptMPNDS"
+    MPMOP11: "OptMPNDS"
+  Table_II_best_meanIGD:
+    MPMOP1: "OptAll"
+    MPMOP2: "OptAll"
+    MPMOP3: "OptMPNDS"
+    MPMOP4: "OptMPNDS"
+    MPMOP5: "OptMPNDS"
+    MPMOP6: "OptMPNDS"
+    MPMOP7: "OptMPNDS"
+    MPMOP8: "OptMPNDS"
+    MPMOP9: "tie"
+    MPMOP10: "OptAll"
+    MPMOP11: "OptMPNDS"

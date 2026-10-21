@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-10-21T16:40:48.732852+00:00",
+  "git_commit": "0a46ba82f56b13c269ee763b717507c7c4c5f175",
+  "benchmark": "MPDMP15",
+  "algorithm": "OptMPNDS3",
+  "condition": "optimization",
+  "seed": 5,
+  "runtime": 216.21235299110413,
+  "configuration": {
+    "population_size": 200,
+    "evaluation_budget": 80000,
+    "fei": 10000,
+    "p": 0.05,
+    "c": 0.05
+  }
+}

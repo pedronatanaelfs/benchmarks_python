@@ -1,0 +1,41 @@
+{
+  "git_commit": "0a46ba82f56b13c269ee763b717507c7c4c5f175",
+  "paper_version": "arXiv:2601.22497 (accepted IEEE TEVC)",
+  "runs_per_condition": 30,
+  "optimizer_runs": 3180,
+  "evaluation_rows": 8580,
+  "core_question": "MOSTLY YES",
+  "claims": {
+    "C1": "SUPPORTED",
+    "C2": "SUPPORTED",
+    "C3": "SUPPORTED",
+    "C4": "SUPPORTED",
+    "C5": "PARTIALLY SUPPORTED",
+    "C6": "PARTIALLY SUPPORTED",
+    "C7": "SUPPORTED"
+  },
+  "experiments": {
+    "MPMOP1_11": {
+      "verdict": "PARTIAL_REPRODUCTION",
+      "nash_ranking_match": "9/11",
+      "meanIGD_ranking_match": "7/11"
+    },
+    "MPMOP12_17": {
+      "verdict": "QUALITATIVE_REPRODUCTION_ONLY"
+    },
+    "MPMOP12_13_Jain_Gini": {
+      "verdict": "QUALITATIVE_REPRODUCTION_ONLY"
+    },
+    "MPDMP1_12": {
+      "verdict": "FAILED_REPRODUCTION",
+      "meanIGD_ranking_match": "0/12",
+      "log_nash_ranking_match": "2/12",
+      "note": "Python OptAll has best meanIGD on every MPDMP1-12 problem; paper reports OptMPNDS-family much better. Not retuned."
+    },
+    "MPDMP13_18": {
+      "verdict": "QUALITATIVE_REPRODUCTION_ONLY"
+    }
+  },
+  "ranking_disagreements_python_meanIGD_vs_nash": 25,
+  "reproduction_tests": "20 passed"
+}

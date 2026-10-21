@@ -1,0 +1,10 @@
+family: MPMOP
+source: "ZM26 Table II caption D=2; operators from OptMPNDS GLOBAL/GA.m"
+n_var: 2
+population_size: 100
+evaluation_budget: 10000
+algorithms: [OptAll, OptMPNDS]
+problems: [MPMOP1, MPMOP2, MPMOP3, MPMOP4, MPMOP5, MPMOP6, MPMOP7, MPMOP8, MPMOP9, MPMOP10, MPMOP11, MPMOP12, MPMOP13, MPMOP14, MPMOP15, MPMOP16, MPMOP17]
+crossover: {type: SBX, probability: 1.0, distribution_index: 20, status: INFERRED_FROM_ORIGINAL_CODE}
+mutation: {type: polynomial, expected_mutated_variables: 1.0, distribution_index: 20, status: INFERRED_FROM_ORIGINAL_CODE}
+independent_runs: 30

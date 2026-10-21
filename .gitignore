@@ -6,6 +6,10 @@ __pycache__/
 dist/
 build/
 *.png
+!experiments/zm26_reproduction/figures/*.png
+!experiments/zm26_reproduction/figures/*.pdf
+# Per-job JSON duplicates results.csv (~3000 files). Keep the CSV.
+experiments/zm26_reproduction/results/raw/job_rows/
 .DS_Store
 sources/**/.git/
 # conda

@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-10-21T14:22:39.449470+00:00",
+  "git_commit": "0a46ba82f56b13c269ee763b717507c7c4c5f175",
+  "benchmark": "MPMOP11",
+  "algorithm": "OptAll",
+  "condition": "optimization",
+  "seed": 7,
+  "runtime": 1.167423963546753,
+  "configuration": {
+    "population_size": 100,
+    "evaluation_budget": 10000,
+    "pro_c": 1.0,
+    "dis_c": 20.0,
+    "pro_m": 1.0,
+    "dis_m": 20.0,
+    "mutation_as_expectation": true
+  }
+}

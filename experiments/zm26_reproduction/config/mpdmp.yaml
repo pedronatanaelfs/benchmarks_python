@@ -1,0 +1,13 @@
+family: MPDMP
+source: "She et al. 2023 Section 5.1; ZM26 uses original-study remaining parameters"
+n_var: 2
+population_size: 200
+evaluation_budget: 80000
+algorithms: [OptAll, OptMPNDS, OptMPNDS2, OptMPNDS3]
+crossover: {type: SBX, probability: 1.0, distribution_index: 15, status: CONFIRMED}
+mutation: {type: polynomial, probability_per_variable: 0.5, distribution_index: 20, status: CONFIRMED}
+optmpnds3:
+  FEI: 10000
+  p: 0.05
+  c: 0.05
+independent_runs: 30
