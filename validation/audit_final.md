@@ -1,71 +1,45 @@
 # Audit Summary (Final)
 
-> **Superseded by the licensed-MATLAB equivalence audit (2026-10-19).**
-> Current authoritative status: 35/35 objective PASS; 33/33 safely executable
-> PS/PF PASS; overall 33 PASS, 2 PARTIAL (MPMOP4/9 unsafe reference meshes),
-> 0 FAIL. See `equivalence_matrix.md`, `discrepancy_report.md`, and
-> `reports/`.
+Date: 2026-10-19  
+Ground truth: supplied executable MATLAB benchmark repositories.
 
-Branch: `audit-validation`  
-Date: 2026-10-03
-
-## Before
+## Result
 
 | Status | Count |
-|---|---|
-| PASS | 23 |
-| PARTIAL | 12 |
-| NEEDS_MANUAL_VERIFICATION | 0 |
+|---|---:|
+| PASS | 33 |
+| PARTIAL | 2 |
+| NEEDS_MANUAL_REVIEW | 0 |
 | FAIL | 0 |
 
-Tests: 128 passed, 3 skipped  
-Octave: not installed
+- Objective equivalence: **35/35 PASS**
+- Safely executable PS/PF equivalence: **33/33 PASS**
+- Automated tests: **227 passed, 1 skipped, 0 failed**
 
-## After
+The two PARTIAL problems are MPMOP4 and MPMOP9. Their objectives match
+MATLAB, but the original `true_PS.m` requests a 20,000×20,000 mesh and is
+not safely executable without modifying the reference.
 
-| Status | Count |
-|---|---|
-| PASS | 29 |
-| PARTIAL | 6 |
-| NEEDS_MANUAL_VERIFICATION | 0 |
-| FAIL | 0 |
+## Resolved discrepancies
 
-Tests: **146 passed, 1 skipped, 0 failed**  
-Octave: **10.3.0** (conda-forge)
+1. MPMOP12–17 were aligned to the executable MATLAB classes rather than the
+   conflicting publication-derived definitions.
+2. MPMOP16/17 objective counts and DM partitions were corrected.
+3. MATLAB's MPMOP15→MPMOP17 kernel duplication is preserved.
+4. MPDMP `nsidedpoly` orientation and `polyshape.Vertices` order were
+   recovered from licensed MATLAB and ported.
+5. Polygon-intersection common PS grids, conflict PF paths, and concession
+   tables were ported.
+6. `true_PS.m` sampling was reproduced for MPMOP1–3, 5–8, and 10–11.
 
-PARTIAL remaining: **MPMOP12–MPMOP17** (decision dimension `D` not fixed in ZM26 Table S-VI; default `n_var=10` is `ASSUMED_DEFAULT`).
+## Evidence
 
-## Changes Made
+- `equivalence_matrix.md`
+- `discrepancy_report.md`
+- `reports/numerical_comparison.csv`
+- `reports/pareto_comparison.csv`
+- `matlab/results/`
+- `matlab/pareto_results/`
 
-| Problem / Area | Issue | Source | Change | Validation | Final Status |
-|---|---|---|---|---|---|
-| API | `common_ps_exists` as unsafe strings | — | `CommonPSStatus` enum | unit tests vs `bool("False")` pitfall | — |
-| MPMOP1–11 | No Octave equivalence | OptMPNDS `MPMOP_Value.m` | Octave runner + CSVs | allclose PASS | PASS |
-| MPMOP12–17 | Hidden D=10 assumption | ZM26 Table S-VI; caption D=2 is for MPMOP1–11 only | metadata `ASSUMED_DEFAULT`, docs | analytical PS tests | PARTIAL |
-| MPDMP3,5,7,8,11,12 | nsidedpoly orientation PARTIAL | Author `.m` + MathWorks nsidedpoly docs + MPDMP6 PS hardcode | geometry tests; keep formulas | analytical + geometry | PASS |
-| MPDMP13–18 | — | ZM26 Table S-V | **no change** | revalidated | PASS |
-| pymoo adapter | missing equality tests | — | tests for MPMOP1/15, MPDMP13/17 | PASS | — |
-| Docs/README/CITATION | overstated “verified”; missing CFF URL | — | honest status table; CITATION.cff | — | — |
-
-## Remaining Risks
-
-1. **MPMOP12–17 dimension**: experiments may have used a D other than 10; constructors accept `n_var=` override.
-2. **MPDMP `nsidedpoly`**: Octave lacks MATLAB Mapping Toolbox; orientation follows MathWorks documentation + author PS hardcodes, not a live MATLAB vertex dump.
-3. **Common PS samplers** for some MPMOP1–11 / polygon-intersection MPDMPs are densified helpers, not full `true_PS.m` reproductions. `evaluate()` does not depend on them.
-4. **MPDMP classdefs**: full Octave execution of PlatEMO-style problems remains `OCTAVE_INCOMPATIBLE`.
-
-## Scientific Assumptions
-
-- `DEFAULT_N_VAR = 10` for MPMOP12–17 (`dimension_status=ASSUMED_DEFAULT`).
-- OptMPNDS default `Global.D=10` for MPMOP1–11 constructors; ZM26 reported D=2 for MPMOP1–11 experiments.
-- `nsidedpoly` Radius: first vertex to the right, CCW (MathWorks).
-- `nsidedpoly` SideLength with even `n`: axis-aligned (matches MPDMP6 hardcoded PS).
-- No fabricated analytical PFs; empty common PS uses `CommonPSStatus.EMPTY` → shape `(0, n_var)`.
-
-## Octave equivalence
-
-| Suite | Result |
-|---|---|
-| MPMOP1–11 (`MPMOP_Value.m`) | **PASS 11/11** |
-| MPDMP1–12 (classdefs) | **OCTAVE_INCOMPATIBLE** |
-| MPDMP13–18 / MPMOP12–17 | N/A (no author MATLAB evaluator in-repo) |
+Octave remains an optional secondary check. Final equivalence claims rely on
+licensed MATLAB outputs, not Octave.

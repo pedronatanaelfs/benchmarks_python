@@ -1,20 +1,18 @@
 # MPMOP13 Audit
 
 ## Source
-- ZM26 Appendix Table S-VI
-- Equations verified via pdftotext of Appendix.pdf
+- Executable MATLAB: `2026ZhaoNash-main/MPMOP/MPMOP13.m` and `MPMOP_Value.m`
+- Publication Table S-VI is **not** used where it conflicts with MATLAB
 
 ## Python current
 - `src/fairmoo_benchmarks/mpmop/mpmop13.py`
-- Default `n_var=10` with metadata `dimension_status=ASSUMED_DEFAULT`
-
-## Difference
-- Numeric D not fixed in Table S-VI.
-- ZM26 D=2 caption applies to MPMOP1–11 experiments only.
+- Default `n_var=10` from MATLAB `obj.Global.D = 10`
+- Unit bounds `[0,1]^D`, `M=4`, `DM=2`
 
 ## Decision
-**KEEP** formulas; dimension remains ASSUMED_DEFAULT=10.
+**ALIGN** to MATLAB classdef, not Appendix Table S-VI.
 
 ## Validation
-- Analytical g=1 on party PS (where applicable)
-- Final status: **PARTIAL** (dimension assumption)
+- Licensed-MATLAB objectives: PASS
+- Licensed-MATLAB PS/PF: PASS
+- Final status: **PASS**

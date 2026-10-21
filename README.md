@@ -180,8 +180,9 @@ pytest -q
 
 Artifacts:
 
-- `validation/validation_report.md`
-- `validation/audit_before.md` / `validation/audit_final.md`
+- `validation/validation_report.md` (current MATLAB equivalence report)
+- `validation/audit_final.md` (current 33 PASS / 2 PARTIAL)
+- `validation/audit_before.md` (historical 2026-10-03 snapshot only)
 - `validation/equivalence/` (MPMOP1–11 vs Octave)
 - `validation/audits/` (per-benchmark KEEP/FIX decisions)
 - `validation/reference_values/`

@@ -208,16 +208,15 @@ plus zero-distance tests at every MATLAB reference vertex.
 
 ## PF/PS behavior: MPMOP1–11 and MPDMP1–12
 
-Python frequently returns a densified geometric helper, an approximation,
-or `None`, while MATLAB uses benchmark-specific `true_PS` or map-specific
-sampling. Objective evaluation is independent of this difference. Exact
-sampling equivalence remains `PARTIAL` until separately tested.
+After the PS/PF harness, Python sampling matches every safely executable
+MATLAB reference (33/33 PASS). MPMOP4/9 remain unexecuted because
+`true_PS.m` requests a 20,000×20,000 mesh. Objective evaluation is
+independent of PS/PF generation.
 
-The supplied MATLAB `PF()` implementations for MPDMP9 and MPDMP10 also
-contain a reference-code defect: they pass `obj.PS` rather than invoking
-`obj.PS()`. The objective functions can still be tested through `CalObj`,
-but PF equivalence for those two problems requires either documenting the
-MATLAB error or an explicitly approved reference patch.
+The supplied MATLAB `PF()` implementations for MPDMP9 and MPDMP10 pass
+`obj.PS` rather than invoking `obj.PS()`. The Python port follows the
+intended `PS()` sampling used by the MATLAB PS export harness rather than
+reproducing that runtime defect in `PF()`.
 
 ## High-risk conversion points
 

@@ -1,64 +1,78 @@
-# Validation Report
+# MATLAB ↔ Python Validation Report
 
-> **Superseded for MATLAB equivalence.** This historical report predates the
-> deterministic licensed-MATLAB run. The authoritative final results are
-> `equivalence_matrix.md` and `reports/numerical_comparison.csv`: after
-> correction, objective-function equivalence is PASS for all 35 benchmarks.
+Date: 2026-10-19  
+Reference: licensed MATLAB running the supplied, unmodified benchmark sources.
 
-GNU Octave: **10.3.0** (conda-forge) for `MPMOP_Value.m` equivalence.
-MATLAB proprietary license not used. MPDMP PlatEMO classdefs: `OCTAVE_INCOMPATIBLE`.
+## Final status
 
-Reference evaluations: `validation/reference_values/*` (seed 42 inputs + Octave/Python CSVs for MPMOP1–11).
+| Status | Count | Meaning |
+|---|---:|---|
+| **PASS** | 33 | Objectives, metadata, and safely executable PS/PF outputs match MATLAB |
+| **PARTIAL** | 2 | MPMOP4/9 objectives match; original MATLAB PS/PF routine is unsafe to execute |
+| **NEEDS_MANUAL_REVIEW** | 0 | — |
+| **FAIL** | 0 | — |
 
-| Problem | Python Runs | Shape | Bounds | Analytical | MATLAB/Octave | Overall |
-|---|---|---|---|---|---|---|
-| MPDMP1 | PASS | PASS | PASS | PASS | OCTAVE_INCOMPATIBLE | PASS |
-| MPDMP2 | PASS | PASS | PASS | PASS | OCTAVE_INCOMPATIBLE | PASS |
-| MPDMP3 | PASS | PASS | PASS | PASS | OCTAVE_INCOMPATIBLE | PASS |
-| MPDMP4 | PASS | PASS | PASS | PASS | OCTAVE_INCOMPATIBLE | PASS |
-| MPDMP5 | PASS | PASS | PASS | PASS | OCTAVE_INCOMPATIBLE | PASS |
-| MPDMP6 | PASS | PASS | PASS | PASS | OCTAVE_INCOMPATIBLE | PASS |
-| MPDMP7 | PASS | PASS | PASS | PASS | OCTAVE_INCOMPATIBLE | PASS |
-| MPDMP8 | PASS | PASS | PASS | PASS | OCTAVE_INCOMPATIBLE | PASS |
-| MPDMP9 | PASS | PASS | PASS | PASS | OCTAVE_INCOMPATIBLE | PASS |
-| MPDMP10 | PASS | PASS | PASS | PASS | OCTAVE_INCOMPATIBLE | PASS |
-| MPDMP11 | PASS | PASS | PASS | PASS | OCTAVE_INCOMPATIBLE | PASS |
-| MPDMP12 | PASS | PASS | PASS | PASS | OCTAVE_INCOMPATIBLE | PASS |
-| MPDMP13 | PASS | PASS | PASS | PASS | N/A | PASS |
-| MPDMP14 | PASS | PASS | PASS | PASS | N/A | PASS |
-| MPDMP15 | PASS | PASS | PASS | PASS | N/A | PASS |
-| MPDMP16 | PASS | PASS | PASS | PASS | N/A | PASS |
-| MPDMP17 | PASS | PASS | PASS | PASS | N/A | PASS |
-| MPDMP18 | PASS | PASS | PASS | PASS | N/A | PASS |
-| MPMOP1 | PASS | PASS | PASS | PASS | PASS | PASS |
-| MPMOP2 | PASS | PASS | PASS | PASS | PASS | PASS |
-| MPMOP3 | PASS | PASS | PASS | PASS | PASS | PASS |
-| MPMOP4 | PASS | PASS | PASS | PASS | PASS | PASS |
-| MPMOP5 | PASS | PASS | PASS | PASS | PASS | PASS |
-| MPMOP6 | PASS | PASS | PASS | PASS | PASS | PASS |
-| MPMOP7 | PASS | PASS | PASS | PASS | PASS | PASS |
-| MPMOP8 | PASS | PASS | PASS | PASS | PASS | PASS |
-| MPMOP9 | PASS | PASS | PASS | PASS | PASS | PASS |
-| MPMOP10 | PASS | PASS | PASS | PASS | PASS | PASS |
-| MPMOP11 | PASS | PASS | PASS | PASS | PASS | PASS |
-| MPMOP12 | PASS | PASS | PASS | PASS | N/A | PARTIAL |
-| MPMOP13 | PASS | PASS | PASS | PASS | N/A | PARTIAL |
-| MPMOP14 | PASS | PASS | PASS | PASS | N/A | PARTIAL |
-| MPMOP15 | PASS | PASS | PASS | PASS | N/A | PARTIAL |
-| MPMOP16 | PASS | PASS | PASS | PASS | N/A | PARTIAL |
-| MPMOP17 | PASS | PASS | PASS | PASS | N/A | PARTIAL |
+Objective-function equivalence is **PASS 35/35** using the same 18
+deterministic decision vectors per benchmark:
 
-## Summary counts
+```text
+np.allclose(matlab, python, rtol=1e-9, atol=1e-10)
+```
 
-- **PASS**: 29
-- **PARTIAL**: 6
-- **NEEDS_MANUAL_VERIFICATION**: 0
-- **FAIL**: 0
+PS/PF equivalence is **PASS 33/33** for every safely executable MATLAB
+reference.
 
-## Notes
+## Numerical evidence
 
-- MPDMP13–18 unchanged; Table S-V reference points preserved.
-- MPMOP1–11: objective formulas match Octave `MPMOP_Value.m` (rtol=1e-8, atol=1e-10).
-- MPMOP12–17: formulas from Table S-VI; `n_var` default=10 is `ASSUMED_DEFAULT` (PARTIAL).
-- MPDMP polygon problems: vertices follow MathWorks `nsidedpoly` documentation + author hardcodes (MPDMP6 PS).
-- `common_ps_exists` is now type-safe `CommonPSStatus` enum.
+- Maximum objective discrepancies among passing benchmarks are floating-point
+  roundoff; all satisfy the stated tolerance.
+- MATLAB result CSVs: `validation/matlab/results/`
+- Python result CSVs: `validation/python/results/`
+- Per-problem errors: `validation/reports/numerical_comparison.csv`
+- MATLAB PS/PF exports: `validation/matlab/pareto_results/`
+- PS/PF comparison: `validation/reports/pareto_comparison.csv`
+- Complete matrix: `validation/equivalence_matrix.md`
+- Discrepancy and remediation trail: `validation/discrepancy_report.md`
+
+## Corrections validated against MATLAB
+
+- MPMOP12–17 equations, bounds, dimensions, objective counts, DM partitions,
+  party PS, and PF generation now follow the executable MATLAB classes.
+- MATLAB MPMOP15 intentionally calls the MPMOP17 kernel; Python preserves
+  that behavior.
+- MPDMP3–8 and MPDMP10–12 now reproduce MATLAB `nsidedpoly` orientation and
+  normalized `polyshape.Vertices` objective ordering.
+- MPDMP polygon common-PS grids reproduce MATLAB's 1000×1000 sampling and
+  ordering.
+- MPDMP13–18 reproduce MATLAB conflict PF paths and concession-case tables.
+- MPMOP1–3, 5–8, and 10–11 reproduce `true_PS.m` sampling.
+
+## Why MPMOP4 and MPMOP9 are PARTIAL
+
+Their objective functions pass MATLAB numerical comparison. However, the
+supplied `true_PS.m` calls:
+
+```matlab
+meshgrid(linspace(0,1,20000))
+```
+
+which attempts a 20,000×20,000 mesh before several additional arrays and
+nested loops. The reference implementation is not safely executable on a
+normal workstation, so PS/PF numerical equivalence cannot be established
+without modifying the MATLAB ground truth. They are therefore classified
+PARTIAL rather than incorrectly declared PASS.
+
+## Automated tests
+
+```text
+227 passed, 1 skipped, 0 failed
+```
+
+This includes:
+
+- 35 licensed-MATLAB objective regression cases;
+- 33 licensed-MATLAB PS/PF regression cases;
+- structural, analytical, geometry, registry, and pymoo adapter tests.
+
+GNU Octave remains an optional secondary check for MPMOP1–11, but no Octave
+result is used as proof of final MATLAB equivalence.

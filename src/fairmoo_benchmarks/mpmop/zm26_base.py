@@ -35,7 +35,7 @@ class ZM26MPMOP(MultiPartyProblem):
         n_var: int = DEFAULT_N_VAR,
         notes: str = "",
     ) -> None:
-        # n_var is an explicit constructor argument; default is ASSUMED_DEFAULT.
+        # n_var is an explicit constructor argument; default matches MATLAB Global.D = 10.
         super().__init__(
             name=name,
             n_var=n_var,

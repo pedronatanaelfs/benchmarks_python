@@ -5,13 +5,12 @@ Traceability from each Python benchmark to primary mathematical / code sources.
 > **2026-10-19 update:** the supplied executable MATLAB repositories are the
 > implementation ground truth where they differ from publication tables.
 > All 35 objectives and all 33 safely executable PS/PF references now match
-> licensed MATLAB. Historical details below describe the pre-MATLAB audit;
-> use `validation/equivalence_matrix.md` for current status.
+> licensed MATLAB. Use `validation/equivalence_matrix.md` for the full matrix.
 
 Legend for **Status**:
-- **PASS** — definition cross-checked against a primary source and analytical checks pass
-- **PARTIAL** — runs correctly but some detail (dimension D, `nsidedpoly` orientation, full common-PS sampler) still needs MATLAB/Octave or author confirmation
-- **NEEDS_MANUAL_VERIFICATION** — ambiguous in the source materials
+- **PASS** — objectives and safely executable PS/PF outputs match licensed MATLAB
+- **PARTIAL** — currently only MPMOP4/9, whose MATLAB `true_PS.m` mesh is unsafe to execute
+- **NEEDS_MANUAL_VERIFICATION** — ambiguous in the source materials (none remaining)
 
 ---
 
@@ -25,8 +24,9 @@ Legend for **Status**:
 | ZM26 paper | arXiv:2601.22497 (`sources/zm26_2026/main.tex`) |
 | ZM26 appendix | `sources/zm26_2026/Appendix.pdf` (TeX for appendix **not** shipped; text via `pdftotext`) |
 
-Audit update (2026-10-03): GNU Octave 10.3 used for MPMOP_Value equivalence (PASS for MPMOP1–11).
-MPDMP PlatEMO classdefs remain OCTAVE_INCOMPATIBLE. See `validation/audit_final.md`.
+Audit update (2026-10-19): licensed MATLAB compared all 35 objectives and
+all 33 safely executable PS/PF references. Octave remains optional for
+MPMOP1–11 only. See `validation/audit_final.md`.
 
 ---
 
@@ -75,7 +75,7 @@ Same family as MPDMP13. Points verified against Table S-V (including MPDMP17 thr
 ## MPDMP5 / MPDMP7 / MPDMP8 / MPDMP11 / MPDMP12
 
 - **Source MATLAB:** `nsidedpoly` constructions in corresponding `.m` files
-- **Status:** PASS — nsidedpoly convention documented + geometry tests; common-PS helpers remain densified samples
+- **Status:** PASS — MATLAB `nsidedpoly` / `polyshape.Vertices` order and common-PS grids match licensed exports
 
 ## MPDMP6
 
@@ -85,7 +85,7 @@ Same family as MPDMP13. Points verified against Table S-V (including MPDMP17 thr
 ## MPDMP9 / MPDMP10
 
 - **Source MATLAB:** `square1.m`, `Map10.m`
-- **Status:** PASS for reference points / DM ownership; Map10 square vertices PARTIAL if orientation differs
+- **Status:** PASS — reference points, DM ownership, and square vertex order match MATLAB
 
 ## MPMOP1–MPMOP11
 
@@ -94,7 +94,7 @@ Same family as MPDMP13. Points verified against Table S-V (including MPDMP17 thr
 - **Python:** `src/fairmoo_benchmarks/mpmop/liu2020.py`
 - **Equations:** direct port of `MPMOP_Value` cases MPMOP1–6 with party times from each classdef
 - **Bounds:** confirmed per class (not all [0,1]^D)
-- **Status:** PARTIAL — objectives PASS vs formula; full `true_PS.m` common-PS sampler not fully reimplemented
+- **Status:** PASS for MPMOP1–3, 5–8, 10–11 (objectives + `true_PS.m` sampling). MPMOP4/9 objectives PASS; PS/PF PARTIAL because MATLAB `meshgrid(linspace(0,1,20000))` is unsafe to execute.
 
 ### Per-problem quick map
 
@@ -112,31 +112,11 @@ Same family as MPDMP13. Points verified against Table S-V (including MPDMP17 thr
 | MPMOP10 | MPMOP5 | 0,1,1.5 | 9 | 3 | [0,1] |
 | MPMOP11 | MPMOP6 | 0,1,1.5 | 9 | 3 | as MPMOP4 |
 
-## MPMOP12
+## MPMOP12–MPMOP17
 
-- **Source:** ZM26 Appendix Table S-VI
-- **Python:** `mpmop12.py`
-- **Overall bounds:** x1∈[1,4], xi∈[0,1] (union of DM columns)
-- **Status:** PASS (equations); default D=10 marked PARTIAL in metadata
-
-## MPMOP13–MPMOP14
-
-- **Source:** Table S-VI
-- **Status:** PASS formulas; D=10 convention PARTIAL
-
-## MPMOP15
-
-- **Source:** Table S-VI (3 DMs)
-- **Status:** PASS formulas; D=10 convention PARTIAL
-
-## MPMOP16
-
-- **Source:** Table S-VI
-- **Note:** g2 uses `100*max(0,1/3-x1)^2 + max(0,x1-2/3)^2` as written (100 only on first term)
-- **Status:** PASS / watch PDF parsing
-
-## MPMOP17
-
-- **Source:** Table S-VI
-- **PS cuts:** 0.33 / 0.66 as written (not 1/3, 2/3)
-- **Status:** PASS formulas; D=10 convention PARTIAL
+- **Source:** executable MATLAB classes in `2026ZhaoNash-main/MPMOP` (not Appendix Table S-VI where they conflict)
+- **Python:** `mpmop12.py`–`mpmop17.py`
+- **Dimension:** MATLAB `if isempty(obj.Global.D); obj.Global.D = 10; end`
+- **Bounds:** unit hypercube `[0,1]^D`
+- **Notes:** MATLAB MPMOP15 calls the MPMOP17 kernel (duplicate). MPMOP16 is `M=4`, `DM=2`. MPMOP17/15 are `M=6`, `DM=3`.
+- **Status:** PASS (objectives, D/M/DM, bounds, party PS, and PF vs licensed MATLAB)

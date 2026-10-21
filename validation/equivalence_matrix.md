@@ -1,8 +1,8 @@
 # Post-fix equivalence matrix
 
 MATLAB objective outputs were generated for all 35 benchmarks and compared
-with `rtol=1e-9`, `atol=1e-10`. All objective evaluations now pass. Separate
-PS/PF export verification remains pending where noted.
+with `rtol=1e-9`, `atol=1e-10`. All objective evaluations pass. Safely
+executable PS/PF exports also pass; only MPMOP4/9 remain unexecuted.
 
 | Problem | Structure | D/M/DM | Bounds | Objective function | PS/PF | MATLAB numerical test | Overall |
 |---|---|---|---|---|---|---|---|
@@ -62,11 +62,9 @@ cannot be safely executed; their objective functions pass.
 - MPMOP9–11: DM1 → f1–f3; DM2 → f4–f6; DM3 → f7–f9.
 - MATLAB MPMOP12–13: DM1 → f1–f2; DM2 → f3–f4.
 - MATLAB MPMOP14: DM1 → f1–f3; DM2 → f4–f6.
-- MATLAB MPMOP15 and MPMOP17: three two-objective blocks.
-- MATLAB MPMOP16: two two-objective blocks. Python instead has three
-  two-objective blocks.
-- Python MPMOP17: three three-objective blocks, whereas MATLAB has three
-  two-objective blocks.
+- MATLAB MPMOP15 and MPMOP17: three two-objective blocks (Python matches;
+  MATLAB MPMOP15 calls the MPMOP17 kernel).
+- MATLAB MPMOP16: two two-objective blocks (Python matches).
 - MPDMP1–2 and 13: two two-objective blocks.
 - MPDMP3: f1–f2 and f3–f5.
 - MPDMP4–5 and 14: two three-objective blocks.

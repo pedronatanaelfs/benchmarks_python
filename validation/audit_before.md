@@ -1,5 +1,11 @@
 # Audit Snapshot (Before Changes)
 
+> **Historical snapshot (2026-10-03).** This is the pre-MATLAB-equivalence
+> audit (23 PASS / 12 PARTIAL; Octave not yet executed). It is **not** the
+> current public status. After licensed-MATLAB comparison and Python
+> correction: **33 PASS, 2 PARTIAL (MPMOP4/9), 0 FAIL**. See
+> `validation_report.md` and `audit_final.md`.
+
 Branch: `audit-validation`  
 Date: 2026-10-03  
 Commit base: `4b9ac35` (origin/main)
