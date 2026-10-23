@@ -1,0 +1,8 @@
+component,python
+p-best,"lexsort(-crowd, front), k~U{1..ceil(n*p)}"
+archive update,replace nearest of 2N archive
+F update,mu_F <- (1-c)mu_F + c * sum(sF^2)/sum(sF)
+CR update,mu_CR <- (1-c)mu_CR + c * mean(sCR)
+mutation,x + F*(pbest-x) + F*(x_r2-x_r1) current-to-pbest/1
+crossover,"binomial, jrand forced"
+bounds repair,"np.clip to [xl,xu]"

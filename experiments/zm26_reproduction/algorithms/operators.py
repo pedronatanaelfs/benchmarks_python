@@ -42,7 +42,11 @@ def nd_sort(F: np.ndarray, n_sort: int | None = None) -> tuple[np.ndarray, int]:
     assigned = 0
     max_fno = 0
     remaining = np.ones(nu, dtype=bool)
-    while assigned < min(n_sort, nu) and remaining.any():
+    # MATLAB NDSort.m ENS_SS:
+    #   while sum(Table(FrontNo<inf)) < min(nSort,length(Loc))
+    # length(Loc) is the number of original rows (n). assigned already
+    # counts original rows via Table, so the unique-count cap was wrong.
+    while assigned < n_sort and remaining.any():
         max_fno += 1
         n_dom = dominates[:, remaining].sum(axis=0) if remaining.any() else 0
         cand = np.zeros(nu, dtype=bool)
@@ -81,36 +85,36 @@ def crowding_distance(F: np.ndarray, front_no: np.ndarray) -> np.ndarray:
 
 
 def crowding_entropy(F: np.ndarray, front_no: np.ndarray) -> np.ndarray:
-    """She OptMPNDS3 CrowdingEntropy.m."""
+    """She OptMPNDS3 CrowdingEntropy.m, including MATLAB NaN/Inf edge cases.
+
+    Original (Public/CrowdingEntropy.m) divides by ``c`` and
+    ``(Fmax-Fmin)`` with no guards, so ``0/0``, ``log2(0)`` and Inf+NaN
+    propagate. Reproduction must keep those IEEE results.
+    """
     F = np.asarray(F, dtype=float)
     n, m = F.shape
     crowd = np.zeros(n, dtype=float)
     fronts = np.unique(front_no[np.isfinite(front_no)])
-    for fno in fronts:
-        idx = np.where(front_no == fno)[0]
-        if idx.size == 0:
-            continue
-        fmax = F[idx].max(axis=0)
-        fmin = F[idx].min(axis=0)
-        span = fmax - fmin
-        for j in range(m):
-            order = idx[np.argsort(F[idx, j], kind="mergesort")]
-            crowd[order[0]] = np.inf
-            crowd[order[-1]] = np.inf
-            if order.size <= 2:
+    with np.errstate(divide="ignore", invalid="ignore"):
+        for fno in fronts:
+            idx = np.where(front_no == fno)[0]
+            if idx.size == 0:
                 continue
-            denom = span[j] if span[j] > 1e-16 else 1.0
-            if order.size <= 2:
-                continue
-            c = F[order[2:], j] - F[order[:-2], j]
-            dl = F[order[2:], j] - F[order[1:-1], j]
-            du = F[order[1:-1], j] - F[order[:-2], j]
-            valid = c > 1e-16
-            pl = np.clip(np.divide(dl, c, out=np.ones_like(dl), where=valid), 1e-12, 1.0)
-            pu = np.clip(np.divide(du, c, out=np.ones_like(du), where=valid), 1e-12, 1.0)
-            ce = np.where(valid, -(dl * np.log2(pl) + du * np.log2(pu)) / denom, 0.0)
-            ce = np.where(np.isfinite(ce), ce, 0.0)
-            crowd[order[1:-1]] += ce
+            fmax = F[idx].max(axis=0)
+            fmin = F[idx].min(axis=0)
+            for j in range(m):
+                order = idx[np.argsort(F[idx, j], kind="mergesort")]
+                crowd[order[0]] = np.inf
+                crowd[order[-1]] = np.inf
+                if order.size <= 2:
+                    continue
+                c = F[order[2:], j] - F[order[:-2], j]
+                dl = F[order[2:], j] - F[order[1:-1], j]
+                du = F[order[1:-1], j] - F[order[:-2], j]
+                pl = dl / c
+                pu = du / c
+                ce = -(dl * np.log2(pl) + du * np.log2(pu)) / (fmax[j] - fmin[j])
+                crowd[order[1:-1]] += ce
     return crowd
 
 
@@ -143,9 +147,10 @@ def sbx_pm(
     """PlatEMO GA.m real encoding: SBX + polynomial mutation.
 
     ``pro_m`` is the expected number of mutated variables when
-    ``mutation_as_expectation`` is True (PlatEMO default, probability pro_m/D).
-    She 2023 sets mutation probability to 0.5 per variable; pass
-    ``mutation_as_expectation=False`` in that case.
+    ``mutation_as_expectation`` is True. MATLAB ``Public/GA.m`` real
+    encoding (line ``Site = rand(2*N,D) < proM/D``) always uses
+    probability ``proM/D``. Production MPDMP must keep that rule
+    (``pro_m=0.5``, D=2 ⇒ 0.25), not a per-variable probability of 0.5.
     """
     n_all, d = parents.shape
     n = n_all // 2
@@ -212,7 +217,9 @@ def mpnds(F: np.ndarray, slices: Sequence[slice], n_sort: int) -> tuple[np.ndarr
     visited = np.zeros(nu, dtype=bool)
     s = np.zeros(nu, dtype=bool)
     n_sort = min(int(n_sort), n)
-    while table[front_no < np.inf].sum() < min(n_sort, nu):
+    # MATLAB MPNDS_Sort: while sum(Table(FrontNo<inf)) < min(nSort,length(Loc))
+    # Loc is the inverse index of the original matrix, so length(Loc)=n.
+    while table[front_no < np.inf].sum() < n_sort:
         fz = np.ones(nu, dtype=bool)
         for k in range(party_num):
             fz &= (party_fronts[k] == fno) & (~visited)
@@ -226,13 +233,8 @@ def mpnds(F: np.ndarray, slices: Sequence[slice], n_sort: int) -> tuple[np.ndarr
             front_no[fz] = max_fno
             visited[fz] = True
             max_fno += 1
-        else:
-            leftover = ~visited
-            if not leftover.any():
-                break
-            front_no[leftover] = max_fno
-            visited[leftover] = True
-            max_fno += 1
+        elif fno > int(np.nanmax(party_fronts[np.isfinite(party_fronts)])) + 2:
+            break
     return front_no[loc], max_fno - 1
 
 

@@ -1,0 +1,14 @@
+field,value
+n_var,2.0
+n_obj,6.0
+n_dm,2.0
+xl0,0.0
+xl1,0.0
+xu0,100.0
+xu1,100.0
+n_obj_dm1,3.0
+n_obj_dm2,3.0
+slice_dm1_start,0.0
+slice_dm1_stop,3.0
+slice_dm2_start,3.0
+slice_dm2_stop,6.0

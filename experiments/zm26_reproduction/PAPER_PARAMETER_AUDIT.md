@@ -18,15 +18,18 @@ Official algorithms: OptMPNDS-master (Liu 2020) and `sources/mpdmp_2023/2022SheO
 | MPMOP crossover | SBX pc=1, ηc=20 | PlatEMO `GA.m` defaults | `Public/GA.m` | INFERRED_FROM_ORIGINAL_CODE |
 | MPMOP mutation | PM, E[mutated bits]=1, ηm=20 | PlatEMO `GA.m` | `Public/GA.m` | INFERRED_FROM_ORIGINAL_CODE |
 | MPDMP crossover | SBX pc=1, ηc=15 | She 2023 | Section 5.1 | CONFIRMED |
-| MPDMP mutation | PM, pm=0.5, ηm=20 | She 2023 | Section 5.1 | CONFIRMED |
+| MPDMP mutation | PM, `proM=0.5`, **site probability `proM/D`** (D=2 ⇒ 0.25) | She `Public/GA.m` `Site = rand < proM/D` | paper §5.1 says pm=0.5; **executable MATLAB is proM/D** | CONFIRMED_FROM_CODE (corrected 2026-10-22) |
 | OptMPNDS3 FEI | 10000 / party (first two DMs) | She 2023 + `getPF.m` | Section 5.1; `getPF.m` | CONFIRMED |
 | OptMPNDS3 JADE p, c | 0.05, 0.05 | She 2023 | Section 5.1 | CONFIRMED |
 | concession original suites | all zeros | ZM26 | Section V-A4 | CONFIRMED |
 | concession non-consensus cases | Table S-IV six cases | ZM26 appendix | Table S-IV | CONFIRMED |
 | PF sample size | 2000 | official MATLAB | `nash_score.m` `'PFSampleSize'` | INFERRED_FROM_ORIGINAL_CODE |
 | Offset PF sample | 5000 | official MATLAB | `compute_offset_to_pf.m` | INFERRED_FROM_ORIGINAL_CODE |
-| IGD | Euclidean mean min distance, party-wise | PlatEMO/She IGD | `IGD_GD.m`, `Metrics/IGD.m` | CONFIRMED |
-| meanIGD | arithmetic mean of party IGD | ZM26 | Section V-A3 | CONFIRMED |
+| IGD (MPMOP) | party-wise Euclidean IGD | PlatEMO `IGD_GD.m` | Liu OptMPNDS | CONFIRMED |
+| IGD (MPDMP Table III) | She `Metrics/IGD.m` on `problem.PF()` (sum party pdist2, then min, then mean) | She GLOBAL.Metric | `IGD.m` + classdef `PF()` | CONFIRMED_FROM_CODE; see `MPDMP_IGD_REFERENCE_AUDIT.md` |
+| meanIGD (paper text) | “arithmetic mean of party IGD” | ZM26 §V-A3 | paper wording | UNRESOLVED vs She `IGD.m`; MPDMP4 numbers match `IGD.m`, not party-triangle IGD |
+| `party_pf_meanIGD` | mean of party-wise geometric IGD | Python research metric | `metrics/mean_igd.py` | kept, not the MPDMP reproduction score |
+| `zm26_meanIGD` | She `IGD.m` + MATLAB `PF()` | reproduction metric | `metrics/she_igd.py` | used for MPDMP Table III |
 | Nash log for MPDMP | natural log `ln` | inferred from Table III magnitudes vs Appendix S-I C | Table III + S-I | INFERRED_FROM_ORIGINAL_CODE |
 | Nash utility | paper `C - L_m` for reported Ψ; MATLAB `exp(-L_m)` also stored | Theorem 1 vs `nash_score.m` | paper Eq. after Lemma 4; MATLAB line `exp(-L_m)` | see discrepancy below |
 | Nash constant C | estimated as `max L + 1` from a random population on each problem | Appendix S-I | Appendix S-I | INFERRED_FROM_ORIGINAL_CODE |

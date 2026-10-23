@@ -34,7 +34,7 @@ class OptMPNDS2:
         dis_c: float = 15.0,
         pro_m: float = 0.5,
         dis_m: float = 20.0,
-        mutation_as_expectation: bool = False,
+        mutation_as_expectation: bool = True,
     ) -> None:
         self.population_size = int(population_size)
         self.evaluation_budget = int(evaluation_budget)

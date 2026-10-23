@@ -1,0 +1,4 @@
+note
+"Python initialization is rng.uniform(xl,xu). Do not compare to MATLAB rng(1)."
+MATLAB test_05 writes Global.Initialization() stats and PF()/PS() for structure comparison.
+OptMPNDS does not use getPF; that is OptMPNDS3-only.

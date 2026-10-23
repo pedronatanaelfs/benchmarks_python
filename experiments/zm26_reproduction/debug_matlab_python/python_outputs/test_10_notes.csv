@@ -1,0 +1,3 @@
+note
+"Python/MATLAB GA.m clip with min(max(x,lower),upper) after SBX and after PM."
+No reflect / regenerate / midpoint repair in GA.m.

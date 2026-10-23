@@ -1,0 +1,4 @@
+note
+OptMPNDS MATLAB EnvironmentalSelection sorts crowding ONCE (oneshot).
+"OptMPNDS3 MATLAB removes worst entropy one-by-one, recalculating each time."
+Python production OptMPNDS matches oneshot; OptMPNDS3 matches iterative.

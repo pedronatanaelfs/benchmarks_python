@@ -1,5 +1,7 @@
 # Reproduced tables
 
+The `meanIGD` column below is the historical **party-wise geometric** metric (`party_pf_meanIGD`). It is **not** the official MPDMP Table III score. For corrected She `IGD.m` numbers see `mpdmp_table_iii_corrected.md`.
+
 ## meanIGD / Nash (case 1)
 
 benchmark,algorithm,condition,metric,mean,std,median,min,max,n_runs

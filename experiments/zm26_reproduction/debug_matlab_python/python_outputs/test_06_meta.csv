@@ -1,0 +1,10 @@
+field,value
+pro_c,1.0
+dis_c,15.0
+pro_m,0.5
+dis_m,20.0
+matlab_site_formula,rand < pro_m/D
+python_production_site_formula,rand < pro_m  (mutation_as_expectation=False)
+n_parents,20
+n_offspring,20
+n_pre_repair_outside_matlab_rate,0

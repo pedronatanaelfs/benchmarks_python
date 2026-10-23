@@ -1,0 +1,7 @@
+side,benchmark,n,zm26_meanIGD,party_pf_meanIGD,mean_dist_to_common_ps,paper_final_zm26,source
+python,MPDMP1,192,2.108,0.3022,15.1,0.0447,PFt_seed1
+python,MPDMP4,198,0.00732,1.911,19.5,0.0133,PFt_seed1
+python_pft_seed2,MPDMP1,190,0.08184,,14.5,0.0447,PFt_seed2
+python_pft_seed3,MPDMP1,191,2.241,,14.5,0.0447,PFt_seed3
+matlab,MPDMP1,,,,,,WAITING
+matlab,MPDMP4,,,,,,WAITING

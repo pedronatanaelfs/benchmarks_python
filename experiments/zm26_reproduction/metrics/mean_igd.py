@@ -1,4 +1,11 @@
-"""meanIGD: arithmetic mean of party-wise IGD (ZM26 Section V-A3)."""
+"""party_pf_meanIGD: arithmetic mean of party-wise geometric IGD.
+
+Historically stored as ``meanIGD`` in ``results/raw/results.csv``.
+That column is the research/diagnostic metric (each DM's sampled PF).
+
+The ZM26 **reproduction** MPDMP metric is ``zm26_meanIGD`` in ``she_igd.py``
+(She ``Metrics/IGD.m`` against MATLAB ``problem.PF()``).
+"""
 
 from __future__ import annotations
 

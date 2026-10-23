@@ -4,8 +4,23 @@ Paper: Fairness-Aware Performance Evaluation for Multi-Party Multi-Objective Opt
 Baseline git commit of the benchmark package: `0a46ba82f56b13c269ee763b717507c7c4c5f175`
 Optimizer runs in `results/raw/results.csv`: **3180** (30 seeds × 17 MPMOP × 2 algorithms + 18 MPDMP × 4 algorithms)
 Evaluation rows: **8580** (non-consensus problems scored under all six Table S-IV concession cases)
+MPDMP metric correction (2026-10-22): official Table III score is `zm26_meanIGD`; historical `meanIGD` is `party_pf_meanIGD`.
 
 Statuses used below: `SUPPORTED` / `PARTIALLY SUPPORTED` / `NOT SUPPORTED` / `INCONCLUSIVE`.
+
+---
+
+## Before / after the MPDMP metric correction
+
+| Claim | Previous status | Corrected status | Reason |
+|---|---|---|---|
+| 1 | SUPPORTED | **SUPPORTED** | Party-IGD hiding effect is independent of the She `IGD.m` reference. MPMOP15/17 examples unchanged. |
+| 2 | SUPPORTED | **SUPPORTED** | Same party-wise columns as Claim 1. `party_pf_meanIGD` is kept for this diagnostic. |
+| 3 | SUPPORTED | **SUPPORTED** | Nash still uses party IGD + concession in \(C-L\). MPMOP1/15 examples unchanged. |
+| 4 | SUPPORTED (MPMOP1–11 only; MPDMP search written off) | **SUPPORTED** | MPMOP Nash ranking still 9/11. Corrected MPDMP `zm26_meanIGD` now shows OptMPNDS/2 much closer to the common-PS image than OptAll, which is the Table III common-region story. |
+| 5 | PARTIALLY SUPPORTED | **PARTIALLY SUPPORTED** | Concession cases were evaluation-only; not affected by the IGD-reference fix. 16/36 pairs still increase along the equal-threshold sequence. |
+| 6 | PARTIALLY SUPPORTED | **PARTIALLY SUPPORTED** | Same unpublished-`C` and clipping caveats. |
+| 7 | SUPPORTED (MPDMP swap was Python-only and opposite to Table III) | **SUPPORTED** | MPMOP1/2/4/7/8/9 ranking swaps remain. The MPDMP “OptAll best meanIGD / MPNDS best Nash” swap was an artifact of `party_pf_meanIGD`. Under `zm26_meanIGD`, OptMPNDS/2 beat OptAll, agreeing with Table III on that qualitative ranking. |
 
 ---
 
@@ -24,6 +39,8 @@ Party IGD ratio \( \max(IGD_1,IGD_2)/\min(IGD_1,IGD_2) > 2 \) (mean of 30 runs):
 | MPDMP3 | OptMPNDS3 | 2.929 | 10.85 | 6.889 | 3.70 |
 
 On MPMOP15 OptAll the average (0.32) looks “moderate” while DM2 is five times farther from its PF than DM1. That is exactly the hiding effect ZM26 describes.
+
+The MPDMP Table III official score (`zm26_meanIGD`) is a different quantity: She `IGD.m` on a common `problem.PF()`. It can be tiny while `party_pf_meanIGD` stays large (MPDMP4 OptMPNDS: `3.7e-4` vs `~19`). That is further evidence that an average / single-reference IGD can hide party geometry — Claims 1–2 are about *party-wise* IGD, so they continue to use `party_pf_meanIGD`.
 
 ---
 
@@ -52,7 +69,7 @@ The MATLAB `nash_score.m` formula \( u_m=\exp(-L_m) \) is also stored (`nash_sco
 
 ## Claim 4 — With a common Pareto-optimal region, Nash rewards mutually good solutions
 
-**SUPPORTED** (ranking evidence on MPMOP1–11; MPDMP search quality is a separate issue)
+**SUPPORTED**
 
 On MPMOP1–11 (common PS exists; ZM26 Table II, D=2):
 
@@ -72,7 +89,25 @@ On MPMOP1–11 (common PS exists; ZM26 Table II, D=2):
 
 **Nash ranking matches Table II on 9/11 problems.** Absolute Ψ magnitudes do not match (unpublished C). meanIGD ranking matches 7/11; Python meanIGD values are systematically smaller than Table II, so this is qualitative/partial numerical agreement, not EXACT.
 
-MPDMP1–12 also have a common PS in the benchmark definition, but our OptMPNDS/2/3 ports did **not** recover She 2023 search quality (see Claim 7 and the reproduction report). Claim 4 is therefore supported by the MPMOP suite, not by Table III numbers.
+MPDMP1–12 also have a common PS. After switching the official score to `zm26_meanIGD` (MATLAB `problem.PF()` + She `IGD.m`):
+
+| Problem | n | Paper OptMPNDS | Python zm26 OptMPNDS | Paper OptAll | Python zm26 OptAll | OptMPNDS/2 beat OptAll? |
+|---|---:|---:|---:|---:|---:|---|
+| MPDMP1 | 5 | 0.0545 | 0.0515 | 4.04 | 4.88 | yes |
+| MPDMP4 | 5 | 9.58e-4 | 3.67e-4 | 0.0178 | 0.0102 | yes |
+| MPDMP6 | 30 | 0.132 | 0.165 | 3.23 | 2.98 | yes |
+| MPDMP8 | 30 | 2.46 | 2.43 | 6.23 | 6.12 | yes |
+
+The previous report treated MPDMP search as failed because party-triangle IGD was ~19. That was the wrong reference. After fixing last-generation truncation, 5-seed OptMPNDS3 is CLOSE to Table III on the four problems with saved `F`:
+
+| Problem | n | Paper OptMPNDS3 | Python zm26 | n_final |
+|---|---:|---:|---:|---:|
+| MPDMP1 | 5 | 0.0447 | 0.0366 | 200 |
+| MPDMP4 | 5 | 0.0133 | 0.00989 | 200 |
+| MPDMP6 | 5 | 0.0838 | 0.0869 | 200 |
+| MPDMP8 | 5 | 2.25 | 2.254 | 200 |
+
+That is additional support for Claim 4. Pre-fix 30-run OptMPNDS3 (`1.62` / `16.71` on MPDMP6/8) was the leftover-FE collapse and must not be quoted.
 
 ---
 
@@ -108,9 +143,9 @@ So the mechanism is visible, but it is not a clean table-ready monotonicity resu
 
 **SUPPORTED**
 
-**25 of 35** benchmarks have a different winner for meanIGD vs Nash in the Python data.
+**25 of 35** benchmarks have a different winner for historical `meanIGD` (`party_pf_meanIGD`) vs Nash in the Python 30-run archive.
 
-Paper-reproduced ranking swaps (the important ones):
+Paper-reproduced ranking swaps that still hold:
 
 | Benchmark | Best meanIGD | Best Nash | Ranking differs? | Why |
 |---|---|---|---|---|
@@ -123,11 +158,13 @@ Paper-reproduced ranking swaps (the important ones):
 | MPMOP3 | OptMPNDS | OptMPNDS | no | Same winner |
 | MPMOP11 | OptMPNDS | OptMPNDS | no | Same winner |
 | MPMOP12–17 | OptAll | OptAll | no | No common PS; OptAll also wins Nash in this reproduction |
-| MPDMP1–12 | OptAll | OptMPNDS / 2 / 3 | yes | **Python-only swap.** Paper: MPNDS-family wins **both** meanIGD and Nash; our ports have OptAll best meanIGD and MPNDS-family best Nash |
 
-The MPDMP swap still illustrates Claim 7 *inside this reproduction*, but it is **not** a numerical reproduction of Table III (see `REPRODUCTION_REPORT.md`). Likely causes: OptMPNDS/2/3 port differences vs She MATLAB, not the Nash formula.
+**MPDMP1–12 after the metric correction.** Table III reports the MPNDS family best on **both** meanIGD and log-Nash. Python `party_pf_meanIGD` had OptAll best IGD (the old FAILED table). Python `zm26_meanIGD` has OptMPNDS/2 better than OptAll wherever `F` exists, so the official reproduction metric **no longer disagrees** with Nash on “OptAll vs MPNDS/2”. That agrees with the paper’s Table III qualitative ranking. After the last-generation fix, OptMPNDS3 is first on MPDMP6/8 (as in the paper) and third on MPDMP4 (as in the paper). Pre-fix OptMPNDS3 30-run numbers were the leftover-FE collapse.
 
-Full table: generated rows in this file’s previous auto-table plus `results/paper_comparison/paper_vs_python.csv`.
+Do not cite the old party-triangle MPDMP swap as a reproduction of Table III. It remains a valid illustration that **a different IGD definition** can reverse algorithm ranking — which is itself a Claim 1/7-style warning.
+
+Full historical table: `results/paper_comparison/paper_vs_python.csv`.
+Corrected MPDMP IGD: `results/paper_comparison/mpdmp_table_iii_corrected.md`.
 
 ---
 
@@ -137,7 +174,9 @@ Full table: generated rows in this file’s previous auto-table plus `results/pa
 
 **MOSTLY YES**
 
-- The hiding of party disparity by meanIGD is recovered (Claims 1–2), with large examples on MPMOP15/17.
+- The hiding of party disparity by meanIGD is recovered (Claims 1–2), with large examples on MPMOP15/17, and independently by the MPDMP4 pair (`zm26_meanIGD ~ 1e-4` vs `party_pf_meanIGD ~ 19`).
 - Table II Nash rankings are largely recovered (9/11), including the OptAll vs OptMPNDS swaps on MPMOP1/2.
-- Table III (MPDMP search + log-Nash) is **not** recovered numerically: Python OptAll dominates meanIGD, opposite to the paper.
+- Table III MPDMP meanIGD **scale and OptMPNDS/2 vs OptAll ranking** are recovered where final populations exist. This was previously reported as FAILED because the Python column used a different reference set.
+- OptMPNDS3 on MPDMP1/4/6/8 is now CLOSE to Table III after the last-generation truncation fix. Pre-fix OptMPNDS3 30-run numbers remain invalid.
 - Concession sensitivity is present but weak/partial under our estimated C.
+- Eight of twelve Table III problems still lack saved `F`, so those cells stay INCONCLUSIVE rather than claimed as numerical matches.

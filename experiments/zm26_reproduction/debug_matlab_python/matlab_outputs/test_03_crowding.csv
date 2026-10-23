@@ -1,0 +1,11 @@
+point_id,front,crowding_value,entropy_value
+1,1,Inf,NaN
+2,1,Inf,Inf
+3,1,0.8999999999999999,NaN
+4,1,Inf,NaN
+5,1,Inf,Inf
+6,1,Inf,Inf
+7,1,1.25,NaN
+8,1,1.6,1.524511249783653
+9,1,Inf,Inf
+10,1,1.5,NaN

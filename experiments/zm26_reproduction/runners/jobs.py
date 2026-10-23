@@ -48,6 +48,8 @@ CSV_FIELDS = [
     "IGD_DM2",
     "IGD_DM3",
     "meanIGD",
+    "party_pf_meanIGD",
+    "zm26_meanIGD",
     "concession_DM1",
     "concession_DM2",
     "concession_DM3",

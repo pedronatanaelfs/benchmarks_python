@@ -40,7 +40,8 @@ MPDMP = {
     "dis_c": 15.0,
     "pro_m": 0.5,
     "dis_m": 20.0,
-    "mutation_as_expectation": False,
+    # MATLAB Public/GA.m: Site = rand < proM/D (not per-variable proM).
+    "mutation_as_expectation": True,
     "optmpnds3_fei": 10000,
     "optmpnds3_p": 0.05,
     "optmpnds3_c": 0.05,

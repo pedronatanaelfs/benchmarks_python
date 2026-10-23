@@ -1,0 +1,4 @@
+OptMPNDS uses GLOBAL.Initialization = unifrnd(lower,upper).
+Do not compare MATLAB rng(1) coordinates to Python default_rng(1).
+MPDMP4.PS is the single common point (50,40); PF=CalObj(PS).
+getPF / PFt initialization is OptMPNDS3 only, not OptMPNDS.

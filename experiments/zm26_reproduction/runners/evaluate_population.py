@@ -13,8 +13,10 @@ from ..config.settings import (
 from ..metrics.gini import gini_coefficient
 from ..metrics.igd import party_igd
 from ..metrics.jain import jain_index
+from ..metrics.matlab_mpdmp_pf import matlab_problem_pf
 from ..metrics.mean_igd import mean_igd
 from ..metrics.nash_score import estimate_lambda, nash_components
+from ..metrics.she_igd import zm26_meanIGD
 
 
 def evaluate_conditions(
@@ -30,7 +32,13 @@ def evaluate_conditions(
     n_dm = problem.n_dm
     rows = []
     igds = party_igd(F, pf_per_dm, slices)
-    migd = float(np.nanmean(igds))
+    party_migd = float(np.nanmean(igds))
+    zm26 = np.nan
+    if str(getattr(problem, "name", "")).startswith("MPDMP"):
+        try:
+            zm26 = zm26_meanIGD(F, matlab_problem_pf(problem), slices)
+        except Exception:
+            zm26 = np.nan
     for case in cases_for(problem.name):
         eps = np.asarray(concession_vector(problem.name, n_dm, case), dtype=float)
         if lambdas is not None and case in lambdas:
@@ -50,7 +58,9 @@ def evaluate_conditions(
         )
         row: dict[str, Any] = {
             "condition": case,
-            "meanIGD": migd,
+            "meanIGD": party_migd,  # alias of party_pf_meanIGD (backward compatible)
+            "party_pf_meanIGD": party_migd,
+            "zm26_meanIGD": zm26,
             "nash_score": det.nash_C,
             "nash_score_exp": det.nash_exp,
             "log_nash": det.log_nash_C,

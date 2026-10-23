@@ -4,6 +4,7 @@
   "runs_per_condition": 30,
   "optimizer_runs": 3180,
   "evaluation_rows": 8580,
+  "validation_5seed_runs": 40,
   "core_question": "MOSTLY YES",
   "claims": {
     "C1": "SUPPORTED",
@@ -27,15 +28,33 @@
       "verdict": "QUALITATIVE_REPRODUCTION_ONLY"
     },
     "MPDMP1_12": {
-      "verdict": "FAILED_REPRODUCTION",
-      "meanIGD_ranking_match": "0/12",
-      "log_nash_ranking_match": "2/12",
-      "note": "Python OptAll has best meanIGD on every MPDMP1-12 problem; paper reports OptMPNDS-family much better. Not retuned."
+      "previous_verdict": "FAILED_REPRODUCTION",
+      "verdict": "PARTIAL_REPRODUCTION",
+      "previous_note": "Party-triangle meanIGD made OptAll look best (~19 vs paper ~1e-3). That was a different metric, not failed search.",
+      "official_metric": "zm26_meanIGD (She IGD.m + MATLAB problem.PF())",
+      "research_metric": "party_pf_meanIGD (kept; aliased as meanIGD in results/raw/results.csv)",
+      "problems_with_F": {
+        "MPDMP1": {"n": 5, "source": "validation_5seed"},
+        "MPDMP4": {"n": 5, "source": "validation_5seed"},
+        "MPDMP6": {"n": 30, "source": "original_30run_npz"},
+        "MPDMP8": {"n": 30, "source": "original_30run_npz"}
+      },
+      "optmpnds_optmpnds2_scale": "matches Table III where F exists",
+      "optmpnds3": "last-generation truncation fixed; 30-seed complete 540/540; zm26 CLOSE on 11/12 Table III (MPDMP9 QUALITATIVE, Python better); MPDMP13-18 n=200 zm26=NaN",
+      "full_ranking_match": "1/4 exact (MPDMP4); OptMPNDS3 first on MPDMP6/8 as in the paper",
+      "optall_worse_than_optmpnds12": "4/4 problems with F",
+      "problems_without_F": "MPDMP2,3,5,7,9-12 INCONCLUSIVE numerically",
+      "log_nash_ranking_match": "2/12 (unchanged; Nash uses party IGD + unpublished C)"
     },
     "MPDMP13_18": {
       "verdict": "QUALITATIVE_REPRODUCTION_ONLY"
     }
   },
   "ranking_disagreements_python_meanIGD_vs_nash": 25,
-  "reproduction_tests": "20 passed"
+  "reproduction_tests": "27 passed (plus OptMPNDS3 last-generation regression)",
+  "full_30seed_rerun_required": false,
+  "optmpnds3_30seed_rerun_justified": true,
+  "optmpnds3_30seed_table_iii": "MPDMP1-12 complete 30/30; MPDMP13-18 n=200 zm26=NaN (no common PF)",
+  "full_rerun_reason": "No 18x4x30 rerun. OptAll/OptMPNDS/OptMPNDS2 stay. OptMPNDS3-only 30-seed is justified: last-gen truncation confirmed, MATLAB-style generation-boundary stop, 5-seed MPDMP1/4/6/8 all CLOSE. Output: results/validation/optmpnds3_30seed/.",
+  "faithfulness_after_correction": "MOSTLY YES"
 }

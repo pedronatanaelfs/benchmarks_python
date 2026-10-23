@@ -1,0 +1,4 @@
+GA.m clips with min(max(x,lower),upper) after SBX and before PM.
+GA.m does not clip after PM; INDIVIDUAL constructor then clips.
+Diagnostic ga_from_stream also clips after PM to match INDIVIDUAL.
+No reflect / regenerate / midpoint repair.

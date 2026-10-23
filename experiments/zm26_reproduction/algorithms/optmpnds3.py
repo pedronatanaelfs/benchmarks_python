@@ -37,7 +37,9 @@ def _party_nsga2(problem, rng, sl, n, n_evals, xl, xu):
     crowd = crowding_distance(F, front)
     while evaluated < n_evals:
         mating = tournament_selection(rng, 2, n, front, -crowd)
-        off_x = sbx_pm(rng, X[mating], xl, xu, dis_c=15.0, pro_m=0.5, mutation_as_expectation=False)
+        off_x = sbx_pm(
+            rng, X[mating], xl, xu, dis_c=15.0, pro_m=0.5, mutation_as_expectation=True
+        )
         remaining = n_evals - evaluated
         if off_x.shape[0] > remaining:
             off_x = off_x[:remaining]
@@ -174,9 +176,12 @@ class OptMPNDS3:
                 child = np.clip(child, xl, xu)
                 off_x.append(child)
             off_x = np.asarray(off_x)
-            remaining = self.evaluation_budget - evaluated
-            if off_x.shape[0] > remaining:
-                off_x = off_x[:remaining]
+            # MATLAB OptMPNDS3.m finishes the for-i=Population generation even if
+            # INDIVIDUAL() overshoots Global.evaluation. GLOBAL.NotTermination
+            # only stops at the *next* while-header and then saves that full
+            # population. Truncating off_x to ``remaining`` here evaluates only
+            # the first few parents, envsel-replaces the whole pop with that
+            # tiny set, and collapses N=200 → O(10) on the last generation.
             off_eval = problem.evaluate(off_x)
             evaluated += off_x.shape[0]
             chosen_x = []

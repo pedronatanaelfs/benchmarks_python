@@ -1,0 +1,14 @@
+test,component,matlab_vs_python,severity,detail
+11,last-generation leftover-FE truncation,ROOT_CAUSE,MAJOR,Python sliced off_x to remaining then envsel replaced N=200 with ~16 rows; MATLAB finishes the generation and stops at the next while-header
+01,PFt geometry,NOT_THE_CAUSE,MINOR,gen-0 zm26 is noisy; JADE already at paper scale by ~25k FE
+02,initial population quality,NOT_COMPARABLE,UNKNOWN,MATLAB native PFt dump still waiting; Python gen-0 not the final collapse
+03,archive gen0 empty,PASS,NONE,both start Archive=[]
+04,p-best python replica,PASS,NONE,lexsort vs getBestIndividual replica mismatches=0/20; random=0
+04,p-best MATLAB CSV,WAITING_MATLAB,UNKNOWN,shared-k Python vs MATLAB-replica already in python summary
+05,F/CR formula,WAITING_MATLAB,UNKNOWN,one-step JADE2 diagnostic previously PASS
+06,archive nearest replace,WAITING_MATLAB,UNKNOWN,secondary; not the n=16 collapse
+07,envsel integration,WAITING_MATLAB,UNKNOWN,crowding entropy already PASS
+08,python production vs matlab-faithful replica,MINOR_DIFFERENCE,MINOR,first X difference at g2 from archive/S_CR secondary diffs; not Table III collapse
+08,MATLAB short trace,WAITING_MATLAB,UNKNOWN,
+09,native 5-run MATLAB,WAITING_MATLAB,UNKNOWN,independent RNG
+09,python 5-seed after fix,PASS,NONE,"MPDMP1 0.03663 vs 0.0447; MPDMP4 0.00989 vs 0.0133; MPDMP6 0.08686 vs 0.0838; MPDMP8 2.254 vs 2.25; n_final=200"
